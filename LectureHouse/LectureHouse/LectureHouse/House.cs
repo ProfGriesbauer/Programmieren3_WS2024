@@ -7,13 +7,65 @@ using System.Threading.Tasks;
 
 namespace LectureHouse
 {
-    public class House
+    public interface IHouse
+    {
+        public float GibMirDenStromVerbauchInmA();
+    }
+    public class House : IHouse
     {
         float _StromV = 56; //in A
+        float _WasserV = 78;
 
-        public float GibMirDenStromVerbauchInmA (House haus)
+        public float GetStromVerbauchInmA()
         {
-            return _StromV*1000;
+            return _StromV * 1000;
+        }
+
+        public void SetStromVerbrauchInmA (float stromV) // in mA
+        {
+            _StromV = stromV / 1000;
+            return;
+        }
+
+        public float StromVerbrauchInmA
+        {
+            get 
+            {
+                return _StromV * 1000;
+            }
+
+            set 
+            { 
+                _StromV = value / 1000; 
+            }
+        }
+
+        public float GibMirSinnlosenGesamtVerbrauch ()
+        {
+            return _StromV + _WasserV;
+        }
+
+        public float SinnloserGesamtverbrauch
+        {
+            get 
+            {
+                return _StromV + _WasserV;
+            }
+        }
+
+        public float GibMirDenStromVerbauchInuA(House haus)
+        {
+            return _StromV * 1000000;
+        }
+
+        public float GibMirDenWasserverbrauch()
+        {
+            return _WasserV;
+        }
+
+        public float GibMirDenStromVerbauchInmA()
+        {
+            return _StromV * 1000;
         }
     }
 }
