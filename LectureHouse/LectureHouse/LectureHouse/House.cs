@@ -10,11 +10,41 @@ namespace LectureHouse
     public interface IHouse
     {
         public float GibMirDenStromVerbauchInmA();
+
+        public bool AlleLichterMainRoom { set; }
+
+        public void RaumHinzufuegen(IRoom room);
+
+        public IList<IRoom> AlleRäume { get; }
     }
     public class House : IHouse
     {
-        float _StromV = 56; //in A
-        float _WasserV = 78;
+        float _StromV; //in A
+        float _WasserV = 88;
+
+        IRoom _mainRoom;
+
+        IList<IRoom> _Rooms = new List<IRoom>();
+
+        public static double PI = 3.14157535;
+
+        public House ()
+        {
+            _StromV = 99;
+            _mainRoom = new Room();
+        }
+
+        public House (float stromV, float wasserV)
+        {
+            _StromV = stromV;
+            _WasserV = wasserV;
+            _mainRoom = new Room();
+        }
+
+        public static float GibMirPIAlsFloat ()
+        {
+            return (float)PI;
+        }
 
         public float GetStromVerbauchInmA()
         {
@@ -27,11 +57,17 @@ namespace LectureHouse
             return;
         }
 
+        public void SetStromVerbrauchInmA() // in mA
+        {
+            _StromV = 100 / 1000;
+            return;
+        }
+
         public float StromVerbrauchInmA
         {
             get 
             {
-                return _StromV * 1000;
+                return GetStromVerbauchInmA();
             }
 
             set 
@@ -53,6 +89,29 @@ namespace LectureHouse
             }
         }
 
+        public bool AlleLichterMainRoom 
+        {             
+            set
+            {
+                if (value)
+                {
+                    _mainRoom.AlleLichterAn();
+                }
+                else
+                {
+                    _mainRoom.AlleLichterAus();
+                }
+            }
+        }
+
+        public IList<IRoom> AlleRäume
+        {
+            get
+            {
+                return new List<IRoom>(_Rooms);
+            }
+        }
+
         public float GibMirDenStromVerbauchInuA(House haus)
         {
             return _StromV * 1000000;
@@ -66,6 +125,11 @@ namespace LectureHouse
         public float GibMirDenStromVerbauchInmA()
         {
             return _StromV * 1000;
+        }
+
+        public void RaumHinzufuegen(IRoom room)
+        {
+            _Rooms.Add(room);
         }
     }
 }
