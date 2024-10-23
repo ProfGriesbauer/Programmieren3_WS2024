@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace LectureHouse
 {
@@ -12,9 +13,59 @@ namespace LectureHouse
 
         public void AlleLichterAus();
     }
-    public class Room : IRoom
+
+    public interface IRoomJalousie : IRoom
     {
-        IList<Light> _lights;
+        public void JalousieZu();
+
+        public void JalousieAuf();
+    }
+
+    public class NormalerRoom : Room
+    {
+        bool _IstBad = false;
+
+        public bool IstBad
+        {
+            get { return _IstBad; }
+            set { _IstBad = value; }
+        }
+
+        public override void AllesAusUndRunter()
+        {
+            AlleLichterAus();
+        }
+    }
+
+    public class JalousieRoom : Room, IRoomJalousie 
+    {
+        bool _JalousieOpen;
+        public JalousieRoom()
+        {
+            _JalousieOpen = true;
+            AlleLichterAus();
+        }
+
+        public void JalousieZu()
+        {
+            _JalousieOpen = false;
+        }
+
+        public void JalousieAuf()
+        {
+            _JalousieOpen = true;
+        }
+
+        public override void AllesAusUndRunter()
+        {
+            AlleLichterAus();
+            JalousieZu();
+        }
+    }
+
+    public abstract class Room : IRoom
+    {
+        protected IList<Light> _lights;
 
         public Room ()
         {
@@ -41,6 +92,8 @@ namespace LectureHouse
             }
             return;
         }
+
+        public abstract void AllesAusUndRunter();
     }
 
     public class Light

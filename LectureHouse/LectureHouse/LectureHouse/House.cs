@@ -31,14 +31,14 @@ namespace LectureHouse
         public House ()
         {
             _StromV = 99;
-            _mainRoom = new Room();
+            _mainRoom = new NormalerRoom();
         }
 
         public House (float stromV, float wasserV)
         {
             _StromV = stromV;
             _WasserV = wasserV;
-            _mainRoom = new Room();
+            _mainRoom = new NormalerRoom();
         }
 
         public static float GibMirPIAlsFloat ()

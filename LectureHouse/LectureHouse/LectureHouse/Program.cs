@@ -10,11 +10,11 @@ LectureHouse.House.GibMirPIAlsFloat();
 
 testHaus.AlleLichterMainRoom = true;
 testHaus.AlleLichterMainRoom = false;
-testHaus.RaumHinzufuegen(new Room());
-testHaus.RaumHinzufuegen(new Room());
-testHaus.RaumHinzufuegen(new Room());
-testHaus.RaumHinzufuegen(new Room());
-testHaus.RaumHinzufuegen(new Room());
+testHaus.RaumHinzufuegen(new NormalerRoom());
+testHaus.RaumHinzufuegen(new NormalerRoom());
+testHaus.RaumHinzufuegen(new NormalerRoom());
+testHaus.RaumHinzufuegen(new NormalerRoom());
+testHaus.RaumHinzufuegen(new NormalerRoom());
 
 foreach (IRoom r in testHaus.AlleRäume)
 {
