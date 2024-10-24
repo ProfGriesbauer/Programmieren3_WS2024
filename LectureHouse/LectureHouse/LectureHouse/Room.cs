@@ -7,7 +7,7 @@ using System.Transactions;
 
 namespace LectureHouse
 {
-    public interface IRoom
+    public interface IRoom : IEGerateBesuchbar
     {
         public void AlleLichterAn();
 
@@ -94,9 +94,18 @@ namespace LectureHouse
         }
 
         public abstract void AllesAusUndRunter();
+
+        public void willkommen(EGerateBesucher besucher)
+        {
+            besucher.BesucheMich(this);
+            foreach (Light l in _lights)
+            {
+                l.willkommen(besucher);
+            }
+        }
     }
 
-    public class Light
+    public class Light : IEGerateBesuchbar
     {
         bool _OnOff;
 
@@ -104,6 +113,11 @@ namespace LectureHouse
         {
             get { return _OnOff; }
             set { _OnOff = value; }
+        }
+
+        public void willkommen(EGerateBesucher besucher)
+        {
+            besucher.BesucheMich(this);
         }
     }
 }

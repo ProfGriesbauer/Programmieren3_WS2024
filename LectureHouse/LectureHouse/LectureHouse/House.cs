@@ -7,6 +7,29 @@ using System.Threading.Tasks;
 
 namespace LectureHouse
 {
+    public interface IEGerateBesuchbar
+    {
+        public void willkommen(EGerateBesucher besucher);
+    }
+
+    public class EGerateBesucher
+    {
+        int _Zahler;
+        public void BesucheMich(IEGerateBesuchbar besuchter)
+        {
+            if (besuchter is Light || besuchter is JalousieRoom)
+            {
+                _Zahler++;
+                if (_Zahler > 20)
+                {
+                    throw new Exception("Zu viel");
+                }
+            }
+        }
+
+        public int AktuellerStand { get { return _Zahler; } } 
+    }
+
     public interface IHouse
     {
         public float GibMirDenStromVerbauchInmA();
@@ -17,7 +40,7 @@ namespace LectureHouse
 
         public IList<IRoom> AlleRäume { get; }
     }
-    public class House : IHouse
+    public class House : IHouse, IEGerateBesuchbar
     {
         float _StromV; //in A
         float _WasserV = 88;
@@ -130,6 +153,16 @@ namespace LectureHouse
         public void RaumHinzufuegen(IRoom room)
         {
             _Rooms.Add(room);
+        }
+
+        public void willkommen(EGerateBesucher besucher)
+        {
+            besucher.BesucheMich(this);
+            _mainRoom.willkommen(besucher);
+            foreach (IRoom r in _Rooms) 
+            {
+                r.willkommen(besucher);
+            }
         }
     }
 }
