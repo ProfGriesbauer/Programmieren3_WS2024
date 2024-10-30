@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 
 namespace LectureHouse
 {
+    public interface ISerializable
+    {
+        string serialize();
+
+        void deserialize(string str);
+    }
+
     public interface IEGerateBesuchbar
     {
         public void willkommen(EGerateBesucher besucher);
@@ -40,7 +47,7 @@ namespace LectureHouse
 
         public IList<IRoom> AlleRäume { get; }
     }
-    public class House : IHouse, IEGerateBesuchbar
+    public class House : IHouse, IEGerateBesuchbar, ISerializable
     {
         float _StromV; //in A
         float _WasserV = 88;
@@ -145,11 +152,6 @@ namespace LectureHouse
             return _WasserV;
         }
 
-        public float GibMirDenStromVerbauchInmA()
-        {
-            return _StromV * 1000;
-        }
-
         public void RaumHinzufuegen(IRoom room)
         {
             _Rooms.Add(room);
@@ -162,6 +164,34 @@ namespace LectureHouse
             foreach (IRoom r in _Rooms) 
             {
                 r.willkommen(besucher);
+            }
+        }
+        public float GibMirDenStromVerbauchInmA()
+        {
+            return _StromV * 1000;
+        }
+
+        public string serialize()
+        {
+            string str = "";
+            foreach(IRoom room in _Rooms) 
+            {
+                str = str + room.serialize();
+            }
+            return _StromV + "|" + _WasserV + str;
+        }
+
+        public void deserialize(string str)
+        {
+            string[] strs = str.Split('|');
+            _StromV = float.Parse(strs[0]);
+            _WasserV = float.Parse(strs[1]);
+            _Rooms.Clear();
+            for (int i = 2; i < strs.Count(); i++)
+            {
+                NormalerRoom nr = new NormalerRoom();
+                nr.deserialize(strs[i]);
+                _Rooms.Add(nr);
             }
         }
     }

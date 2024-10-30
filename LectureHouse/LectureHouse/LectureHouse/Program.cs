@@ -17,6 +17,13 @@ testHaus.RaumHinzufuegen(new NormalerRoom());
 testHaus.RaumHinzufuegen(new NormalerRoom());
 testHaus.RaumHinzufuegen(new NormalerRoom());
 
+string strInhalt = testHaus.serialize();
+Console.WriteLine(strInhalt);
+
+LectureHouse.House LoadHouse = new LectureHouse.House();
+LoadHouse.deserialize(strInhalt);
+Console.WriteLine(LoadHouse.serialize());
+
 LectureHouse.EGerateBesucher meinBEsucher = new EGerateBesucher();
 try
 {
