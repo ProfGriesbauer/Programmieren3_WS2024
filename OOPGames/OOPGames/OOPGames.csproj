@@ -70,7 +70,7 @@
     <Compile Include="Classes\C_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\J_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\H_Gruppe\Vorname_Nachname_XXX.cs" />
-    <Compile Include="Classes\D_Gruppe\Vorname_Nachname_XXX.cs" />
+    <Compile Include="Classes\D_Gruppe\JLJ_RBA_TikTokToo.cs" />
     <Compile Include="Classes\B_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\A_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\X_Griesbauer\Josef_Griesbauer_BaseTicTacToe.cs" />
@@ -82,7 +82,7 @@
     <Compile Include="Interfaces\G_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\C_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\H_Gruppe\Vorname_Nachname_IXXX.cs" />
-    <Compile Include="Interfaces\D_Gruppe\Vorname_Nachname_IXXX.cs" />
+    <Compile Include="Interfaces\D_Gruppe\JLJ_RBA_ITikTokToo.cs" />
     <Compile Include="Interfaces\B_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\A_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\IGamePlayer.cs" />
