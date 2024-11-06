@@ -259,7 +259,7 @@ namespace OOPGames
     {
         int _PlayerNumber = 0;
 
-        public string Name { get { return "JLJs_TTTComputerPkayer"; } }
+        public string Name { get { return "JLJs_TTTComputerPlayer"; } }
 
         public int PlayerNumber { get { return _PlayerNumber; } }
 
@@ -277,32 +277,97 @@ namespace OOPGames
 
         public IPlayMove GetMove(IGameField field)
         {
-            if (field is D_FieldTikTokToo)
+            if (field is D_FieldTikTokToo myField)
             {
                 D_FieldTikTokToo myfield = (D_FieldTikTokToo)field;
 
-                Random rand = new Random();
-                int f = rand.Next(0, 8);
-                for (int i = 0; i < 9; i++)
+                // 1. Schritt: Prüfen, ob der Computer gewinnen kann und den Gewinnzug machen
+                IPlayMove winningMove = FindWinningMove(myField, _PlayerNumber);
+                if (winningMove != null)
                 {
-                    int c = f % 3;
-                    int r = ((f - c) / 3) % 3;
-                    if (myfield[r, c] <= 0)
+                    return winningMove;
+                }
+
+                // 2. Schritt: Prüfen, ob der Gegner gewinnen könnte, und blockieren
+                int opponentNumber = _PlayerNumber == 1 ? 2 : 1;
+                IPlayMove blockingMove = FindWinningMove(myField, opponentNumber);
+                if (blockingMove != null)
+                {
+                    return blockingMove;
+                }
+
+                // 3. Schritt: Falls weder Gewinn noch Block möglich ist, Zentrum wählen
+                if (myField[1, 1] == 0)
+                {
+                    return new D_MoveTikTokToo(1, 1, _PlayerNumber);
+                }
+
+                // 4. Schritt: Ecken besetzen, falls das Zentrum schon belegt ist
+                int[,] ecken = new int[,] { { 0, 0 }, { 0, 2 }, { 2, 0 }, { 2, 2 } };
+                for (int i = 0; i < ecken.GetLength(0); i++)
+                {
+                    int row = ecken[i, 0];
+                    int col = ecken[i, 1];
+                    if (myField[row, col] == 0)
                     {
-                        return new D_MoveTikTokToo(r, c, _PlayerNumber);
-                    }
-                    else
-                    {
-                        f++;
+                        return new D_MoveTikTokToo(row, col, _PlayerNumber);
                     }
                 }
 
-                return null;
+                // 5. Schritt: Alle verbleibenden freien Felder der Reihe nach prüfen
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (myField[i, j] == 0)
+                        {
+                            return new D_MoveTikTokToo(i, j, _PlayerNumber);
+                        }
+                    }
+                }
             }
-            else
+            return null; // Falls keine Züge möglich sind
+        }
+
+        // Hilfsmethode, um einen Gewinnzug für den Spieler zu finden
+        private IPlayMove FindWinningMove(D_FieldTikTokToo field, int playerNumber)
+        {
+            // Reihen und Spalten durchgehen, um Gewinnmöglichkeiten zu prüfen
+            for (int i = 0; i < 3; i++)
             {
-                return null;
+                // Horizontale Reihen prüfen
+                if (field[i, 0] == playerNumber && field[i, 1] == playerNumber && field[i, 2] == 0)
+                    return new D_MoveTikTokToo(i, 2, _PlayerNumber);
+                if (field[i, 0] == playerNumber && field[i, 2] == playerNumber && field[i, 1] == 0)
+                    return new D_MoveTikTokToo(i, 1, _PlayerNumber);
+                if (field[i, 1] == playerNumber && field[i, 2] == playerNumber && field[i, 0] == 0)
+                    return new D_MoveTikTokToo(i, 0, _PlayerNumber);
+
+                // Vertikale Spalten prüfen
+                if (field[0, i] == playerNumber && field[1, i] == playerNumber && field[2, i] == 0)
+                    return new D_MoveTikTokToo(2, i, _PlayerNumber);
+                if (field[0, i] == playerNumber && field[2, i] == playerNumber && field[1, i] == 0)
+                    return new D_MoveTikTokToo(1, i, _PlayerNumber);
+                if (field[1, i] == playerNumber && field[2, i] == playerNumber && field[0, i] == 0)
+                    return new D_MoveTikTokToo(0, i, _PlayerNumber);
             }
+
+            // Diagonalen prüfen
+            if (field[0, 0] == playerNumber && field[1, 1] == playerNumber && field[2, 2] == 0)
+                return new D_MoveTikTokToo(2, 2, _PlayerNumber);
+            if (field[0, 0] == playerNumber && field[2, 2] == playerNumber && field[1, 1] == 0)
+                return new D_MoveTikTokToo(1, 1, _PlayerNumber);
+            if (field[1, 1] == playerNumber && field[2, 2] == playerNumber && field[0, 0] == 0)
+                return new D_MoveTikTokToo(0, 0, _PlayerNumber);
+
+            if (field[0, 2] == playerNumber && field[1, 1] == playerNumber && field[2, 0] == 0)
+                return new D_MoveTikTokToo(2, 0, _PlayerNumber);
+            if (field[0, 2] == playerNumber && field[2, 0] == playerNumber && field[1, 1] == 0)
+                return new D_MoveTikTokToo(1, 1, _PlayerNumber);
+            if (field[1, 1] == playerNumber && field[2, 0] == playerNumber && field[0, 2] == 0)
+                return new D_MoveTikTokToo(0, 2, _PlayerNumber);
+
+            return null; // Kein Gewinnzug gefunden
         }
 
         public void SetPlayerNumber(int playerNumber)
