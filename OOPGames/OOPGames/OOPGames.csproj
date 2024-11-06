@@ -63,6 +63,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\C_Gruppe\Rabea.cs" />
     <Compile Include="Classes\E_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\F_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\I_Gruppe\Vorname_Nachname_XXX.cs" />
