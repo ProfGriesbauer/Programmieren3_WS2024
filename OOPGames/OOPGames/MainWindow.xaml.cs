@@ -33,6 +33,7 @@ namespace OOPGames
             //REGISTER YOUR CLASSES HERE
             //Painters
             OOPGamesManager.Singleton.RegisterPainter(new X_TicTacToePaint());
+            OOPGamesManager.Singleton.RegisterPainter(new B_Paint_TTT());
             //Rules
             OOPGamesManager.Singleton.RegisterRules(new X_TicTacToeRules());
             //Players
