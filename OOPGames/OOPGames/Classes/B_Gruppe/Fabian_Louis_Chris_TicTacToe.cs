@@ -15,8 +15,8 @@ namespace OOPGames
         public string Name
         {
             get
-            { 
-            return "Gruppe B TicTacToe";
+            {
+                return "Gruppe B TicTacToe";
             }
         }
 
@@ -77,7 +77,7 @@ namespace OOPGames
         public int this[int r, int c]
         {
             get
-            { 
+            {
                 return _Field[r, c];
             }
             set
@@ -86,7 +86,7 @@ namespace OOPGames
             }
         }
 
-    
+
         public bool CanBePaintedBy(IPaintGame painter)
         {
             return painter is IB_Painter_TTT;
@@ -97,12 +97,13 @@ namespace OOPGames
         B_Field_TTT _Field = new B_Field_TTT();
         public IB_Field_TTT TTTField
         {
-            get {
+            get
+            {
                 return _Field;
             }
-    }
+        }
 
-        public string Name 
+        public string Name
         {
             get
             {
@@ -132,20 +133,20 @@ namespace OOPGames
 
         public int CheckIfPLayerWon()
         {
-            for (int i = 0; i<3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 //check rows
                 if (_Field[i, 0] != 0)
-                    {
+                {
                     if (_Field[i, 0] == _Field[i, 1] && _Field[i, 0] == _Field[i, 2])
                     {
                         return _Field[i, 0];
                     }
                 }
                 //check colums
-                if (_Field  [0, i] != 0)
+                if (_Field[0, i] != 0)
                 {
-                    if (_Field[0, i] ==  _Field[1, i] && _Field[0, i] == _Field[2, i])
+                    if (_Field[0, i] == _Field[1, i] && _Field[0, i] == _Field[2, i])
                     {
                         return _Field[0, i];
                     }
@@ -175,7 +176,7 @@ namespace OOPGames
 
         public void DoMove(IPlayMove move)
         {
-            if(move is IB_Move_TTT)
+            if (move is IB_Move_TTT)
             {
                 DoMoveTTT((IB_Move_TTT)move);
             }
@@ -196,6 +197,12 @@ namespace OOPGames
         int _Column = 0;
         int _PlayerNumber = 0;
 
+        public B_Move_TTT(int row, int column, int playerNumber)
+        {
+            _Row = row;
+            _Column = column;
+            _PlayerNumber = playerNumber;
+        }
         public int PlayerNumber
         {
             get
@@ -212,11 +219,139 @@ namespace OOPGames
             }
         }
         public int Row
-             {
+        {
             get
             {
                 return _Row;
             }
-}
+        }
     }
+
+    public abstract class B_BasePlayer : IGamePlayer
+    {
+        int _PlayerNumber = 0;
+        public abstract string Name
+        {
+            get;
+        }
+
+        public int PlayerNumber
+        {
+            get
+            {
+                return _PlayerNumber;
+            }
+        }
+        public bool CanBeRuledBy(IGameRules rules)
+        {
+            return rules is IB_Rules_TTT;
+        }
+
+        public abstract IGamePlayer Clone();
+
+        public void SetPlayerNumber(int playerNumber)
+        {
+            _PlayerNumber = playerNumber;
+        }
+    }
+
+    public class B_ComputerPlayer_TTT : B_BasePlayer, IB_ComputerPlayer_TTT
+    {
+        public override string Name
+        {
+            get
+            {
+                return "Gruppe B TicTacToe ComputerPlayer";
+            }
+        }
+
+        public override IGamePlayer Clone()
+        {
+            B_ComputerPlayer_TTT TTT_Computer = new B_ComputerPlayer_TTT();
+            TTT_Computer.SetPlayerNumber(this.PlayerNumber);
+            return TTT_Computer;
+        }
+
+        public IB_Move_TTT GetTTTMove(IB_Field_TTT field)
+        {
+            Random rand = new Random();
+            int f = rand.Next(0, 8);
+            for (int i = 0; i < 9; i++)
+            {
+                int c = f % 3;
+                int r = ((f - c) / 3) % 3;
+                if (field[r, c] <= 0)
+                {
+                    return new B_Move_TTT(r, c, this.PlayerNumber);
+                }
+                else
+                {
+                    f++;
+                }
+            }
+
+            return null;
+        }
+
+        public IPlayMove GetMove(IGameField field)
+        {
+            if (field is IB_Field_TTT)
+            {
+                return GetTTTMove((IB_Field_TTT)field);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+    }
+    public class B_HumanPlayer_TTT : B_BasePlayer, IB_HumanPlayer_TTT
+    {
+        public override string Name
+        {
+            get
+            {
+                return "Gruppe B TicTacToe HumanPlayer";
+            }
+        }
+
+        public override IGamePlayer Clone()
+        {
+            B_HumanPlayer_TTT TTT_Human = new B_HumanPlayer_TTT();
+            TTT_Human.SetPlayerNumber(this.PlayerNumber);
+            return TTT_Human;
+        }
+
+        public IPlayMove GetMove(IMoveSelection selection, IGameField field)
+        {
+            if (selection is IClickSelection && field is IB_Field_TTT)
+            {
+                return GetTTTMove((IB_Field_TTT)field, (IClickSelection)selection);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public IB_Move_TTT GetTTTMove(IB_Field_TTT field, IClickSelection selection)
+        {
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (selection.XClickPos > 20 + (j * 100) && selection.XClickPos < 120 + (j * 100) &&
+                        selection.YClickPos > 20 + (i * 100) && selection.YClickPos < 120 + (i * 100) &&
+                        field[i, j] <= 0)
+                    {
+                        return new B_Move_TTT(i, j, this.PlayerNumber);
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
 }

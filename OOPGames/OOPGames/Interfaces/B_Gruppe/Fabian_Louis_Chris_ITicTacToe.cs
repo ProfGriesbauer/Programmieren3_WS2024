@@ -38,4 +38,14 @@ namespace OOPGames
         int Row { get; }
 
     }
+    public interface IB_HumanPlayer_TTT : IHumanGamePlayer
+    {
+        IB_Move_TTT GetTTTMove(IB_Field_TTT field, IClickSelection selection);
+    }
+
+    public interface IB_ComputerPlayer_TTT : IComputerGamePlayer
+    {
+        IB_Move_TTT GetTTTMove(IB_Field_TTT field);
+    }
+
 }
