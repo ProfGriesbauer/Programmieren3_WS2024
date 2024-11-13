@@ -24,8 +24,8 @@ namespace OOPGames
 
         public void PaintTTTField(Canvas canvas, ID_TTTGameField currentField)
         {
-
-
+            IDrawableSymbol Symbol1 = new D_SmileySymbol();
+            IDrawableSymbol Symbol2 = new D_SkullSymbol();
 
             // Paint funktionen 
             canvas.Children.Clear();
@@ -33,10 +33,7 @@ namespace OOPGames
             canvas.Background = new SolidColorBrush(bgColor);
             Color lineColor = Color.FromRgb(0, 0, 0);
             Brush lineStroke = new SolidColorBrush(lineColor);
-            Color XColor = Color.FromRgb(145, 44, 238);
-            Brush XStroke = new SolidColorBrush(XColor);
-            Color OColor = Color.FromRgb(22, 211, 245);
-            Brush OStroke = new SolidColorBrush(OColor);
+            
 
             Line l1 = new Line() { X1 = 120, Y1 = 20, X2 = 120, Y2 = 320, Stroke = lineStroke, StrokeThickness = 5.0 };
             canvas.Children.Add(l1);
@@ -51,23 +48,210 @@ namespace OOPGames
             {
                 for (int j = 0; j < 3; j++)
                 {
+                    int x = 20 + (j * 100);
+                    int y = 20 + (i * 100);
+
                     if (currentField[i, j] == 1)
                     {
-                        Line X1 = new Line() { X1 = 20 + (j * 100), Y1 = 20 + (i * 100), X2 = 120 + (j * 100), Y2 = 120 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
-                        canvas.Children.Add(X1);
-                        Line X2 = new Line() { X1 = 20 + (j * 100), Y1 = 120 + (i * 100), X2 = 120 + (j * 100), Y2 = 20 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
-                        canvas.Children.Add(X2);
+                        Symbol1.Draw(canvas, x, y);
                     }
                     else if (currentField[i, j] == 2)
                     {
-                        Ellipse OE = new Ellipse() { Margin = new Thickness(20 + (j * 100), 20 + (i * 100), 0, 0), Width = 100, Height = 100, Stroke = OStroke, StrokeThickness = 3.0 };
-                        canvas.Children.Add(OE);
+                        Symbol2.Draw(canvas, x, y);
                     }
                 }
             }
 
         }
 
+    }
+    public class D_XSymbol : IDrawableSymbol
+    {
+        public void Draw(Canvas canvas, int x, int y)
+        {
+            Color XColor = Color.FromRgb(0, 255, 0);
+            Brush XStroke = new SolidColorBrush(XColor);
+
+            Line X1 = new Line() { X1 = x, Y1 = y, X2 = x + 100, Y2 = y + 100, Stroke = XStroke, StrokeThickness = 3.0 };
+            Line X2 = new Line() { X1 = x, Y1 = y + 100, X2 = x + 100, Y2 = y, Stroke = XStroke, StrokeThickness = 3.0 };
+
+            canvas.Children.Add(X1);
+            canvas.Children.Add(X2);
+        }
+    }
+
+    public class D_OSymbol : IDrawableSymbol
+    {
+        public void Draw(Canvas canvas, int x, int y)
+        {
+            Color OColor = Color.FromRgb(0, 0, 255);
+            Brush OStroke = new SolidColorBrush(OColor);
+
+            Ellipse OE = new Ellipse() { Margin = new Thickness(x, y, 0, 0), Width = 100, Height = 100, Stroke = OStroke, StrokeThickness = 3.0 };
+            canvas.Children.Add(OE);
+        }
+    }
+
+    public class D_SmileySymbol : IDrawableSymbol
+    {
+        public void Draw(Canvas canvas, int x, int y)
+        {
+            // Farben für das Smiley-Gesicht
+            Color faceColor = Color.FromRgb(255, 223, 0); // Gelbes Gesicht
+            Color featureColor = Color.FromRgb(0, 0, 0);  // Schwarze Augen und Mund
+            Brush faceBrush = new SolidColorBrush(faceColor);
+            Brush featureBrush = new SolidColorBrush(featureColor);
+
+            // Gesicht des Smileys (Kreis)
+            Ellipse face = new Ellipse()
+            {
+                Margin = new Thickness(x, y, 0, 0),
+                Width = 90,
+                Height = 90,
+                Fill = faceBrush
+            };
+            canvas.Children.Add(face);
+
+            // Linkes Auge
+            Ellipse leftEye = new Ellipse()
+            {
+                Margin = new Thickness(x + 25, y + 30, 0, 0),
+                Width = 10,
+                Height = 10,
+                Fill = featureBrush
+            };
+            canvas.Children.Add(leftEye);
+
+            // Rechtes Auge
+            Ellipse rightEye = new Ellipse()
+            {
+                Margin = new Thickness(x + 65, y + 30, 0, 0),
+                Width = 10,
+                Height = 10,
+                Fill = featureBrush
+            };
+            canvas.Children.Add(rightEye);
+
+            // Lachender Mund (nach oben gebogener Bogen)
+            PathFigure mouthFigure = new PathFigure() { StartPoint = new Point(x + 30, y + 60) };
+            mouthFigure.Segments.Add(new ArcSegment()
+            {
+                Point = new Point(x + 70, y + 60),
+                Size = new Size(20, 20),
+                SweepDirection = SweepDirection.Counterclockwise // Mund nach oben gebogen
+            });
+
+            PathGeometry mouthGeometry = new PathGeometry();
+            mouthGeometry.Figures.Add(mouthFigure);
+
+            Path mouth = new Path()
+            {
+                Stroke = featureBrush,
+                StrokeThickness = 2.0,
+                Data = mouthGeometry
+            };
+            canvas.Children.Add(mouth);
+        }
+    }
+    public class D_SkullSymbol : IDrawableSymbol
+    {
+        public void Draw(Canvas canvas, int x, int y)
+        {
+            // Farben für den Totenkopf
+            Color skullColor = Color.FromRgb(220, 220, 220); // Hellgrauer Schädel
+            Color featureColor = Color.FromRgb(0, 0, 0);     // Schwarze Augen und Mund
+            Brush skullBrush = new SolidColorBrush(skullColor);
+            Brush featureBrush = new SolidColorBrush(featureColor);
+
+            // Kleiner Schädel (kleinerer Kreis)
+            Ellipse skull = new Ellipse()
+            {
+                Margin = new Thickness(x + 20, y + 10, 0, 0),
+                Width = 60,
+                Height = 60,
+                Fill = skullBrush
+            };
+            canvas.Children.Add(skull);
+
+            // Linke Augenhöhle (kleiner und angepasst an die neue Schädelgröße)
+            Ellipse leftEye = new Ellipse()
+            {
+                Margin = new Thickness(x + 35, y + 25, 0, 0),
+                Width = 7,
+                Height = 10,
+                Fill = featureBrush
+            };
+            canvas.Children.Add(leftEye);
+
+            // Rechte Augenhöhle
+            Ellipse rightEye = new Ellipse()
+            {
+                Margin = new Thickness(x + 55, y + 25, 0, 0),
+                Width = 7,
+                Height = 10,
+                Fill = featureBrush
+            };
+            canvas.Children.Add(rightEye);
+
+            // Nasenöffnung (noch kleineres Oval)
+            Ellipse nose = new Ellipse()
+            {
+                Margin = new Thickness(x + 45, y + 40, 0, 0),
+                Width = 4,
+                Height = 6,
+                Fill = featureBrush
+            };
+            canvas.Children.Add(nose);
+
+            // Kleinerer Mund
+            Rectangle mouth = new Rectangle()
+            {
+                Margin = new Thickness(x + 40, y + 55, 0, 0),
+                Width = 20,
+                Height = 6,
+                Stroke = featureBrush,
+                StrokeThickness = 1.0
+            };
+            canvas.Children.Add(mouth);
+
+            // Kleinere Zähne (vertikale Linien im Mundbereich)
+            for (int i = 0; i < 2; i++)
+            {
+                Line tooth = new Line()
+                {
+                    X1 = x + 45 + (i * 10),
+                    Y1 = y + 55,
+                    X2 = x + 45 + (i * 10),
+                    Y2 = y + 61,
+                    Stroke = featureBrush,
+                    StrokeThickness = 0.8
+                };
+                canvas.Children.Add(tooth);
+            }
+
+            //// Kleinere gekreuzte Knochen
+            //Line bone1 = new Line()
+            //{
+            //    X1 = x + 25,
+            //    Y1 = y + 75,
+            //    X2 = x + 55,
+            //    Y2 = y + 85,
+            //    Stroke = featureBrush,
+            //    StrokeThickness = 1.5
+            //};
+            //canvas.Children.Add(bone1);
+
+            //Line bone2 = new Line()
+            //{
+            //    X1 = x + 25,
+            //    Y1 = y + 85,
+            //    X2 = x + 55,
+            //    Y2 = y + 75,
+            //    Stroke = featureBrush,
+            //    StrokeThickness = 1.5
+            //};
+            //canvas.Children.Add(bone2);
+        }
     }
     
 
@@ -307,8 +491,6 @@ namespace OOPGames
 
         public ID_TTTMove GetMove(ID_TTTGameField field)
         {
-
-
             // 1. Schritt: Prüfen, ob der Computer gewinnen kann und den Gewinnzug machen
             ID_TTTMove winningMove = FindWinningMove(field, _PlayerNumber);
             if (winningMove != null)
