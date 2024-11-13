@@ -30,6 +30,10 @@ namespace OOPGames
 
         public void PaintTTT(Canvas canvas, IB_Field_TTT playField)
         {
+            double _Height = canvas.ActualHeight;
+            double _Width = canvas.ActualWidth;
+            double _maxSquare = Math.Max(_Height, _Width);
+
             canvas.Children.Clear();
             Color bgColor = Color.FromRgb(255, 255, 255);
             canvas.Background = new SolidColorBrush(bgColor);
@@ -40,7 +44,7 @@ namespace OOPGames
             Color OColor = Color.FromRgb(0, 0, 255);
             Brush OStroke = new SolidColorBrush(OColor);
 
-            Line l1 = new Line() { X1 = 120, Y1 = 20, X2 = 120, Y2 = 320, Stroke = lineStroke, StrokeThickness = 3.0 };
+            Line l1 = new Line() { X1 = 120, Y1 = 20, X2 = 120, Y2 = _maxSquare-20, Stroke = lineStroke, StrokeThickness = 3.0 };
             canvas.Children.Add(l1);
             Line l2 = new Line() { X1 = 220, Y1 = 20, X2 = 220, Y2 = 320, Stroke = lineStroke, StrokeThickness = 3.0 };
             canvas.Children.Add(l2);
