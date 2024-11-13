@@ -38,7 +38,8 @@ namespace OOPGames
         ID_TTTMove GetMove(ID_TTTGameField field);
     }
 
-
-        
-
+    public interface IDrawableSymbol
+    {
+        void Draw(Canvas canvas, int x, int y);
+    }
 }
