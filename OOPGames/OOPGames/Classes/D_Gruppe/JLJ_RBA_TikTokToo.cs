@@ -24,51 +24,52 @@ namespace OOPGames
 
         public void PaintTTTField(Canvas canvas, ID_TTTGameField currentField)
         {
-             
-           
 
-                // Paint funktionen 
-                canvas.Children.Clear();
-                Color bgColor = Color.FromRgb(255, 255, 255);
-                canvas.Background = new SolidColorBrush(bgColor);
-                Color lineColor = Color.FromRgb(0, 0, 0);
-                Brush lineStroke = new SolidColorBrush(lineColor);
-                Color XColor = Color.FromRgb(145, 44, 238);
-                Brush XStroke = new SolidColorBrush(XColor);
-                Color OColor = Color.FromRgb(22, 211, 245);
-                Brush OStroke = new SolidColorBrush(OColor);
 
-                Line l1 = new Line() { X1 = 120, Y1 = 20, X2 = 120, Y2 = 320, Stroke = lineStroke, StrokeThickness = 5.0 };
-                canvas.Children.Add(l1);
-                Line l2 = new Line() { X1 = 220, Y1 = 20, X2 = 220, Y2 = 320, Stroke = lineStroke, StrokeThickness = 5.0 };
-                canvas.Children.Add(l2);
-                Line l3 = new Line() { X1 = 20, Y1 = 120, X2 = 320, Y2 = 120, Stroke = lineStroke, StrokeThickness = 5.0 };
-                canvas.Children.Add(l3);
-                Line l4 = new Line() { X1 = 20, Y1 = 220, X2 = 320, Y2 = 220, Stroke = lineStroke, StrokeThickness = 5.0 };
-                canvas.Children.Add(l4);
 
-                for (int i = 0; i < 3; i++)
+            // Paint funktionen 
+            canvas.Children.Clear();
+            Color bgColor = Color.FromRgb(255, 255, 255);
+            canvas.Background = new SolidColorBrush(bgColor);
+            Color lineColor = Color.FromRgb(0, 0, 0);
+            Brush lineStroke = new SolidColorBrush(lineColor);
+            Color XColor = Color.FromRgb(145, 44, 238);
+            Brush XStroke = new SolidColorBrush(XColor);
+            Color OColor = Color.FromRgb(22, 211, 245);
+            Brush OStroke = new SolidColorBrush(OColor);
+
+            Line l1 = new Line() { X1 = 120, Y1 = 20, X2 = 120, Y2 = 320, Stroke = lineStroke, StrokeThickness = 5.0 };
+            canvas.Children.Add(l1);
+            Line l2 = new Line() { X1 = 220, Y1 = 20, X2 = 220, Y2 = 320, Stroke = lineStroke, StrokeThickness = 5.0 };
+            canvas.Children.Add(l2);
+            Line l3 = new Line() { X1 = 20, Y1 = 120, X2 = 320, Y2 = 120, Stroke = lineStroke, StrokeThickness = 5.0 };
+            canvas.Children.Add(l3);
+            Line l4 = new Line() { X1 = 20, Y1 = 220, X2 = 320, Y2 = 220, Stroke = lineStroke, StrokeThickness = 5.0 };
+            canvas.Children.Add(l4);
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
                 {
-                    for (int j = 0; j < 3; j++)
+                    if (currentField[i, j] == 1)
                     {
-                        if (currentField[i, j] == 1)
-                        {
-                            Line X1 = new Line() { X1 = 20 + (j * 100), Y1 = 20 + (i * 100), X2 = 120 + (j * 100), Y2 = 120 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
-                            canvas.Children.Add(X1);
-                            Line X2 = new Line() { X1 = 20 + (j * 100), Y1 = 120 + (i * 100), X2 = 120 + (j * 100), Y2 = 20 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
-                            canvas.Children.Add(X2);
-                        }
-                        else if (currentField[i, j] == 2)
-                        {
-                            Ellipse OE = new Ellipse() { Margin = new Thickness(20 + (j * 100), 20 + (i * 100), 0, 0), Width = 100, Height = 100, Stroke = OStroke, StrokeThickness = 3.0 };
-                            canvas.Children.Add(OE);
-                        }
+                        Line X1 = new Line() { X1 = 20 + (j * 100), Y1 = 20 + (i * 100), X2 = 120 + (j * 100), Y2 = 120 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
+                        canvas.Children.Add(X1);
+                        Line X2 = new Line() { X1 = 20 + (j * 100), Y1 = 120 + (i * 100), X2 = 120 + (j * 100), Y2 = 20 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
+                        canvas.Children.Add(X2);
+                    }
+                    else if (currentField[i, j] == 2)
+                    {
+                        Ellipse OE = new Ellipse() { Margin = new Thickness(20 + (j * 100), 20 + (i * 100), 0, 0), Width = 100, Height = 100, Stroke = OStroke, StrokeThickness = 3.0 };
+                        canvas.Children.Add(OE);
                     }
                 }
-            
+            }
+
         }
 
     }
+    
 
     public class D_RulesTikTokToo : ID_TTTRules
     {
@@ -99,7 +100,7 @@ namespace OOPGames
             }
         }
 
-        
+
 
         public int CheckIfPLayerWon()
         {
@@ -144,7 +145,7 @@ namespace OOPGames
             if (move is ID_TTTMove)
             {
                 DoTicTacToeMove((ID_TTTMove)move);
-            } 
+            }
         }
 
         public void DoTicTacToeMove(ID_TTTMove move)
@@ -158,7 +159,7 @@ namespace OOPGames
 
     public class D_FieldTikTokToo : ID_TTTGameField
     {
-        
+
 
         public bool CanBePaintedBy(IPaintGame painter)
         {
@@ -192,7 +193,7 @@ namespace OOPGames
     }
 
     public class D_MoveTikTokToo : ID_TTTMove
-    {   
+    {
         int _PlayerNumber = 0;
 
         int _Row = 0;
@@ -235,27 +236,27 @@ namespace OOPGames
 
         public ID_TTTMove GetMove(IMoveSelection selection, ID_TTTGameField field)
         {
-           
 
-                if (selection is IClickSelection)
+
+            if (selection is IClickSelection)
+            {
+                IClickSelection sel = (IClickSelection)selection;
+                for (int i = 0; i < 3; i++)
                 {
-                    IClickSelection sel = (IClickSelection)selection;
-                    for (int i = 0; i < 3; i++)
+                    for (int j = 0; j < 3; j++)
                     {
-                        for (int j = 0; j < 3; j++)
+                        if (sel.XClickPos > 20 + (j * 100) && sel.XClickPos < 120 + (j * 100) &&
+                            sel.YClickPos > 20 + (i * 100) && sel.YClickPos < 120 + (i * 100) &&
+                            field[i, j] <= 0)
                         {
-                            if (sel.XClickPos > 20 + (j * 100) && sel.XClickPos < 120 + (j * 100) &&
-                                sel.YClickPos > 20 + (i * 100) && sel.YClickPos < 120 + (i * 100) &&
-                                field[i, j] <= 0)
-                            {
-                                return new D_MoveTikTokToo(i, j, _PlayerNumber);
-                            }
+                            return new D_MoveTikTokToo(i, j, _PlayerNumber);
                         }
                     }
                 }
-                return null;
-            
-            
+            }
+            return null;
+
+
         }
 
         public IPlayMove GetMove(IMoveSelection selection, IGameField field)
@@ -310,50 +311,50 @@ namespace OOPGames
 
             // 1. Schritt: Prüfen, ob der Computer gewinnen kann und den Gewinnzug machen
             ID_TTTMove winningMove = FindWinningMove(field, _PlayerNumber);
-                if (winningMove != null)
-                {
-                    return winningMove;
-                }
+            if (winningMove != null)
+            {
+                return winningMove;
+            }
 
-                // 2. Schritt: Prüfen, ob der Gegner gewinnen könnte, und blockieren
-                int opponentNumber = _PlayerNumber == 1 ? 2 : 1;
+            // 2. Schritt: Prüfen, ob der Gegner gewinnen könnte, und blockieren
+            int opponentNumber = _PlayerNumber == 1 ? 2 : 1;
             ID_TTTMove blockingMove = FindWinningMove(field, opponentNumber);
-                if (blockingMove != null)
-                {
-                    return blockingMove;
-                }
+            if (blockingMove != null)
+            {
+                return blockingMove;
+            }
 
-                // 3. Schritt: Falls weder Gewinn noch Block möglich ist, Zentrum wählen
-                if (field[1, 1] == 0)
-                {
-                    return new D_MoveTikTokToo(1, 1, _PlayerNumber);
-                }
+            // 3. Schritt: Falls weder Gewinn noch Block möglich ist, Zentrum wählen
+            if (field[1, 1] == 0)
+            {
+                return new D_MoveTikTokToo(1, 1, _PlayerNumber);
+            }
 
-                // 4. Schritt: Ecken besetzen, falls das Zentrum schon belegt ist
-                int[,] ecken = new int[,] { { 0, 0 }, { 0, 2 }, { 2, 0 }, { 2, 2 } };
-                for (int i = 0; i < ecken.GetLength(0); i++)
+            // 4. Schritt: Ecken besetzen, falls das Zentrum schon belegt ist
+            int[,] ecken = new int[,] { { 0, 0 }, { 0, 2 }, { 2, 0 }, { 2, 2 } };
+            for (int i = 0; i < ecken.GetLength(0); i++)
+            {
+                int row = ecken[i, 0];
+                int col = ecken[i, 1];
+                if (field[row, col] == 0)
                 {
-                    int row = ecken[i, 0];
-                    int col = ecken[i, 1];
-                    if (field[row, col] == 0)
+                    return new D_MoveTikTokToo(row, col, _PlayerNumber);
+                }
+            }
+
+            // 5. Schritt: Alle verbleibenden freien Felder der Reihe nach prüfen
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (field[i, j] == 0)
                     {
-                        return new D_MoveTikTokToo(row, col, _PlayerNumber);
+                        return new D_MoveTikTokToo(i, j, _PlayerNumber);
                     }
                 }
-
-                // 5. Schritt: Alle verbleibenden freien Felder der Reihe nach prüfen
-                for (int i = 0; i < 3; i++)
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        if (field[i, j] == 0)
-                        {
-                            return new D_MoveTikTokToo(i, j, _PlayerNumber);
-                        }
-                    }
-                }
+            }
             return null;
-           
+
         }
 
         // Hilfsmethode, um einen Gewinnzug für den Spieler zu finden
@@ -402,6 +403,6 @@ namespace OOPGames
             _PlayerNumber = playerNumber;
         }
 
-     
+
     }
 }
