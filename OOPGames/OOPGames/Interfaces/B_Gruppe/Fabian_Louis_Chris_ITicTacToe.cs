@@ -48,4 +48,9 @@ namespace OOPGames
         IB_Move_TTT GetTTTMove(IB_Field_TTT field);
     }
 
+    public interface IB_ComputerPlayerSchlau_TTT : IComputerGamePlayer
+    {
+        IB_Move_TTT GetTTTMove(IB_Field_TTT field);
+    }
+
 }

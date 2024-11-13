@@ -48,6 +48,7 @@ namespace OOPGames
             OOPGamesManager.Singleton.RegisterPlayer(new D_ComputerPTikTokToo());
             OOPGamesManager.Singleton.RegisterPlayer(new B_HumanPlayer_TTT());
             OOPGamesManager.Singleton.RegisterPlayer(new B_ComputerPlayer_TTT());
+            OOPGamesManager.Singleton.RegisterPlayer(new B_ComputerPlayerSchlau_TTT());
             OOPGamesManager.Singleton.RegisterPlayer(new C_Computer());
             OOPGamesManager.Singleton.RegisterPlayer(new C_Human());
 
