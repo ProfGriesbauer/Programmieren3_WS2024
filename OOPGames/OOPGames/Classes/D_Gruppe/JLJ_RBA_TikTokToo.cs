@@ -10,16 +10,22 @@ using System.Windows.Shapes;
 
 namespace OOPGames
 {
-    public class D_PainterTikTokToo : IPaintGame
+    public class D_PainterTikTokToo : ID_PaintTTT
     {
         public string Name { get { return "JLJs_TTTPainter"; } }
 
         public void PaintGameField(Canvas canvas, IGameField currentField)
         {
-            // Test ob Gamefield 
-            if (currentField is D_FieldTikTokToo)
+            if (currentField is ID_TTTGameField)
             {
-                D_FieldTikTokToo myField = (D_FieldTikTokToo)currentField;
+                PaintTTTField(canvas, (ID_TTTGameField)currentField);
+            }
+        }
+
+        public void PaintTTTField(Canvas canvas, ID_TTTGameField currentField)
+        {
+             
+           
 
                 // Paint funktionen 
                 canvas.Children.Clear();
@@ -45,32 +51,34 @@ namespace OOPGames
                 {
                     for (int j = 0; j < 3; j++)
                     {
-                        if (myField[i, j] == 1)
+                        if (currentField[i, j] == 1)
                         {
                             Line X1 = new Line() { X1 = 20 + (j * 100), Y1 = 20 + (i * 100), X2 = 120 + (j * 100), Y2 = 120 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
                             canvas.Children.Add(X1);
                             Line X2 = new Line() { X1 = 20 + (j * 100), Y1 = 120 + (i * 100), X2 = 120 + (j * 100), Y2 = 20 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
                             canvas.Children.Add(X2);
                         }
-                        else if (myField[i, j] == 2)
+                        else if (currentField[i, j] == 2)
                         {
                             Ellipse OE = new Ellipse() { Margin = new Thickness(20 + (j * 100), 20 + (i * 100), 0, 0), Width = 100, Height = 100, Stroke = OStroke, StrokeThickness = 3.0 };
                             canvas.Children.Add(OE);
                         }
                     }
                 }
-            }
+            
         }
+
     }
 
-    public class D_RulesTikTokToo : IGameRules
+    public class D_RulesTikTokToo : ID_TTTRules
     {
         D_FieldTikTokToo _Field = new D_FieldTikTokToo();
 
 
         public string Name { get { return "JLJs_TTTRules"; } }
 
-        public IGameField CurrentField { get { return _Field; } }
+        public ID_TTTGameField TTTField { get { return (ID_TTTGameField)_Field; } }
+        public IGameField CurrentField { get { return TTTField; } }
 
         public bool MovesPossible
         {
@@ -90,6 +98,8 @@ namespace OOPGames
                 return false;
             }
         }
+
+        
 
         public int CheckIfPLayerWon()
         {
@@ -131,23 +141,28 @@ namespace OOPGames
 
         public void DoMove(IPlayMove move)
         {
-            if (move is D_MoveTikTokToo)
+            if (move is ID_TTTMove)
             {
-                D_MoveTikTokToo myMove = (D_MoveTikTokToo) move;
-
-                if (myMove.Row >= 0 && myMove.Row < 3 && myMove.Column >= 0 && myMove.Column < 3)
-                {
-                    _Field[myMove.Row, myMove.Column] = myMove.PlayerNumber;
-                }
+                DoTicTacToeMove((ID_TTTMove)move);
             } 
+        }
+
+        public void DoTicTacToeMove(ID_TTTMove move)
+        {
+            if (move.Row >= 0 && move.Row < 3 && move.Column >= 0 && move.Column < 3)
+            {
+                _Field[move.Row, move.Column] = move.PlayerNumber;
+            }
         }
     }
 
-    public class D_FieldTikTokToo : IGameField
+    public class D_FieldTikTokToo : ID_TTTGameField
     {
+        
+
         public bool CanBePaintedBy(IPaintGame painter)
         {
-            return painter is D_PainterTikTokToo;
+            return painter is ID_PaintTTT;
         }
 
         int[,] _Field = new int[3, 3] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
@@ -176,7 +191,7 @@ namespace OOPGames
         }
     }
 
-    public class D_MoveTikTokToo : IRowMove, IColumnMove
+    public class D_MoveTikTokToo : ID_TTTMove
     {   
         int _PlayerNumber = 0;
 
@@ -198,7 +213,7 @@ namespace OOPGames
         public int PlayerNumber { get { return _PlayerNumber; } }
     }
 
-    public class D_HumanPTikTokToo : IHumanGamePlayer
+    public class D_HumanPTikTokToo : ID_HumanTTTPlayer
     {
         int _PlayerNumber = 0;
 
@@ -208,7 +223,7 @@ namespace OOPGames
 
         public bool CanBeRuledBy(IGameRules rules)
         {
-            return rules is D_RulesTikTokToo;
+            return rules is ID_TTTRules;
         }
 
         public IGamePlayer Clone()
@@ -218,12 +233,9 @@ namespace OOPGames
             return D_TTT_HP;
         }
 
-        public IPlayMove GetMove(IMoveSelection selection, IGameField field)
+        public ID_TTTMove GetMove(IMoveSelection selection, ID_TTTGameField field)
         {
-            if (field is D_FieldTikTokToo)
-            {
-
-                D_FieldTikTokToo myfield = (D_FieldTikTokToo)field; 
+           
 
                 if (selection is IClickSelection)
                 {
@@ -234,7 +246,7 @@ namespace OOPGames
                         {
                             if (sel.XClickPos > 20 + (j * 100) && sel.XClickPos < 120 + (j * 100) &&
                                 sel.YClickPos > 20 + (i * 100) && sel.YClickPos < 120 + (i * 100) &&
-                                myfield[i, j] <= 0)
+                                field[i, j] <= 0)
                             {
                                 return new D_MoveTikTokToo(i, j, _PlayerNumber);
                             }
@@ -242,6 +254,15 @@ namespace OOPGames
                     }
                 }
                 return null;
+            
+            
+        }
+
+        public IPlayMove GetMove(IMoveSelection selection, IGameField field)
+        {
+            if (field is ID_TTTGameField)
+            {
+                return GetMove(selection, (ID_TTTGameField)field);
             }
             else
             {
@@ -255,7 +276,7 @@ namespace OOPGames
         }
     }
 
-    public class D_ComputerPTikTokToo : IComputerGamePlayer
+    public class D_ComputerPTikTokToo : ID_ComputerTTTPlayer
     {
         int _PlayerNumber = 0;
 
@@ -274,15 +295,21 @@ namespace OOPGames
             D_TTT_CP.SetPlayerNumber(this._PlayerNumber);
             return D_TTT_CP;
         }
-
         public IPlayMove GetMove(IGameField field)
         {
-            if (field is D_FieldTikTokToo myField)
+            if (field is ID_TTTGameField)
             {
-                D_FieldTikTokToo myfield = (D_FieldTikTokToo)field;
+                return GetMove((ID_TTTGameField)field);
+            }
+            else { return null; }
+        }
 
-                // 1. Schritt: Prüfen, ob der Computer gewinnen kann und den Gewinnzug machen
-                IPlayMove winningMove = FindWinningMove(myField, _PlayerNumber);
+        public ID_TTTMove GetMove(ID_TTTGameField field)
+        {
+
+
+            // 1. Schritt: Prüfen, ob der Computer gewinnen kann und den Gewinnzug machen
+            ID_TTTMove winningMove = FindWinningMove(field, _PlayerNumber);
                 if (winningMove != null)
                 {
                     return winningMove;
@@ -290,14 +317,14 @@ namespace OOPGames
 
                 // 2. Schritt: Prüfen, ob der Gegner gewinnen könnte, und blockieren
                 int opponentNumber = _PlayerNumber == 1 ? 2 : 1;
-                IPlayMove blockingMove = FindWinningMove(myField, opponentNumber);
+            ID_TTTMove blockingMove = FindWinningMove(field, opponentNumber);
                 if (blockingMove != null)
                 {
                     return blockingMove;
                 }
 
                 // 3. Schritt: Falls weder Gewinn noch Block möglich ist, Zentrum wählen
-                if (myField[1, 1] == 0)
+                if (field[1, 1] == 0)
                 {
                     return new D_MoveTikTokToo(1, 1, _PlayerNumber);
                 }
@@ -308,7 +335,7 @@ namespace OOPGames
                 {
                     int row = ecken[i, 0];
                     int col = ecken[i, 1];
-                    if (myField[row, col] == 0)
+                    if (field[row, col] == 0)
                     {
                         return new D_MoveTikTokToo(row, col, _PlayerNumber);
                     }
@@ -319,18 +346,18 @@ namespace OOPGames
                 {
                     for (int j = 0; j < 3; j++)
                     {
-                        if (myField[i, j] == 0)
+                        if (field[i, j] == 0)
                         {
                             return new D_MoveTikTokToo(i, j, _PlayerNumber);
                         }
                     }
                 }
-            }
-            return null; // Falls keine Züge möglich sind
+            return null;
+           
         }
 
         // Hilfsmethode, um einen Gewinnzug für den Spieler zu finden
-        private IPlayMove FindWinningMove(D_FieldTikTokToo field, int playerNumber)
+        private ID_TTTMove FindWinningMove(ID_TTTGameField field, int playerNumber)
         {
             // Reihen und Spalten durchgehen, um Gewinnmöglichkeiten zu prüfen
             for (int i = 0; i < 3; i++)
@@ -374,5 +401,7 @@ namespace OOPGames
         {
             _PlayerNumber = playerNumber;
         }
+
+     
     }
 }
