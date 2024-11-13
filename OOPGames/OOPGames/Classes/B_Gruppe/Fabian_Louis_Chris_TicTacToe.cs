@@ -170,8 +170,10 @@ namespace OOPGames
             }
 
             return -1;
-
+            
         }
+        
+
 
         public void ClearField()
         {
@@ -278,6 +280,8 @@ namespace OOPGames
 
         public IB_Move_TTT GetTTTMove(IB_Field_TTT field)
         {
+
+
             Random rand = new Random();
             int f = rand.Next(0, 8);
             for (int i = 0; i < 9; i++)
@@ -310,6 +314,166 @@ namespace OOPGames
         }
 
     }
+
+
+    //Erstellt eine Klasse B_ComputerPlayerSchlau_TTT aus der Abstrakten Klasse B_BasePlayer
+    //und der Interface Klasse IB_ComputerPlayerSchlau_TTT
+    public class B_ComputerPlayerSchlau_TTT : B_BasePlayer, IB_ComputerPlayerSchlau_TTT
+    {
+
+        //Überschreibt den Angezeigten Name der Klasse im Auswahlbereich
+        public override string Name
+        {
+            get
+            {
+                return "Gruppe B TicTacToe ComputerPlayerSchlau";
+            }
+        }
+
+        //Erstellt ein neues Objekt für einen ComputerPlayer
+        public override IGamePlayer Clone()
+        {
+            B_ComputerPlayerSchlau_TTT TTT_ComputerSchlau = new B_ComputerPlayerSchlau_TTT();
+            TTT_ComputerSchlau.SetPlayerNumber(this.PlayerNumber);
+            return TTT_ComputerSchlau;
+        }
+
+
+        public IPlayMove GetMove(IGameField field)
+        {
+            if (field is IB_Field_TTT)
+            {
+                return GetTTTMove((IB_Field_TTT)field);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private int Minimax(int[,] board, int depth, bool isMaximizing)
+        {
+            int winner = CheckWinner(board);
+            if (winner != 0)
+            {
+                return winner == this.PlayerNumber ? 1 : -1;
+            }
+
+            if (IsBoardFull(board)) return 0;
+
+            if (isMaximizing)
+            {
+                int bestScore = int.MinValue;
+                for (int r = 0; r < 3; r++)
+                {
+                    for (int c = 0; c < 3; c++)
+                    {
+                        if (board[r, c] == 0)
+                        {
+                            board[r, c] = this.PlayerNumber;
+                            int score = Minimax(board, depth + 1, false);
+                            board[r, c] = 0;
+                            bestScore = Math.Max(score, bestScore);
+                        }
+                    }
+                }
+                return bestScore;
+            }
+            else
+            {
+                int bestScore = int.MaxValue;
+                int opponent = this.PlayerNumber == 1 ? 2 : 1;
+                for (int r = 0; r < 3; r++)
+                {
+                    for (int c = 0; c < 3; c++)
+                    {
+                        if (board[r, c] == 0)
+                        {
+                            board[r, c] = opponent;
+                            int score = Minimax(board, depth + 1, true);
+                            board[r, c] = 0;
+                            bestScore = Math.Min(score, bestScore);
+                        }
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        public IB_Move_TTT GetTTTMove(IB_Field_TTT field)
+        {
+            int[,] board = new int[3, 3];
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    board[i, j] = field[i, j];
+                }
+            }
+
+            int bestScore = int.MinValue;
+            (int, int) bestMove = (-1, -1);
+
+            for (int r = 0; r < 3; r++)
+            {
+                for (int c = 0; c < 3; c++)
+                {
+                    if (board[r, c] == 0)
+                    {
+                        board[r, c] = this.PlayerNumber;
+                        int score = Minimax(board, 0, false);
+                        board[r, c] = 0;
+
+                        if (score > bestScore)
+                        {
+                            bestScore = score;
+                            bestMove = (r, c);
+                        }
+                    }
+                }
+            }
+
+            return new B_Move_TTT(bestMove.Item1, bestMove.Item2, this.PlayerNumber);
+
+            //return null;
+        }
+        private bool IsBoardFull(int[,] board)
+        {
+            for (int r = 0; r < 3; r++)
+            {
+                for (int c = 0; c < 3; c++)
+                {
+                    if (board[r, c] == 0) return false;
+                }
+            }
+            return true;
+        }
+
+        // Prüft, ob ein Spieler gewonnen hat
+        private int CheckWinner(int[,] board)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                // Überprüfe Zeilen
+                if (board[i, 0] != 0 && board[i, 0] == board[i, 1] && board[i, 0] == board[i, 2])
+                    return board[i, 0];
+
+                // Überprüfe Spalten
+                if (board[0, i] != 0 && board[0, i] == board[1, i] && board[0, i] == board[2, i])
+                    return board[0, i];
+            }
+
+            // Überprüfe Diagonalen
+            if (board[0, 0] != 0 && board[0, 0] == board[1, 1] && board[0, 0] == board[2, 2])
+                return board[0, 0];
+
+            if (board[0, 2] != 0 && board[0, 2] == board[1, 1] && board[0, 2] == board[2, 0])
+                return board[0, 2];
+
+            return 0; // Kein Gewinner
+        }
+    }
+
     public class B_HumanPlayer_TTT : B_BasePlayer, IB_HumanPlayer_TTT
     {
         public override string Name
@@ -356,6 +520,7 @@ namespace OOPGames
             }
             return null;
         }
+
     }
 
 }
