@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -47,16 +48,23 @@ namespace LectureHouse
 
         public IList<IRoom> AlleRäume { get; }
     }
-    public class House : IHouse, IEGerateBesuchbar, ISerializable
+    public class House : IHouse, IEGerateBesuchbar, ISerializable, IEnumerable<IRoom>, IComparable<House>
     {
         float _StromV; //in A
         float _WasserV = 88;
+
+        public EventHandler RaumDazu;
 
         IRoom _mainRoom;
 
         IList<IRoom> _Rooms = new List<IRoom>();
 
         public static double PI = 3.14157535;
+
+        public House HausErzeugerFabnrik(float stromV, float wasserV)
+        {
+            return new House(stromV, wasserV);
+        }
 
         public House ()
         {
@@ -154,6 +162,7 @@ namespace LectureHouse
 
         public void RaumHinzufuegen(IRoom room)
         {
+            RaumDazu(this, new EventArgs());
             _Rooms.Add(room);
         }
 
@@ -193,6 +202,22 @@ namespace LectureHouse
                 nr.deserialize(strs[i]);
                 _Rooms.Add(nr);
             }
+        }
+
+        public IEnumerator<IRoom> GetEnumerator()
+        {
+            return _Rooms.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _Rooms.GetEnumerator();
+        }
+
+        public int CompareTo(House? other)
+        {
+            if (other == null) return -1;
+            else return (other._WasserV == _WasserV && other._StromV == _StromV) ? 0 : -1;
         }
     }
 }
