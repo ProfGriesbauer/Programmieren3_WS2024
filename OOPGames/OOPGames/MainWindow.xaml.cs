@@ -133,10 +133,6 @@ namespace OOPGames
             {
                 Status.Text = "Player " + winner + " Won!";
             }
-            else if (!_CurrentRules.MovesPossible)
-            {
-                Status.Text = "Draw! No more moves possible.";
-            }
             else
             {
                 while (_CurrentRules.MovesPossible &&
@@ -167,6 +163,10 @@ namespace OOPGames
             if (winner > 0)
             {
                 Status.Text = "Player " + winner + " Won!";
+            }
+            else if (!_CurrentRules.MovesPossible)
+            {
+                Status.Text = "Draw! No more moves possible.";
             }
             else
             {
@@ -202,10 +202,6 @@ namespace OOPGames
             if (winner > 0)
             {
                 Status.Text = "Player" + winner + " Won!";
-            }
-            else if (!_CurrentRules.MovesPossible)
-            {
-                Status.Text = "Draw! No more moves possible.";
             }
             else
             {

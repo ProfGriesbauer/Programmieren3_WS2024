@@ -68,7 +68,6 @@
     <Compile Include="Classes\F_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\I_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\G_Gruppe\Vorname_Nachname_XXX.cs" />
-    <Compile Include="Classes\C_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\J_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\H_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\D_Gruppe\JLJ_RBA_TikTokToo.cs" />

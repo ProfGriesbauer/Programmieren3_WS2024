@@ -10,10 +10,18 @@ namespace OOPGames
     public interface IB_Painter_TTT : IPaintGame
     {
         void PaintTTT(Canvas canvas, IB_Field_TTT playField);
+
     }
 
     public interface IB_Field_TTT : IGameField
     {
+        //Values for the current Heigth and Width of the Canvas setted/updated by the PaintTTT function
+        double Height { get; set; }
+        double Width { get; set; }
+
+        //Margin for the Playfield
+        double MarginPercentage { get; }
+
         // 3x3 TicTacToe Field
         //O: unuesed
         //1: Player 1
