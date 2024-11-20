@@ -320,42 +320,53 @@ namespace OOPGames
 
         }
 
-
         public int CheckIfPLayerWon()
+        {
+            int _winner = CheckIfPLayerWon_TTT(TTTField);
+            if (_winner == 0)
+            {
+                return -1;
+            }
+            else
+            {
+                return _winner;
+            }
+        }
+        public int CheckIfPLayerWon_TTT(IB_Field_TTT field)
         {
             for (int i = 0; i < 3; i++)
             {
                 //check rows
-                if (_Field[i, 0] != 0)
+                if (field[i, 0] != 0)
                 {
-                    if (_Field[i, 0] == _Field[i, 1] && _Field[i, 0] == _Field[i, 2])
+                    if (field[i, 0] == field[i, 1] && field[i, 0] == field[i, 2])
                     {
-                        return _Field[i, 0];
+                        return field[i, 0];
                     }
                 }
                 //check colums
-                if (_Field[0, i] != 0)
+                if (field[0, i] != 0)
                 {
-                    if (_Field[0, i] == _Field[1, i] && _Field[0, i] == _Field[2, i])
+                    if (field[0, i] == field[1, i] && field[0, i] == field[2, i])
                     {
-                        return _Field[0, i];
+                        return field[0, i];
                     }
                 }
             }
 
             //check diagonal 1
-            if (_Field[0, 0] != 0 && _Field[0, 0] == _Field[1, 1] && _Field[0, 0] == _Field[2, 2])
+            if (field[0, 0] != 0 && field[0, 0] == field[1, 1] && field[0, 0] == field[2, 2])
             {
-                return _Field[0, 0];
+                return field[0, 0];
             }
 
             //check diagonal 2
-            if (_Field[0, 2] != 0 && _Field[0, 2] == _Field[1, 1] && _Field[0, 2] == _Field[2, 0])
+            if (field[0, 2] != 0 && field[0, 2] == field[1, 1] && field[0, 2] == field[2, 0])
             {
-                return _Field[0, 2];
+                return field[0, 2];
             }
 
-            return -1;
+            return 0;
             
         }
         
@@ -378,7 +389,7 @@ namespace OOPGames
         {
             if (move.Row >= 0 && move.Row < 3 && move.Column >= 0 && move.Column < 3)
             {
-                _Field[move.Row, move.Column] = move.PlayerNumber;
+                TTTField[move.Row, move.Column] = move.PlayerNumber;
             }
         }
     }
@@ -506,7 +517,7 @@ namespace OOPGames
     //und der Interface Klasse IB_ComputerPlayerSchlau_TTT
     public class B_ComputerPlayerSchlau_TTT : B_BasePlayer, IB_ComputerPlayer_TTT
     {
-
+        
         //Überschreibt den Angezeigten Name der Klasse im Auswahlbereich
         public override string Name
         {
@@ -537,15 +548,21 @@ namespace OOPGames
             }
         }
 
-        private int Minimax(int[,] board, int depth, bool isMaximizing)
+
+        private int Minimax(IB_Field_TTT board, int depth, bool isMaximizing, IB_Field_TTT field)
         {
-            int winner = CheckWinner(board);
+            int winner = field.Rules_TTT.CheckIfPLayerWon_TTT(board);
+
             if (winner != 0)
             {
                 return winner == this.PlayerNumber ? 1 : -1;
             }
 
-            if (IsBoardFull(board)) return 0;
+            if (!field.Rules_TTT.MovesPossible)
+            {
+                return 0;
+            }
+
 
             if (isMaximizing)
             {
@@ -557,7 +574,7 @@ namespace OOPGames
                         if (board[r, c] == 0)
                         {
                             board[r, c] = this.PlayerNumber;
-                            int score = Minimax(board, depth + 1, false);
+                            int score = Minimax(board, depth + 1, false, field);
                             board[r, c] = 0;
                             bestScore = Math.Max(score, bestScore);
                         }
@@ -576,7 +593,7 @@ namespace OOPGames
                         if (board[r, c] == 0)
                         {
                             board[r, c] = opponent;
-                            int score = Minimax(board, depth + 1, true);
+                            int score = Minimax(board, depth + 1, true, field);
                             board[r, c] = 0;
                             bestScore = Math.Min(score, bestScore);
                         }
@@ -588,14 +605,7 @@ namespace OOPGames
 
         public IB_Move_TTT GetTTTMove(IB_Field_TTT field)
         {
-            int[,] board = new int[3, 3];
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    board[i, j] = field[i, j];
-                }
-            }
+            IB_Field_TTT board = field;
 
             int bestScore = int.MinValue;
             (int, int) bestMove = (-1, -1);
@@ -607,7 +617,7 @@ namespace OOPGames
                     if (board[r, c] == 0)
                     {
                         board[r, c] = this.PlayerNumber;
-                        int score = Minimax(board, 0, false);
+                        int score = Minimax(board, 0, false, field);
                         board[r, c] = 0;
 
                         if (score > bestScore)
@@ -620,43 +630,6 @@ namespace OOPGames
             }
 
             return new B_Move_TTT(bestMove.Item1, bestMove.Item2, this.PlayerNumber);
-
-            //return null;
-        }
-        private bool IsBoardFull(int[,] board)
-        {
-            for (int r = 0; r < 3; r++)
-            {
-                for (int c = 0; c < 3; c++)
-                {
-                    if (board[r, c] == 0) return false;
-                }
-            }
-            return true;
-        }
-
-        // Prüft, ob ein Spieler gewonnen hat
-        private int CheckWinner(int[,] board)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                // Überprüfe Zeilen
-                if (board[i, 0] != 0 && board[i, 0] == board[i, 1] && board[i, 0] == board[i, 2])
-                    return board[i, 0];
-
-                // Überprüfe Spalten
-                if (board[0, i] != 0 && board[0, i] == board[1, i] && board[0, i] == board[2, i])
-                    return board[0, i];
-            }
-
-            // Überprüfe Diagonalen
-            if (board[0, 0] != 0 && board[0, 0] == board[1, 1] && board[0, 0] == board[2, 2])
-                return board[0, 0];
-
-            if (board[0, 2] != 0 && board[0, 2] == board[1, 1] && board[0, 2] == board[2, 0])
-                return board[0, 2];
-
-            return 0; // Kein Gewinner
         }
     }
 

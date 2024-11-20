@@ -22,6 +22,9 @@ namespace OOPGames
         //Margin for the Playfield
         double MarginPercentage { get; }
 
+     
+        IB_Rules_TTT Rules_TTT { get; }
+
         // 3x3 TicTacToe Field
         //O: unuesed
         //1: Player 1
@@ -33,6 +36,10 @@ namespace OOPGames
     {
         //Adds the given move to the current tictactoe field if possible
         void DoMoveTTT(IB_Move_TTT move);
+
+        //Returns the number of a player who won using the current field
+        //RETURN -1 IF NO PLAYER WON
+        int CheckIfPLayerWon_TTT(IB_Field_TTT field);
 
         //Gets the current state of the game field; the class implementing
         //this interface should hold a game field corresponding to the rules
