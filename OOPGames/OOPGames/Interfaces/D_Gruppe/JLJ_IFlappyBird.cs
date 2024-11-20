@@ -12,7 +12,7 @@ namespace OOPGames
 
     }
 
-    public interface ID_FB_GameField : IGameField
+	public interface ID_FB_GameField : IGameField
     {
 
     }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OOPGames.Classes.C_Gruppe.OOPGames;
+using OOPGames.Classes.C_Gruppe.OOPGames.Classes.C_Gruppe.OOPGames;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,13 +38,13 @@ namespace OOPGames
             OOPGamesManager.Singleton.RegisterPainter(new D_PainterTikTokToo());
             OOPGamesManager.Singleton.RegisterPainter(new B_Paint_TTT());
             OOPGamesManager.Singleton.RegisterPainter(new C_Painter());
-            OOPGamesManager.Singleton.RegisterPainter(new FlappyPainter());
+            OOPGamesManager.Singleton.RegisterPainter(new C_MemoryGamePainter());
             //Rules
             OOPGamesManager.Singleton.RegisterRules(new X_TicTacToeRules());
             OOPGamesManager.Singleton.RegisterRules(new D_RulesTikTokToo());
             OOPGamesManager.Singleton.RegisterRules(new B_Rules_TTT());
             OOPGamesManager.Singleton.RegisterRules(new C_Rules());
-            OOPGamesManager.Singleton.RegisterRules(new FlappyRules());
+            OOPGamesManager.Singleton.RegisterRules(new C_MemoryGameRules());
             //Players
             OOPGamesManager.Singleton.RegisterPlayer(new X_TicTacToeHumanPlayer());
             OOPGamesManager.Singleton.RegisterPlayer(new X_TicTacToeComputerPlayer());
@@ -53,7 +55,8 @@ namespace OOPGames
             OOPGamesManager.Singleton.RegisterPlayer(new B_ComputerPlayerSchlau_TTT());
             OOPGamesManager.Singleton.RegisterPlayer(new C_Computer());
             OOPGamesManager.Singleton.RegisterPlayer(new C_Human());
-            OOPGamesManager.Singleton.RegisterPlayer(new FlappyPlayer());
+            OOPGamesManager.Singleton.RegisterPlayer(new C_HumanMemoryPlayer());
+            OOPGamesManager.Singleton.RegisterPlayer(new C_ComputerMemoryPlayer());
 
             InitializeComponent();
             PaintList.ItemsSource = OOPGamesManager.Singleton.Painters;
@@ -117,7 +120,7 @@ namespace OOPGames
                 ((IGameRules2)_CurrentRules).StartedGameCall();
             }
 
-            if (_CurrentPainter != null &&
+            if (_CurrentPainter != null && 
                 _CurrentRules != null && _CurrentRules.CurrentField.CanBePaintedBy(_CurrentPainter))
             {
                 _CurrentPlayer = _CurrentPlayer1;
@@ -167,16 +170,12 @@ namespace OOPGames
             {
                 Status.Text = "Player " + winner + " Won!";
             }
-            else if (!_CurrentRules.MovesPossible)
-            {
-                Status.Text = "Draw! No more moves possible.";
-            }
             else
             {
                 if (_CurrentRules.MovesPossible &&
                     _CurrentPlayer is IHumanGamePlayer)
                 {
-                    IPlayMove pm = ((IHumanGamePlayer)_CurrentPlayer).GetMove(new ClickSelection((int)e.GetPosition(PaintCanvas).X,
+                    IPlayMove pm = ((IHumanGamePlayer)_CurrentPlayer).GetMove(new ClickSelection((int)e.GetPosition(PaintCanvas).X, 
                         (int)e.GetPosition(PaintCanvas).Y, (int)e.ChangedButton), _CurrentRules.CurrentField);
                     if (pm != null)
                     {
