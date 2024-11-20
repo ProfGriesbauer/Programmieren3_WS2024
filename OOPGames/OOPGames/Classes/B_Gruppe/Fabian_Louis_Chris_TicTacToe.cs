@@ -216,6 +216,12 @@ namespace OOPGames
 
         int[,] _Field = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
 
+        IB_Rules_TTT _Rules;
+        public B_Field_TTT (IB_Rules_TTT rules)
+        {
+            _Rules = rules; 
+        }
+
         public int this[int r, int c]
         {
             get
@@ -260,6 +266,11 @@ namespace OOPGames
             }
         }
 
+        public IB_Rules_TTT Rules_TTT
+        {
+            get { return _Rules; }
+        }
+
         public bool CanBePaintedBy(IPaintGame painter)
         {
             return painter is IB_Painter_TTT;
@@ -267,7 +278,12 @@ namespace OOPGames
     }
     public class B_Rules_TTT : IB_Rules_TTT
     {
-        B_Field_TTT _Field = new B_Field_TTT();
+        B_Field_TTT _Field;
+
+        public B_Rules_TTT()
+        {
+            _Field = new B_Field_TTT(this);
+        }
         public IB_Field_TTT TTTField
         {
             get
@@ -347,7 +363,7 @@ namespace OOPGames
 
         public void ClearField()
         {
-            _Field = new B_Field_TTT();
+            _Field = new B_Field_TTT(this);
         }
 
         public void DoMove(IPlayMove move)
