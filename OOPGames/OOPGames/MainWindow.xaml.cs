@@ -117,7 +117,7 @@ namespace OOPGames
                 ((IGameRules2)_CurrentRules).StartedGameCall();
             }
 
-            if (_CurrentPainter != null && 
+            if (_CurrentPainter != null &&
                 _CurrentRules != null && _CurrentRules.CurrentField.CanBePaintedBy(_CurrentPainter))
             {
                 _CurrentPlayer = _CurrentPlayer1;
@@ -167,12 +167,16 @@ namespace OOPGames
             {
                 Status.Text = "Player " + winner + " Won!";
             }
+            else if (!_CurrentRules.MovesPossible)
+            {
+                Status.Text = "Draw! No more moves possible.";
+            }
             else
             {
                 if (_CurrentRules.MovesPossible &&
                     _CurrentPlayer is IHumanGamePlayer)
                 {
-                    IPlayMove pm = ((IHumanGamePlayer)_CurrentPlayer).GetMove(new ClickSelection((int)e.GetPosition(PaintCanvas).X, 
+                    IPlayMove pm = ((IHumanGamePlayer)_CurrentPlayer).GetMove(new ClickSelection((int)e.GetPosition(PaintCanvas).X,
                         (int)e.GetPosition(PaintCanvas).Y, (int)e.ChangedButton), _CurrentRules.CurrentField);
                     if (pm != null)
                     {
