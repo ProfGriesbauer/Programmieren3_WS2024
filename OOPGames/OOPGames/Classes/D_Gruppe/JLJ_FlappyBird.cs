@@ -19,7 +19,10 @@ namespace OOPGames
         public void PaintGameField(Canvas canvas, IGameField currentField)
         {
             var field = (FlappyField)currentField;
+
+            //Spielfeld der Canvas anpassen
             field.AdoptCanvas(canvas);
+
             canvas.Children.Clear();
 
             // Vogel zeichnen
@@ -159,7 +162,7 @@ namespace OOPGames
             }
 
             // Füge neue Hindernisse hinzu
-            if (field.Obstacles.Count == 0 || field.Obstacles.Last().X < field.Width - 200)
+            if (field.Obstacles.Count == 0 || field.Obstacles.Last().X < field.Width - 250)
             {
                 Random rnd = new Random();
                 int gapY = rnd.Next(100, field.Height - 200);
@@ -262,16 +265,14 @@ namespace OOPGames
 
     public class D_Bird
     {
-        public int X { get; private set; }
-        public int Y { get; private set; }
-        public int Radius{ get; private set; }
-        public int Acceleration { get; private set; }
-        public int Velocity { get; private set; }
+        public int X { get; private set; } // Die x-Position des Vogels
+        public int Y { get; private set; } // Die y-Position des Vogels
+        public int Radius{ get; private set; } // Der Radius des Vogels für die Hitbox
+        public int Acceleration { get; private set; } // Die Beschleunigunf des Vogels nach unten 
+        public int Velocity { get; private set; } // Die Geschwindigkeit mit der sich der Vogel in Y richtung bewegt
 
-        public void moveUp(int speed)
-        {
-            Velocity = speed;
-        }
+
+        // Konstruktor
         public D_Bird(int x, int y, int radius, int acceleration, int velocity)
         {
             X = x;
@@ -280,6 +281,14 @@ namespace OOPGames
             Acceleration = acceleration;
             Velocity = velocity;
         }
+
+        // Aktion wenn Taste gedrückt wird
+        public void moveUp(int speed)
+        {
+            Velocity = speed;
+        }
+
+        // Nach jedem Tick wird die Posotion des Vogels erneuert und die Beschleunigung auf die Geschwindigkeit addiert
         public void UpdatePosition()
         {
             Velocity += Acceleration;
