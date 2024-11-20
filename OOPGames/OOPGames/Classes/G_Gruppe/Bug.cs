@@ -10,10 +10,10 @@ using System.Windows.Shapes;
 
 namespace OOPGames
 {
-    public class oX_TicTacToePaint : IX_PaintTicTacToe
+    public class omm_BugPaint : OMM_BugGamePaint
     {
-        public string Name { get { return "OliverMarcusTicTacToePaint"; } }
-        public void PaintTicTacToeField(Canvas canvas, IX_TicTacToeField currentField)
+        public string Name { get { return "OMM_Bug_Paint"; } }
+        public void PaintTicTacToeField(Canvas canvas, OMM_BugField currentField)
         {
             PaintGameField(canvas, currentField);
         }
@@ -21,31 +21,66 @@ namespace OOPGames
 
         public void PaintGameField(Canvas canvas, IGameField currentField)
         {
-            if (!(currentField is IX_TicTacToeField))
+            if (!(currentField is OMM_BugField))
             {
                 return;
             }
 
-            IX_TicTacToeField myField = (IX_TicTacToeField)currentField;
+            OMM_BugField myField = (OMM_BugField)currentField;
 
             canvas.Children.Clear();
             Color bgColor = Color.FromRgb(0, 0, 0);
             canvas.Background = new SolidColorBrush(bgColor);
             Color lineColor = Color.FromRgb(255, 128, 0);
             Brush lineStroke = new SolidColorBrush(lineColor);
-            Color XColor = Color.FromRgb(0, 255, 0);
-            Brush XStroke = new SolidColorBrush(XColor);
-            Color OColor = Color.FromRgb(0, 0, 255);
-            Brush OStroke = new SolidColorBrush(OColor);
+            Color BugColor = Color.FromRgb(0, 255, 0);
+            Brush BugStroke = new SolidColorBrush(BugColor);
+            Color AppelColor = Color.FromRgb(0, 0, 255);
+            Brush AppleStroke = new SolidColorBrush(AppelColor);
+            double thickness = 2.0;
 
-            Line l1 = new Line() { X1 = 120, Y1 = 20, X2 = 120, Y2 = 320, Stroke = lineStroke, StrokeThickness = 5.0 };
+            Line l0 = new Line() { X1 = 40, Y1 = 0, X2 = 40, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness  };
+            canvas.Children.Add(l0);
+            Line l1 = new Line() { X1 = 80, Y1 = 0, X2 = 80, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness };
             canvas.Children.Add(l1);
-            Line l2 = new Line() { X1 = 220, Y1 = 20, X2 = 220, Y2 = 320, Stroke = lineStroke, StrokeThickness = 5.0 };
+            Line l2 = new Line() { X1 = 120, Y1 = 0, X2 = 120, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness };
             canvas.Children.Add(l2);
-            Line l3 = new Line() { X1 = 20, Y1 = 120, X2 = 320, Y2 = 120, Stroke = lineStroke, StrokeThickness = 5.0 };
+            Line l3 = new Line() { X1 = 160, Y1 = 0, X2 = 160, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness };
             canvas.Children.Add(l3);
-            Line l4 = new Line() { X1 = 20, Y1 = 220, X2 = 320, Y2 = 220, Stroke = lineStroke, StrokeThickness = 5.0 };
+            Line l4 = new Line() { X1 = 200, Y1 = 0, X2 = 200, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness };
             canvas.Children.Add(l4);
+            Line l5 = new Line() { X1 = 240, Y1 = 0, X2 = 240, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l5);
+            Line l6 = new Line() { X1 = 280, Y1 = 0, X2 = 280, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l6);
+            Line l7 = new Line() { X1 = 320, Y1 = 0, X2 = 320, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l7);
+            Line l8 = new Line() { X1 = 360, Y1 = 0, X2 = 360, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l8);
+            Line l9 = new Line() { X1 = 400, Y1 = 0, X2 = 400, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l9);
+
+            Line l10 = new Line() { X1 = 0, Y1 = 40, X2 = 400, Y2 = 40, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l10);
+            Line l11 = new Line() { X1 = 0, Y1 = 80, X2 = 400, Y2 = 80, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l11);
+            Line l12 = new Line() { X1 = 0, Y1 = 120, X2 = 400, Y2 = 120, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l12);
+            Line l13 = new Line() { X1 = 0, Y1 = 160, X2 = 400, Y2 = 160, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l13);
+            Line l14 = new Line() { X1 = 0, Y1 = 200, X2 = 400, Y2 = 200, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l14);
+            Line l15 = new Line() { X1 = 0, Y1 = 240, X2 = 400, Y2 = 240, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l15);
+            Line l16 = new Line() { X1 = 0, Y1 = 280, X2 = 400, Y2 = 280, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l16);
+            Line l17 = new Line() { X1 = 0, Y1 = 320, X2 = 400, Y2 = 320, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l17);
+            Line l18 = new Line() { X1 = 0, Y1 = 360, X2 = 400, Y2 = 360, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l18);
+            Line l19 = new Line() { X1 = 0, Y1 = 400, X2 = 400, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness };
+            canvas.Children.Add(l19);
+
 
             for (int i = 0; i < 3; i++)
             {
@@ -53,26 +88,26 @@ namespace OOPGames
                 {
                     if (myField[i, j] == 1)
                     {
-                        Line X1 = new Line() { X1 = 20 + (j * 100), Y1 = 20 + (i * 100), X2 = 120 + (j * 100), Y2 = 120 + (i * 100), Stroke = XStroke, StrokeThickness = 5.0 };
+                        Line X1 = new Line() { X1 = 20 + (j * 100), Y1 = 20 + (i * 100), X2 = 120 + (j * 100), Y2 = 120 + (i * 100), Stroke = BugStroke, StrokeThickness = 5.0 };
                         canvas.Children.Add(X1);
-                        Line X2 = new Line() { X1 = 20 + (j * 100), Y1 = 120 + (i * 100), X2 = 120 + (j * 100), Y2 = 20 + (i * 100), Stroke = XStroke, StrokeThickness = 5.0 };
+                        Line X2 = new Line() { X1 = 20 + (j * 100), Y1 = 120 + (i * 100), X2 = 120 + (j * 100), Y2 = 20 + (i * 100), Stroke = BugStroke, StrokeThickness = 5.0 };
                         canvas.Children.Add(X2);
                     }
                     else if (myField[i, j] == 2)
                     {
-                        Ellipse OE = new Ellipse() { Margin = new Thickness(20 + (j * 100), 20 + (i * 100), 0, 0), Width = 100, Height = 100, Stroke = OStroke, StrokeThickness = 5.0 };
+                        Ellipse OE = new Ellipse() { Margin = new Thickness(20 + (j * 100), 20 + (i * 100), 0, 0), Width = 100, Height = 100, Stroke = AppleStroke, StrokeThickness = 5.0 };
                         canvas.Children.Add(OE);
                     }
                 }
             }
         }
     }
-
-    public class oX_TicTacToeRules : IX_TicTacToeRules
+    /*
+    public class oX_TicTacToeRules : OMM_BugRules
     {
-        X_TicTacToeField _Field = new X_TicTacToeField();
+        omm_BugField _Field = new omm_BugField();
 
-        public IX_TicTacToeField TicTacToeField { get { return _Field; } }
+        public omm_BugField TicTacToeField { get { return _Field; } }
 
         public bool MovesPossible
         {
@@ -132,7 +167,7 @@ namespace OOPGames
             }
         }
 
-        public void DoTicTacToeMove(IX_TicTacToeMove move)
+        public void DoTicTacToeMove(omm_BugMove move)
         {
             if (move.Row >= 0 && move.Row < 3 && move.Column >= 0 && move.Column < 3)
             {
@@ -144,14 +179,14 @@ namespace OOPGames
 
         public void DoMove(IPlayMove move)
         {
-            if (move is IX_TicTacToeMove)
+            if (move is omm_BugMove)
             {
-                DoTicTacToeMove((IX_TicTacToeMove)move);
+                DoTicTacToeMove((omm_BugMove)move);
             }
         }
     }
 
-    public class oX_TicTacToeField : IX_TicTacToeField
+    public class oX_TicTacToeField : omm_BugField
     {
         int[,] _Field = new int[3, 3] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
 
@@ -180,11 +215,11 @@ namespace OOPGames
 
         public bool CanBePaintedBy(IPaintGame painter)
         {
-            return painter is IX_PaintTicTacToe;
+            return painter is omm_BugPaint;
         }
     }
 
-    public class oX_TicTacToeMove : IX_TicTacToeMove
+    public class oX_TicTacToeMove : omm_BugMove
     {
         int _Row = 0;
         int _Column = 0;
@@ -204,7 +239,7 @@ namespace OOPGames
         public int PlayerNumber { get { return _PlayerNumber; } }
     }
 
-    public class oX_TicTacToeHumanPlayer : IX_HumanTicTacToePlayer
+    public class oX_TicTacToeHumanPlayer : omm_BugHumanPlayer
     {
         int _PlayerNumber = 0;
 
@@ -221,7 +256,7 @@ namespace OOPGames
             return ttthp;
         }
 
-        public IX_TicTacToeMove GetMove(IMoveSelection selection, IX_TicTacToeField field)
+        public omm_BugMove GetMove(IMoveSelection selection, omm_BugField field)
         {
             if (selection is IClickSelection)
             {
@@ -250,14 +285,14 @@ namespace OOPGames
 
         public bool CanBeRuledBy(IGameRules rules)
         {
-            return rules is IX_TicTacToeRules;
+            return rules is omm_BugRules;
         }
 
         public IPlayMove GetMove(IMoveSelection selection, IGameField field)
         {
-            if (field is IX_TicTacToeField)
+            if (field is omm_BugField)
             {
-                return GetMove(selection, (IX_TicTacToeField)field);
+                return GetMove(selection, (omm_BugField)field);
             }
             else
             {
@@ -266,7 +301,7 @@ namespace OOPGames
         }
     }
 
-    public class oX_TicTacToeComputerPlayer : IX_ComputerTicTacToePlayer
+    public class oX_TicTacToeComputerPlayer : omm_BugComputerPlayer
     {
         int _PlayerNumber = 0;
 
@@ -281,7 +316,7 @@ namespace OOPGames
             return ttthp;
         }
 
-        public IX_TicTacToeMove GetMove(IX_TicTacToeField field)
+        public omm_BugMove GetMove(omm_BugField field)
         {
             Random rand = new Random();
             int f = rand.Next(0, 8);
@@ -309,14 +344,14 @@ namespace OOPGames
 
         public bool CanBeRuledBy(IGameRules rules)
         {
-            return rules is IX_TicTacToeRules;
+            return rules is omm_BugRules;
         }
 
         public IPlayMove GetMove(IGameField field)
         {
-            if (field is IX_TicTacToeField)
+            if (field is omm_BugField)
             {
-                return GetMove((IX_TicTacToeField)field);
+                return GetMove((omm_BugField)field);
             }
             else
             {
@@ -324,4 +359,5 @@ namespace OOPGames
             }
         }
     }
+    */
 }
