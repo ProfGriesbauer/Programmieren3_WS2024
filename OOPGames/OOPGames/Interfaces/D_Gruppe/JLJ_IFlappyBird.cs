@@ -22,13 +22,13 @@ namespace OOPGames
     
     }
 
-    public interface ID_FB_Move 
+    public interface ID_FB_Move : IPlayMove
     {
 
     }
 
-    public interface ID_FB_HumanPlayer : IHumanGamePlayer 
+    public interface ID_FB_HumanPlayer : IHumanGamePlayer
     {
-    
+
     }
 }
