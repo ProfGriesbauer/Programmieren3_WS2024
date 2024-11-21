@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -96,8 +97,18 @@ namespace OOPGames
     {
         public string Name => "FlappyBirdRules";
         public IGameField CurrentField { get; private set; }
-        public bool MovesPossible => true; // Solange der Spieler nicht verloren hat.
+        public bool MovesPossible  // Solange der Spieler nicht verloren hat.
+        {
+            get
+            {
+                if (CheckifCollision((FlappyField)CurrentField))
+                {
+                    return false;
+                }
 
+                return true;
+            }
+        }
         private int PlayerWon = -1;
 
         public FlappyRules()
@@ -129,43 +140,52 @@ namespace OOPGames
             field.Obstacles.Add(new D_Tubes(field.Width, 200, 150, 50, field.Height));
         }
 
-        public void TickGameCall()
+        public bool CheckifCollision(FlappyField field)
         {
-            var field = (FlappyField)CurrentField;
-
-            // Aktualisiere die Position des Vogels
-            field.Bird.UpdatePosition();
-
-            // Überprüfe, ob der Vogel den Boden oder den oberen Rand berührt
-            if (field.Bird.Y < 0 || field.Bird.Y > field.Height)
+            if ((field.Bird.Y - field.Bird.Radius) < 0 || (field.Bird.Y + field.Bird.Radius) > field.Height)
             {
-                PlayerWon = -1; // Spieler hat verloren
+                return true;
             }
-
-            // Bewege die Hindernisse
-            foreach (var tube in field.Obstacles)
-            {
-                tube.MoveLeft(5); // Bewege jedes Hindernis nach links
-            }
-
-            // Entferne Hindernisse, die aus dem Bildschirmbereich sind
-            field.Obstacles.RemoveAll(tube => tube.IsOutOfScreen());
-
-            // Prüfe auf Kollisionen
             foreach (var tube in field.Obstacles)
             {
                 if (tube.CheckCollision(field.Bird))
                 {
-                    PlayerWon = -1; // Spieler hat verloren
+                    return true;
                 }
             }
+            return false;
+        }
 
-            // Füge neue Hindernisse hinzu
-            if (field.Obstacles.Count == 0 || field.Obstacles.Last().X < field.Width - 250)
+        public void TickGameCall()
+        {
+            var field = (FlappyField)CurrentField;
+
+            if (!CheckifCollision(field))
             {
-                Random rnd = new Random();
-                int gapY = rnd.Next(100, field.Height - 200);
-                field.Obstacles.Add(new D_Tubes(field.Width-30, gapY, 150, 30, field.Height));
+                // Aktualisiere die Position des Vogels
+                field.Bird.UpdatePosition();
+
+                // Bewege die Hindernisse
+                foreach (var tube in field.Obstacles)
+                {
+                    tube.MoveLeft(5); // Bewege jedes Hindernis nach links
+                }
+                // Entferne Hindernisse, die aus dem Bildschirmbereich sind
+                field.Obstacles.RemoveAll(tube => tube.IsOutOfScreen());
+
+                // Füge neue Hindernisse hinzu
+                if (field.Obstacles.Count == 0 || field.Obstacles.Last().X < field.Width - 250)
+                {
+                    Random rnd = new Random();
+                    int gapY = rnd.Next(100, field.Height - 200);
+                    field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 150, 30, field.Height));
+                }
+            }
+            else
+            {
+                // Ende des Spiels Highscore speichern 
+                // Keine Moves mehr 
+                // Neustart Knopf
             }
         }
     }
