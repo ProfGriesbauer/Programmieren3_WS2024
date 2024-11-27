@@ -61,6 +61,45 @@ namespace OOPGames
                 Canvas.SetLeft(bottomPillar, tube.X);
                 canvas.Children.Add(bottomPillar);
             }
+
+            //Score zeichnen 
+            var scoreText = new TextBlock
+            {
+                Text = $"Score: {field.score}",
+                FontSize = 30,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.Black,
+                Background = Brushes.Transparent,
+                TextAlignment = TextAlignment.Center,
+                Width = 200, // Breite des Textblocks
+                Height = 40 // Höhe des Textblocks
+            };
+
+            // Positioniere das TextBlock oben mittig auf der Canvas
+            Canvas.SetTop(scoreText, 10); // 10 Pixel vom oberen Rand
+            Canvas.SetLeft(scoreText, (canvas.ActualWidth - scoreText.Width) / 2); // Zentriert
+            canvas.Children.Add(scoreText);
+
+            //Score zeichnen 
+            var gameoverText = new TextBlock
+            {
+                Text = $"Game Over!",
+                FontSize = 60,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.Black,
+                Background = Brushes.Red,
+                TextAlignment = TextAlignment.Center,
+                Width = 400, // Breite des Textblocks
+                Height = 100 // Höhe des Textblocks
+            };
+
+            //Game Over Pop up
+            if (field.gameover)
+            {
+                Canvas.SetTop(gameoverText, (canvas.ActualHeight - gameoverText.Height) / 2); // 10 Pixel vom oberen Rand
+                Canvas.SetLeft(gameoverText, (canvas.ActualWidth - gameoverText.Width) / 2); // Zentriert
+                canvas.Children.Add(gameoverText);
+            }
         }
 
         public void TickPaintGameField(Canvas canvas, IGameField currentField)
@@ -75,6 +114,10 @@ namespace OOPGames
         public List<D_Tubes> Obstacles { get; set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
+
+        public int score = 0;
+
+        public bool gameover = false;
 
         public void AdoptCanvas (Canvas canvas)
         {
@@ -135,9 +178,10 @@ namespace OOPGames
 
         public void StartedGameCall()
         {
-            // Initialisierung von Hindernissen
+            // Initialisierung vom Score
             var field = (FlappyField)CurrentField;
-            field.Obstacles.Add(new D_Tubes(field.Width, 200, 150, 50, field.Height));
+            field.score = 0;
+            field.gameover = false;
         }
 
         public bool CheckifCollision(FlappyField field)
@@ -178,7 +222,7 @@ namespace OOPGames
                 {
                     Random rnd = new Random();
                     int gapY = rnd.Next(100, field.Height - 200);
-                    field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 150, 30, field.Height));
+                    field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 150, 40, field.Height));
                 }
 
                 //Score updaten
@@ -187,12 +231,11 @@ namespace OOPGames
             else
             {
                 // Ende des Spiels Highscore speichern 
+                field.gameover = true;
                 // Keine Moves mehr 
                 // Neustart Knopf
             }
         }
-
-        public int score = 0;
 
         public void updateScore(FlappyField field)
         {
@@ -200,8 +243,20 @@ namespace OOPGames
             {
                 if (((tube.X + tube.Width) < field.Bird.X) && (tube.X + tube.Width) > ((field.Bird.X) - 5))
                 {
-                    score++;
+                    field.score++;
                 }
+            }
+        }
+
+        public string StatusBar()
+        {
+            if (!CheckifCollision((FlappyField)CurrentField))
+            {
+                return "Jump with Key U!";
+            }
+            else
+            {
+                return "Game Over!";
             }
         }
     }
