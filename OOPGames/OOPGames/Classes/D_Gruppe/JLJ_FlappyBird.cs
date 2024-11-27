@@ -26,16 +26,16 @@ namespace OOPGames
 
             canvas.Children.Clear();
 
-            // Vogel zeichnen
-            var bird = new Ellipse
-            {
-                Width = field.Bird.Radius * 2,
-                Height = field.Bird.Radius * 2,
-                Fill = Brushes.Yellow
-            };
-            Canvas.SetTop(bird, field.Bird.Y - field.Bird.Radius);
-            Canvas.SetLeft(bird, field.Bird.X - field.Bird.Radius);
-            canvas.Children.Add(bird);
+            //// Vogel zeichnen
+            //var bird = new Ellipse
+            //{
+            //    Width = field.Bird.Radius * 2,
+            //    Height = field.Bird.Radius * 2,
+            //    Fill = Brushes.Yellow
+            //};
+            //Canvas.SetTop(bird, field.Bird.Y - field.Bird.Radius);
+            //Canvas.SetLeft(bird, field.Bird.X - field.Bird.Radius);
+            //canvas.Children.Add(bird);
 
             // Vogel zeichnen als Bild
             var birdImage = new Image
