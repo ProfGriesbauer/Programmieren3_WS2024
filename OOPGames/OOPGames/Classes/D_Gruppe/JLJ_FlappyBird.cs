@@ -97,7 +97,7 @@ namespace OOPGames
     {
         public string Name => "FlappyBirdRules";
         public IGameField CurrentField { get; private set; }
-        public bool MovesPossible  // Solange der Spieler nicht verloren hat.
+        public bool MovesPossible // Solange der Spieler nicht verloren hat.
         {
             get
             {
@@ -180,12 +180,28 @@ namespace OOPGames
                     int gapY = rnd.Next(100, field.Height - 200);
                     field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 150, 30, field.Height));
                 }
+
+                //Score updaten
+                updateScore(field);
             }
             else
             {
                 // Ende des Spiels Highscore speichern 
                 // Keine Moves mehr 
                 // Neustart Knopf
+            }
+        }
+
+        public int score = 0;
+
+        public void updateScore(FlappyField field)
+        {
+            foreach (var tube in field.Obstacles)
+            {
+                if (((tube.X + tube.Width) < field.Bird.X) && (tube.X + tube.Width) > ((field.Bird.X) - 5))
+                {
+                    score++;
+                }
             }
         }
     }
@@ -209,8 +225,6 @@ namespace OOPGames
         public void SetPlayerNumber(int playerNumber) => _playerNumber = playerNumber;
 
         public bool CanBeRuledBy(IGameRules rules) => rules is FlappyRules;
-
-        //public IPlayMove Clone() => new FlappyPlayer { _playerNumber = this._playerNumber };
 
         public IPlayMove GetMove(IMoveSelection selection, IGameField field)
         {
