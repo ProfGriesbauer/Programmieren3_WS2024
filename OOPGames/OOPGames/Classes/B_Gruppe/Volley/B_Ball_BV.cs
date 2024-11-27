@@ -44,8 +44,8 @@ namespace OOPGames
 
         public int B_On_Ground()
         {
-            if (Pos_y > Ballsize / 2) return 0; // Bottom collision left
-            if (Pos_y > Ballsize / 2) return 1; // Bottom collision right
+            if (Pos_y > Ballsize / 2) return 1; // Bottom collision left
+            if (Pos_y > Ballsize / 2) return 0; // Bottom collision right
             return -1; //no collision
 
         }
