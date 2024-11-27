@@ -42,6 +42,13 @@ namespace OOPGames
             if (Pos_y < Ballsize / 2) Velo_y *= -1; // Ceiling collision
         }
 
+        public int B_On_Ground()
+        {
+            if (Pos_y > Ballsize / 2) return 0; // Bottom collision left
+            if (Pos_y > Ballsize / 2) return 1; // Bottom collision right
+            return -1; //no collision
+
+        }
         public void HandlePlayerCollision(IB_Player_BV player)
         {
             double dx = Pos_x - player.Pos_x;
