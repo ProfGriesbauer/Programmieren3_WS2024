@@ -10,67 +10,260 @@ using System.Windows.Shapes;
 
 namespace OOPGames
 {
-    public class D_PainterTikTokToo : IPaintGame
+    public class D_PainterTikTokToo : ID_PaintTTT
     {
         public string Name { get { return "JLJs_TTTPainter"; } }
 
         public void PaintGameField(Canvas canvas, IGameField currentField)
         {
-            // Test ob Gamefield 
-            if (currentField is D_FieldTikTokToo)
+            if (currentField is ID_TTTGameField)
             {
-                D_FieldTikTokToo myField = (D_FieldTikTokToo)currentField;
+                PaintTTTField(canvas, (ID_TTTGameField)currentField);
+            }
+        }
 
-                // Paint funktionen 
-                canvas.Children.Clear();
-                Color bgColor = Color.FromRgb(255, 255, 255);
-                canvas.Background = new SolidColorBrush(bgColor);
-                Color lineColor = Color.FromRgb(0, 0, 0);
-                Brush lineStroke = new SolidColorBrush(lineColor);
-                Color XColor = Color.FromRgb(145, 44, 238);
-                Brush XStroke = new SolidColorBrush(XColor);
-                Color OColor = Color.FromRgb(22, 211, 245);
-                Brush OStroke = new SolidColorBrush(OColor);
+        public void PaintTTTField(Canvas canvas, ID_TTTGameField currentField)
+        {
+            IDrawableSymbol Symbol1 = new D_SmileySymbol();
+            IDrawableSymbol Symbol2 = new D_SkullSymbol();
 
-                Line l1 = new Line() { X1 = 120, Y1 = 20, X2 = 120, Y2 = 320, Stroke = lineStroke, StrokeThickness = 5.0 };
-                canvas.Children.Add(l1);
-                Line l2 = new Line() { X1 = 220, Y1 = 20, X2 = 220, Y2 = 320, Stroke = lineStroke, StrokeThickness = 5.0 };
-                canvas.Children.Add(l2);
-                Line l3 = new Line() { X1 = 20, Y1 = 120, X2 = 320, Y2 = 120, Stroke = lineStroke, StrokeThickness = 5.0 };
-                canvas.Children.Add(l3);
-                Line l4 = new Line() { X1 = 20, Y1 = 220, X2 = 320, Y2 = 220, Stroke = lineStroke, StrokeThickness = 5.0 };
-                canvas.Children.Add(l4);
+            // Paint funktionen 
+            canvas.Children.Clear();
+            Color bgColor = Color.FromRgb(255, 255, 255);
+            canvas.Background = new SolidColorBrush(bgColor);
+            Color lineColor = Color.FromRgb(0, 0, 0);
+            Brush lineStroke = new SolidColorBrush(lineColor);
+            
 
-                for (int i = 0; i < 3; i++)
+            Line l1 = new Line() { X1 = 120, Y1 = 20, X2 = 120, Y2 = 320, Stroke = lineStroke, StrokeThickness = 5.0 };
+            canvas.Children.Add(l1);
+            Line l2 = new Line() { X1 = 220, Y1 = 20, X2 = 220, Y2 = 320, Stroke = lineStroke, StrokeThickness = 5.0 };
+            canvas.Children.Add(l2);
+            Line l3 = new Line() { X1 = 20, Y1 = 120, X2 = 320, Y2 = 120, Stroke = lineStroke, StrokeThickness = 5.0 };
+            canvas.Children.Add(l3);
+            Line l4 = new Line() { X1 = 20, Y1 = 220, X2 = 320, Y2 = 220, Stroke = lineStroke, StrokeThickness = 5.0 };
+            canvas.Children.Add(l4);
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
                 {
-                    for (int j = 0; j < 3; j++)
+                    int x = 20 + (j * 100);
+                    int y = 20 + (i * 100);
+
+                    if (currentField[i, j] == 1)
                     {
-                        if (myField[i, j] == 1)
-                        {
-                            Line X1 = new Line() { X1 = 20 + (j * 100), Y1 = 20 + (i * 100), X2 = 120 + (j * 100), Y2 = 120 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
-                            canvas.Children.Add(X1);
-                            Line X2 = new Line() { X1 = 20 + (j * 100), Y1 = 120 + (i * 100), X2 = 120 + (j * 100), Y2 = 20 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
-                            canvas.Children.Add(X2);
-                        }
-                        else if (myField[i, j] == 2)
-                        {
-                            Ellipse OE = new Ellipse() { Margin = new Thickness(20 + (j * 100), 20 + (i * 100), 0, 0), Width = 100, Height = 100, Stroke = OStroke, StrokeThickness = 3.0 };
-                            canvas.Children.Add(OE);
-                        }
+                        Symbol1.Draw(canvas, x, y);
+                    }
+                    else if (currentField[i, j] == 2)
+                    {
+                        Symbol2.Draw(canvas, x, y);
                     }
                 }
             }
+
+        }
+
+    }
+    public class D_XSymbol : IDrawableSymbol
+    {
+        public void Draw(Canvas canvas, int x, int y)
+        {
+            Color XColor = Color.FromRgb(0, 255, 0);
+            Brush XStroke = new SolidColorBrush(XColor);
+
+            Line X1 = new Line() { X1 = x, Y1 = y, X2 = x + 100, Y2 = y + 100, Stroke = XStroke, StrokeThickness = 3.0 };
+            Line X2 = new Line() { X1 = x, Y1 = y + 100, X2 = x + 100, Y2 = y, Stroke = XStroke, StrokeThickness = 3.0 };
+
+            canvas.Children.Add(X1);
+            canvas.Children.Add(X2);
         }
     }
 
-    public class D_RulesTikTokToo : IGameRules
+    public class D_OSymbol : IDrawableSymbol
+    {
+        public void Draw(Canvas canvas, int x, int y)
+        {
+            Color OColor = Color.FromRgb(0, 0, 255);
+            Brush OStroke = new SolidColorBrush(OColor);
+
+            Ellipse OE = new Ellipse() { Margin = new Thickness(x, y, 0, 0), Width = 100, Height = 100, Stroke = OStroke, StrokeThickness = 3.0 };
+            canvas.Children.Add(OE);
+        }
+    }
+
+    public class D_SmileySymbol : IDrawableSymbol
+    {
+        public void Draw(Canvas canvas, int x, int y)
+        {
+            // Farben für das Smiley-Gesicht
+            Color faceColor = Color.FromRgb(255, 223, 0); // Gelbes Gesicht
+            Color featureColor = Color.FromRgb(0, 0, 0);  // Schwarze Augen und Mund
+            Brush faceBrush = new SolidColorBrush(faceColor);
+            Brush featureBrush = new SolidColorBrush(featureColor);
+
+            // Gesicht des Smileys (Kreis)
+            Ellipse face = new Ellipse()
+            {
+                Margin = new Thickness(x, y, 0, 0),
+                Width = 90,
+                Height = 90,
+                Fill = faceBrush
+            };
+            canvas.Children.Add(face);
+
+            // Linkes Auge
+            Ellipse leftEye = new Ellipse()
+            {
+                Margin = new Thickness(x + 25, y + 30, 0, 0),
+                Width = 10,
+                Height = 10,
+                Fill = featureBrush
+            };
+            canvas.Children.Add(leftEye);
+
+            // Rechtes Auge
+            Ellipse rightEye = new Ellipse()
+            {
+                Margin = new Thickness(x + 65, y + 30, 0, 0),
+                Width = 10,
+                Height = 10,
+                Fill = featureBrush
+            };
+            canvas.Children.Add(rightEye);
+
+            // Lachender Mund (nach oben gebogener Bogen)
+            PathFigure mouthFigure = new PathFigure() { StartPoint = new Point(x + 30, y + 60) };
+            mouthFigure.Segments.Add(new ArcSegment()
+            {
+                Point = new Point(x + 70, y + 60),
+                Size = new Size(20, 20),
+                SweepDirection = SweepDirection.Counterclockwise // Mund nach oben gebogen
+            });
+
+            PathGeometry mouthGeometry = new PathGeometry();
+            mouthGeometry.Figures.Add(mouthFigure);
+
+            Path mouth = new Path()
+            {
+                Stroke = featureBrush,
+                StrokeThickness = 2.0,
+                Data = mouthGeometry
+            };
+            canvas.Children.Add(mouth);
+        }
+    }
+    public class D_SkullSymbol : IDrawableSymbol
+    {
+        public void Draw(Canvas canvas, int x, int y)
+        {
+            // Farben für den Totenkopf
+            Color skullColor = Color.FromRgb(220, 220, 220); // Hellgrauer Schädel
+            Color featureColor = Color.FromRgb(0, 0, 0);     // Schwarze Augen und Mund
+            Brush skullBrush = new SolidColorBrush(skullColor);
+            Brush featureBrush = new SolidColorBrush(featureColor);
+
+            // Kleiner Schädel (kleinerer Kreis)
+            Ellipse skull = new Ellipse()
+            {
+                Margin = new Thickness(x + 20, y + 10, 0, 0),
+                Width = 60,
+                Height = 60,
+                Fill = skullBrush
+            };
+            canvas.Children.Add(skull);
+
+            // Linke Augenhöhle (kleiner und angepasst an die neue Schädelgröße)
+            Ellipse leftEye = new Ellipse()
+            {
+                Margin = new Thickness(x + 35, y + 25, 0, 0),
+                Width = 7,
+                Height = 10,
+                Fill = featureBrush
+            };
+            canvas.Children.Add(leftEye);
+
+            // Rechte Augenhöhle
+            Ellipse rightEye = new Ellipse()
+            {
+                Margin = new Thickness(x + 55, y + 25, 0, 0),
+                Width = 7,
+                Height = 10,
+                Fill = featureBrush
+            };
+            canvas.Children.Add(rightEye);
+
+            // Nasenöffnung (noch kleineres Oval)
+            Ellipse nose = new Ellipse()
+            {
+                Margin = new Thickness(x + 45, y + 40, 0, 0),
+                Width = 4,
+                Height = 6,
+                Fill = featureBrush
+            };
+            canvas.Children.Add(nose);
+
+            // Kleinerer Mund
+            Rectangle mouth = new Rectangle()
+            {
+                Margin = new Thickness(x + 40, y + 55, 0, 0),
+                Width = 20,
+                Height = 6,
+                Stroke = featureBrush,
+                StrokeThickness = 1.0
+            };
+            canvas.Children.Add(mouth);
+
+            // Kleinere Zähne (vertikale Linien im Mundbereich)
+            for (int i = 0; i < 2; i++)
+            {
+                Line tooth = new Line()
+                {
+                    X1 = x + 45 + (i * 10),
+                    Y1 = y + 55,
+                    X2 = x + 45 + (i * 10),
+                    Y2 = y + 61,
+                    Stroke = featureBrush,
+                    StrokeThickness = 0.8
+                };
+                canvas.Children.Add(tooth);
+            }
+
+            //// Kleinere gekreuzte Knochen
+            //Line bone1 = new Line()
+            //{
+            //    X1 = x + 25,
+            //    Y1 = y + 75,
+            //    X2 = x + 55,
+            //    Y2 = y + 85,
+            //    Stroke = featureBrush,
+            //    StrokeThickness = 1.5
+            //};
+            //canvas.Children.Add(bone1);
+
+            //Line bone2 = new Line()
+            //{
+            //    X1 = x + 25,
+            //    Y1 = y + 85,
+            //    X2 = x + 55,
+            //    Y2 = y + 75,
+            //    Stroke = featureBrush,
+            //    StrokeThickness = 1.5
+            //};
+            //canvas.Children.Add(bone2);
+        }
+    }
+    
+
+    public class D_RulesTikTokToo : ID_TTTRules
     {
         D_FieldTikTokToo _Field = new D_FieldTikTokToo();
 
 
         public string Name { get { return "JLJs_TTTRules"; } }
 
-        public IGameField CurrentField { get { return _Field; } }
+        public ID_TTTGameField TTTField { get { return (ID_TTTGameField)_Field; } }
+        public IGameField CurrentField { get { return TTTField; } }
 
         public bool MovesPossible
         {
@@ -90,6 +283,8 @@ namespace OOPGames
                 return false;
             }
         }
+
+
 
         public int CheckIfPLayerWon()
         {
@@ -131,23 +326,28 @@ namespace OOPGames
 
         public void DoMove(IPlayMove move)
         {
-            if (move is D_MoveTikTokToo)
+            if (move is ID_TTTMove)
             {
-                D_MoveTikTokToo myMove = (D_MoveTikTokToo) move;
+                DoTicTacToeMove((ID_TTTMove)move);
+            }
+        }
 
-                if (myMove.Row >= 0 && myMove.Row < 3 && myMove.Column >= 0 && myMove.Column < 3)
-                {
-                    _Field[myMove.Row, myMove.Column] = myMove.PlayerNumber;
-                }
-            } 
+        public void DoTicTacToeMove(ID_TTTMove move)
+        {
+            if (move.Row >= 0 && move.Row < 3 && move.Column >= 0 && move.Column < 3)
+            {
+                _Field[move.Row, move.Column] = move.PlayerNumber;
+            }
         }
     }
 
-    public class D_FieldTikTokToo : IGameField
+    public class D_FieldTikTokToo : ID_TTTGameField
     {
+
+
         public bool CanBePaintedBy(IPaintGame painter)
         {
-            return painter is D_PainterTikTokToo;
+            return painter is ID_PaintTTT;
         }
 
         int[,] _Field = new int[3, 3] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
@@ -176,8 +376,8 @@ namespace OOPGames
         }
     }
 
-    public class D_MoveTikTokToo : IRowMove, IColumnMove
-    {   
+    public class D_MoveTikTokToo : ID_TTTMove
+    {
         int _PlayerNumber = 0;
 
         int _Row = 0;
@@ -198,7 +398,7 @@ namespace OOPGames
         public int PlayerNumber { get { return _PlayerNumber; } }
     }
 
-    public class D_HumanPTikTokToo : IHumanGamePlayer
+    public class D_HumanPTikTokToo : ID_HumanTTTPlayer
     {
         int _PlayerNumber = 0;
 
@@ -208,7 +408,7 @@ namespace OOPGames
 
         public bool CanBeRuledBy(IGameRules rules)
         {
-            return rules is D_RulesTikTokToo;
+            return rules is ID_TTTRules;
         }
 
         public IGamePlayer Clone()
@@ -218,30 +418,36 @@ namespace OOPGames
             return D_TTT_HP;
         }
 
-        public IPlayMove GetMove(IMoveSelection selection, IGameField field)
+        public ID_TTTMove GetMove(IMoveSelection selection, ID_TTTGameField field)
         {
-            if (field is D_FieldTikTokToo)
+
+
+            if (selection is IClickSelection)
             {
-
-                D_FieldTikTokToo myfield = (D_FieldTikTokToo)field; 
-
-                if (selection is IClickSelection)
+                IClickSelection sel = (IClickSelection)selection;
+                for (int i = 0; i < 3; i++)
                 {
-                    IClickSelection sel = (IClickSelection)selection;
-                    for (int i = 0; i < 3; i++)
+                    for (int j = 0; j < 3; j++)
                     {
-                        for (int j = 0; j < 3; j++)
+                        if (sel.XClickPos > 20 + (j * 100) && sel.XClickPos < 120 + (j * 100) &&
+                            sel.YClickPos > 20 + (i * 100) && sel.YClickPos < 120 + (i * 100) &&
+                            field[i, j] <= 0)
                         {
-                            if (sel.XClickPos > 20 + (j * 100) && sel.XClickPos < 120 + (j * 100) &&
-                                sel.YClickPos > 20 + (i * 100) && sel.YClickPos < 120 + (i * 100) &&
-                                myfield[i, j] <= 0)
-                            {
-                                return new D_MoveTikTokToo(i, j, _PlayerNumber);
-                            }
+                            return new D_MoveTikTokToo(i, j, _PlayerNumber);
                         }
                     }
                 }
-                return null;
+            }
+            return null;
+
+
+        }
+
+        public IPlayMove GetMove(IMoveSelection selection, IGameField field)
+        {
+            if (field is ID_TTTGameField)
+            {
+                return GetMove(selection, (ID_TTTGameField)field);
             }
             else
             {
@@ -255,7 +461,7 @@ namespace OOPGames
         }
     }
 
-    public class D_ComputerPTikTokToo : IComputerGamePlayer
+    public class D_ComputerPTikTokToo : ID_ComputerTTTPlayer
     {
         int _PlayerNumber = 0;
 
@@ -274,63 +480,67 @@ namespace OOPGames
             D_TTT_CP.SetPlayerNumber(this._PlayerNumber);
             return D_TTT_CP;
         }
-
         public IPlayMove GetMove(IGameField field)
         {
-            if (field is D_FieldTikTokToo myField)
+            if (field is ID_TTTGameField)
             {
-                D_FieldTikTokToo myfield = (D_FieldTikTokToo)field;
+                return GetMove((ID_TTTGameField)field);
+            }
+            else { return null; }
+        }
 
-                // 1. Schritt: Prüfen, ob der Computer gewinnen kann und den Gewinnzug machen
-                IPlayMove winningMove = FindWinningMove(myField, _PlayerNumber);
-                if (winningMove != null)
+        public ID_TTTMove GetMove(ID_TTTGameField field)
+        {
+            // 1. Schritt: Prüfen, ob der Computer gewinnen kann und den Gewinnzug machen
+            ID_TTTMove winningMove = FindWinningMove(field, _PlayerNumber);
+            if (winningMove != null)
+            {
+                return winningMove;
+            }
+
+            // 2. Schritt: Prüfen, ob der Gegner gewinnen könnte, und blockieren
+            int opponentNumber = _PlayerNumber == 1 ? 2 : 1;
+            ID_TTTMove blockingMove = FindWinningMove(field, opponentNumber);
+            if (blockingMove != null)
+            {
+                return blockingMove;
+            }
+
+            // 3. Schritt: Falls weder Gewinn noch Block möglich ist, Zentrum wählen
+            if (field[1, 1] == 0)
+            {
+                return new D_MoveTikTokToo(1, 1, _PlayerNumber);
+            }
+
+            // 4. Schritt: Ecken besetzen, falls das Zentrum schon belegt ist
+            int[,] ecken = new int[,] { { 0, 0 }, { 0, 2 }, { 2, 0 }, { 2, 2 } };
+            for (int i = 0; i < ecken.GetLength(0); i++)
+            {
+                int row = ecken[i, 0];
+                int col = ecken[i, 1];
+                if (field[row, col] == 0)
                 {
-                    return winningMove;
+                    return new D_MoveTikTokToo(row, col, _PlayerNumber);
                 }
+            }
 
-                // 2. Schritt: Prüfen, ob der Gegner gewinnen könnte, und blockieren
-                int opponentNumber = _PlayerNumber == 1 ? 2 : 1;
-                IPlayMove blockingMove = FindWinningMove(myField, opponentNumber);
-                if (blockingMove != null)
+            // 5. Schritt: Alle verbleibenden freien Felder der Reihe nach prüfen
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
                 {
-                    return blockingMove;
-                }
-
-                // 3. Schritt: Falls weder Gewinn noch Block möglich ist, Zentrum wählen
-                if (myField[1, 1] == 0)
-                {
-                    return new D_MoveTikTokToo(1, 1, _PlayerNumber);
-                }
-
-                // 4. Schritt: Ecken besetzen, falls das Zentrum schon belegt ist
-                int[,] ecken = new int[,] { { 0, 0 }, { 0, 2 }, { 2, 0 }, { 2, 2 } };
-                for (int i = 0; i < ecken.GetLength(0); i++)
-                {
-                    int row = ecken[i, 0];
-                    int col = ecken[i, 1];
-                    if (myField[row, col] == 0)
+                    if (field[i, j] == 0)
                     {
-                        return new D_MoveTikTokToo(row, col, _PlayerNumber);
-                    }
-                }
-
-                // 5. Schritt: Alle verbleibenden freien Felder der Reihe nach prüfen
-                for (int i = 0; i < 3; i++)
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        if (myField[i, j] == 0)
-                        {
-                            return new D_MoveTikTokToo(i, j, _PlayerNumber);
-                        }
+                        return new D_MoveTikTokToo(i, j, _PlayerNumber);
                     }
                 }
             }
-            return null; // Falls keine Züge möglich sind
+            return null;
+
         }
 
         // Hilfsmethode, um einen Gewinnzug für den Spieler zu finden
-        private IPlayMove FindWinningMove(D_FieldTikTokToo field, int playerNumber)
+        private ID_TTTMove FindWinningMove(ID_TTTGameField field, int playerNumber)
         {
             // Reihen und Spalten durchgehen, um Gewinnmöglichkeiten zu prüfen
             for (int i = 0; i < 3; i++)
@@ -374,5 +584,7 @@ namespace OOPGames
         {
             _PlayerNumber = playerNumber;
         }
+
+
     }
 }
