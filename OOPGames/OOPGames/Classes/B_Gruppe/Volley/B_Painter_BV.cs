@@ -32,7 +32,7 @@ namespace OOPGames
             {
                 Width = 10,
                 Height = canvas.ActualHeight * 0.6,
-                Fill = Brushes.White
+                Fill = Brushes.Gray
             };
             Canvas.SetLeft(net, canvas.ActualWidth / 2 - net.Width / 2);
             Canvas.SetTop(net, canvas.ActualHeight - ground.Height - net.Height);
@@ -50,7 +50,7 @@ namespace OOPGames
             {
                 Text = $"{field.Rules_BV.Points[0]}",
                 FontSize = 24,
-                Foreground = Brushes.White
+                Foreground = Brushes.Black
             };
             Canvas.SetLeft(scorePlayer1, 10);
             Canvas.SetTop(scorePlayer1, 10);
@@ -60,7 +60,7 @@ namespace OOPGames
             {
                 Text = $"{field.Rules_BV.Points[1]}",
                 FontSize = 24,
-                Foreground = Brushes.White
+                Foreground = Brushes.Black
             };
             Canvas.SetRight(scorePlayer2, 10);
             Canvas.SetTop(scorePlayer2, 10);

@@ -11,13 +11,13 @@ namespace OOPGames
         public string Name => "Blobby Volley Rules";
 
         private B_Field_BV _Field;
-        private int[] _Points;
-
+        private int[] _Points = new int[2];
+        
         public B_Rules_BV()
         {
             _Field = new B_Field_BV(this);
-            //_Points[0] = 0;
-            //_Points[1] = 0;
+            _Points[0] = 0;
+            _Points[1] = 0;
         }
         public IB_Field_BV Field_BV
         {
@@ -92,14 +92,13 @@ namespace OOPGames
         {
             if (move is B_Move_BV)
             {
-                var bird = ((FlappyField)CurrentField).Bird;
-                bird.moveUp(-13); // Vogel springt nach oben
+                
             }
         }
 
         public void StartedGameCall()
         {
-            TickGameCall();
+            ScoredReset(new Random().Next(0, 2));
         }
 
         public void TickGameCall()
