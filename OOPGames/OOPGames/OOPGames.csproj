@@ -75,8 +75,12 @@
     <Compile Include="Classes\D_Gruppe\JLJ_FlappyBird.cs" />
     <Compile Include="Classes\E_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\F_Gruppe\Vorname_Nachname_XXX.cs" />
+    <Compile Include="Classes\G_Gruppe\Bug.cs" />
+    <Compile Include="Classes\G_Gruppe\OliverMarcus_TicTacToe.cs" />
+    <Compile Include="Classes\G_Gruppe\Snake.cs" />
     <Compile Include="Classes\I_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\G_Gruppe\Vorname_Nachname_XXX.cs" />
+    <Compile Include="Classes\C_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\J_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\H_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\D_Gruppe\JLJ_RBA_TikTokToo.cs" />
@@ -86,6 +90,7 @@
     <Compile Include="Classes\X_Griesbauer\Josef_Griesbauer_TicTacToe.cs" />
     <Compile Include="Interfaces\B_Gruppe\Volley\B_IVolley.cs" />
     <Compile Include="Interfaces\D_Gruppe\JLJ_IFlappyBird.cs" />
+    <Compile Include="Interfaces\G_Gruppe\InterfaceBug.cs" />
     <Compile Include="Interfaces\I_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\J_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\E_Gruppe\Vorname_Nachname_IXXX.cs" />
