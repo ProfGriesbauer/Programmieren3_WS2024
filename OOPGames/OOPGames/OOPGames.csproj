@@ -63,8 +63,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\B_Gruppe\Volley\B_Ball_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_ComputerPlayer_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_HumanPlayer_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Painter_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Rules_BV.cs" />
     <Compile Include="Classes\C_Gruppe\MemoryV3.cs" />
     <Compile Include="Classes\C_Gruppe\Rabea.cs" />
     <Compile Include="Classes\D_Gruppe\JLJ_FlappyBird.cs" />

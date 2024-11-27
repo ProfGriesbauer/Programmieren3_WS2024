@@ -23,7 +23,8 @@ namespace OOPGames
 
         //objects for the player and ball states
         IB_Ball_BV Ball { get; set; }
-        IB_Player_BV Player { get; set; }
+        IB_Player_BV Player1 { get; set; }
+        IB_Player_BV Player2 { get; set; }
 
 
         IB_Rules_BV Rules_BV { get; }
