@@ -63,6 +63,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Computer_Player.cs" />
+    <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Human_Player.cs" />
+    <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Move.cs" />
+    <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Painter.cs" />
+    <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Rules.cs" />
+    <Compile Include="Classes\A_Gruppe\Painter_A.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Ball_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_ComputerPlayer_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Field_BV.cs" />
@@ -76,18 +82,19 @@
     <Compile Include="Classes\E_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\F_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\G_Gruppe\Bug.cs" />
+    <Compile Include="Classes\G_Gruppe\G_Matthias_Hofmann_Move.cs" />
+    <Compile Include="Classes\G_Gruppe\G_Matthias_Hofmann_Rules.cs" />
     <Compile Include="Classes\G_Gruppe\OliverMarcus_TicTacToe.cs" />
     <Compile Include="Classes\G_Gruppe\Snake.cs" />
     <Compile Include="Classes\I_Gruppe\Vorname_Nachname_XXX.cs" />
-    <Compile Include="Classes\G_Gruppe\Vorname_Nachname_XXX.cs" />
-    <Compile Include="Classes\C_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\J_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\H_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\D_Gruppe\JLJ_RBA_TikTokToo.cs" />
     <Compile Include="Classes\B_Gruppe\Fabian_Louis_Chris_TicTacToe.cs" />
-    <Compile Include="Classes\A_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\X_Griesbauer\Josef_Griesbauer_BaseTicTacToe.cs" />
     <Compile Include="Classes\X_Griesbauer\Josef_Griesbauer_TicTacToe.cs" />
+    <Compile Include="Interfaces\A_Gruppe\IA_TicTacToeField.cs" />
+    <Compile Include="Interfaces\A_Gruppe\Matthias_Hofmann_IPainter.cs" />
     <Compile Include="Interfaces\B_Gruppe\Volley\B_IVolley.cs" />
     <Compile Include="Interfaces\D_Gruppe\JLJ_IFlappyBird.cs" />
     <Compile Include="Interfaces\G_Gruppe\InterfaceBug.cs" />
@@ -100,7 +107,6 @@
     <Compile Include="Interfaces\H_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\D_Gruppe\JLJ_RBA_ITikTokToo.cs" />
     <Compile Include="Interfaces\B_Gruppe\Fabian_Louis_Chris_ITicTacToe.cs" />
-    <Compile Include="Interfaces\A_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\IGamePlayer.cs" />
     <Compile Include="Interfaces\IGameRules.cs" />
     <Compile Include="Interfaces\IPaintGame.cs" />
