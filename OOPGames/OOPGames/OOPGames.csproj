@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -63,18 +64,24 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Computer_Player.cs" />
+    <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Move.cs" />
+    <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Painter.cs" />
+    <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Human_Player.cs" />
+    <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Rules.cs" />
     <Compile Include="Classes\E_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\F_Gruppe\Vorname_Nachname_XXX.cs" />
+    <Compile Include="Classes\G_Gruppe\G_Matthias_Hofmann_Move.cs" />
     <Compile Include="Classes\I_Gruppe\Vorname_Nachname_XXX.cs" />
-    <Compile Include="Classes\G_Gruppe\Vorname_Nachname_XXX.cs" />
+    <Compile Include="Classes\G_Gruppe\G_Matthias_Hofmann_Rules.cs" />
     <Compile Include="Classes\C_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\J_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\H_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\D_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\B_Gruppe\Vorname_Nachname_XXX.cs" />
-    <Compile Include="Classes\A_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\X_Griesbauer\Josef_Griesbauer_BaseTicTacToe.cs" />
     <Compile Include="Classes\X_Griesbauer\Josef_Griesbauer_TicTacToe.cs" />
+    <Compile Include="Interfaces\A_Gruppe\IA_TicTacToeField.cs" />
     <Compile Include="Interfaces\I_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\J_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\E_Gruppe\Vorname_Nachname_IXXX.cs" />
@@ -84,7 +91,6 @@
     <Compile Include="Interfaces\H_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\D_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\B_Gruppe\Vorname_Nachname_IXXX.cs" />
-    <Compile Include="Interfaces\A_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\IGamePlayer.cs" />
     <Compile Include="Interfaces\IGameRules.cs" />
     <Compile Include="Interfaces\IPaintGame.cs" />
@@ -122,5 +128,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
