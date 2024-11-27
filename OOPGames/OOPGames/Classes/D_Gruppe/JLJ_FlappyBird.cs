@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace OOPGames
@@ -25,16 +26,27 @@ namespace OOPGames
 
             canvas.Children.Clear();
 
-            // Vogel zeichnen
-            var bird = new Ellipse
+            //// Vogel zeichnen
+            //var bird = new Ellipse
+            //{
+            //    Width = field.Bird.Radius * 2,
+            //    Height = field.Bird.Radius * 2,
+            //    Fill = Brushes.Yellow
+            //};
+            //Canvas.SetTop(bird, field.Bird.Y - field.Bird.Radius);
+            //Canvas.SetLeft(bird, field.Bird.X - field.Bird.Radius);
+            //canvas.Children.Add(bird);
+
+            // Vogel zeichnen als Bild
+            var birdImage = new Image
             {
                 Width = field.Bird.Radius * 2,
                 Height = field.Bird.Radius * 2,
-                Fill = Brushes.Yellow
+                Source = new BitmapImage(new Uri("C:\Users\Leonr\Documents\Uni\Programmiern_3_WS24_25\Grafiken\bird.png", UriKind.RelativeOrAbsolute))
             };
-            Canvas.SetTop(bird, field.Bird.Y - field.Bird.Radius);
-            Canvas.SetLeft(bird, field.Bird.X - field.Bird.Radius);
-            canvas.Children.Add(bird);
+            Canvas.SetTop(birdImage, field.Bird.Y - field.Bird.Radius);
+            Canvas.SetLeft(birdImage, field.Bird.X - field.Bird.Radius);
+            canvas.Children.Add(birdImage);
 
             // Hindernisse zeichnen
             foreach (var tube in field.Obstacles)
