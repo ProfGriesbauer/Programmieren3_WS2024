@@ -9,11 +9,11 @@ namespace OOPGames
 {
     //TicTacToe specific paint game
     //DIESES INTERFACE NICHT ÄNDERN!
-    public interface OMM_BugGamePaint
+    public interface OMM_BugGamePaint : IPaintGame2
     {
         //Paints the given game field on the given canvas
         //NOTE: Clearing the canvas, etc. has to be done within this function
-        void PaintTicTacToeField(Canvas canvas, OMM_BugField currentField);
+        void PaintBugField(Canvas canvas, OMM_BugField currentField);
     }
 
     //TicTacToe specific game field 3x3

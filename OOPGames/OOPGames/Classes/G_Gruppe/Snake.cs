@@ -61,11 +61,11 @@ namespace OOPGames
         }
     }
 
-    public class omSnakeRules : IX_TicTacToeRules
+    public class omSnakeRules : OMM_BugRules
     {
         omSnakeField _Field = new omSnakeField();
 
-        public IX_TicTacToeField TicTacToeField { get { return _Field; } }
+        public OMM_BugField TicTacToeField { get { return _Field; } }
 
         public bool MovesPossible
         {
@@ -97,6 +97,8 @@ namespace OOPGames
 
         public IGameField CurrentField { get { return TicTacToeField; } }
 
+        public OMM_BugField BugField => throw new NotImplementedException();
+
         public void DoMove(IPlayMove move)
         {
             if (move is IX_TicTacToeMove)
@@ -104,9 +106,24 @@ namespace OOPGames
                 DoTicTacToeMove((IX_TicTacToeMove)move);
             }
         }
+
+        public void DoBugMove(OMM_BugMove move)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void StartedGameCall()
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void TickGameCall()
+        {
+            //throw new NotImplementedException();
+        }
     }
 
-    public class omSnakeField : IX_TicTacToeField
+    public class omSnakeField : OMM_BugField
     {
         public List<Point> SnakeSegments { get; private set; }
         public Point Food { get; private set; }
@@ -194,7 +211,7 @@ namespace OOPGames
 
         public bool CanBePaintedBy(IPaintGame painter)
         {
-            return painter is IX_PaintTicTacToe;
+            return painter is OMM_BugGamePaint;
         }
     }
 

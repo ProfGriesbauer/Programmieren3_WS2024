@@ -13,7 +13,7 @@ namespace OOPGames
     public class omm_BugPaint : OMM_BugGamePaint
     {
         public string Name { get { return "OMM_Bug_Paint"; } }
-        public void PaintTicTacToeField(Canvas canvas, OMM_BugField currentField)
+        public void PaintBugField(Canvas canvas, OMM_BugField currentField)
         {
             PaintGameField(canvas, currentField);
         }
@@ -81,7 +81,7 @@ namespace OOPGames
             Line l19 = new Line() { X1 = 0, Y1 = 400, X2 = 400, Y2 = 400, Stroke = lineStroke, StrokeThickness = thickness };
             canvas.Children.Add(l19);
 
-
+            /*
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -100,12 +100,20 @@ namespace OOPGames
                     }
                 }
             }
+
+        */
+        }
+
+        public void TickPaintGameField(Canvas canvas, IGameField currentField)
+        {
+            //throw new NotImplementedException();
         }
     }
     /*
+    
     public class oX_TicTacToeRules : OMM_BugRules
     {
-        omm_BugField _Field = new omm_BugField();
+        omm_BugField _Field = new OMM_BugField();
 
         public omm_BugField TicTacToeField { get { return _Field; } }
 
@@ -358,6 +366,6 @@ namespace OOPGames
                 return null;
             }
         }
-    }
-    */
+    }*/
+    
 }
