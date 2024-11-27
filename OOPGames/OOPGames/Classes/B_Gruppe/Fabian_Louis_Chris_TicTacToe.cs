@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 
 namespace OOPGames
 {
     public class B_Paint_TTT : IB_Painter_TTT
     {
+        double _CanvasHeigth;
+        double _CanvasWidth;
+        private readonly double _MarginPercentage = 0.1;
         public string Name
         {
             get
@@ -30,23 +34,36 @@ namespace OOPGames
 
         public void PaintTTT(Canvas canvas, IB_Field_TTT playField)
         {
-            canvas.Children.Clear();
-            Color bgColor = Color.FromRgb(255, 255, 255);
-            canvas.Background = new SolidColorBrush(bgColor);
-            Color lineColor = Color.FromRgb(255, 0, 0);
-            Brush lineStroke = new SolidColorBrush(lineColor);
-            Color XColor = Color.FromRgb(0, 255, 0);
-            Brush XStroke = new SolidColorBrush(XColor);
-            Color OColor = Color.FromRgb(0, 0, 255);
-            Brush OStroke = new SolidColorBrush(OColor);
+            
+            playField.Height = canvas.ActualHeight;
+            playField.Width = canvas.ActualWidth;
 
-            Line l1 = new Line() { X1 = 120, Y1 = 20, X2 = 120, Y2 = 320, Stroke = lineStroke, StrokeThickness = 3.0 };
+            double _maxPossibleSquare = Math.Min(playField.Height, playField.Width);
+            double _Margin = _maxPossibleSquare * playField.MarginPercentage;
+            double _maxSquare = _maxPossibleSquare - 2*_Margin;
+            double _sq = _maxSquare / 3;
+            double _SymbolSizeX = 0.65*_sq;
+            double _SymbolSizeO = 0.75 * _sq;
+
+            canvas.Children.Clear();
+            Color bgColor = Color.FromArgb(255, 5, 5, 5);
+            canvas.Background = new SolidColorBrush(bgColor);
+            Color lineColor = Color.FromArgb(255, 255, 223, 93);
+            Brush lineStroke = new SolidColorBrush(lineColor);
+            Color XColor = Color.FromArgb(255, 2, 134, 255);
+            Brush XStroke = new SolidColorBrush(XColor);
+            Color OColor = Color.FromArgb(255, 255, 2, 134);
+            Brush OStroke = new SolidColorBrush(OColor);
+            Color WinColor = Color.FromArgb(255, 0, 204, 102);
+            Brush WinStroke = new SolidColorBrush(WinColor);
+
+            Line l1 = new Line() { X1 = _Margin + _sq, Y1 = _Margin, X2 = _Margin + _sq, Y2 = _Margin + _maxSquare, Stroke = lineStroke, StrokeThickness = _sq / 40 };
             canvas.Children.Add(l1);
-            Line l2 = new Line() { X1 = 220, Y1 = 20, X2 = 220, Y2 = 320, Stroke = lineStroke, StrokeThickness = 3.0 };
+            Line l2 = new Line() { X1 = _Margin + 2 * _sq, Y1 = _Margin, X2 = _Margin + 2 * _sq, Y2 = _Margin + _maxSquare, Stroke = lineStroke, StrokeThickness = _sq / 40 };
             canvas.Children.Add(l2);
-            Line l3 = new Line() { X1 = 20, Y1 = 120, X2 = 320, Y2 = 120, Stroke = lineStroke, StrokeThickness = 3.0 };
+            Line l3 = new Line() { X1 = _Margin, Y1 = _Margin + _sq, X2 = _Margin + _maxSquare, Y2 = _Margin + _sq, Stroke = lineStroke, StrokeThickness = _sq / 40 };
             canvas.Children.Add(l3);
-            Line l4 = new Line() { X1 = 20, Y1 = 220, X2 = 320, Y2 = 220, Stroke = lineStroke, StrokeThickness = 3.0 };
+            Line l4 = new Line() { X1 = _Margin, Y1 = _Margin + 2 * _sq, X2 = _Margin + _maxSquare, Y2 = _Margin + 2 * _sq, Stroke = lineStroke, StrokeThickness = _sq / 40 };
             canvas.Children.Add(l4);
 
             for (int i = 0; i < 3; i++)
@@ -55,24 +72,155 @@ namespace OOPGames
                 {
                     if (playField[i, j] == 1)
                     {
-                        Line X1 = new Line() { X1 = 20 + (j * 100), Y1 = 20 + (i * 100), X2 = 120 + (j * 100), Y2 = 120 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
+                        Line X1 = new Line()
+                        { 
+                            X1 = _Margin + (_sq - _SymbolSizeX) / 2 + (j * _sq), 
+                            Y1 = _Margin + (_sq - _SymbolSizeX) / 2 + (i * _sq), 
+                            X2 = _Margin + (_sq - _SymbolSizeX) / 2 + (j * _sq) + _SymbolSizeX, 
+                            Y2 = _Margin + (_sq - _SymbolSizeX) / 2 + (i * _sq) + _SymbolSizeX, 
+                            Stroke = XStroke, 
+                            StrokeThickness = _sq/18 
+                        };
                         canvas.Children.Add(X1);
-                        Line X2 = new Line() { X1 = 20 + (j * 100), Y1 = 120 + (i * 100), X2 = 120 + (j * 100), Y2 = 20 + (i * 100), Stroke = XStroke, StrokeThickness = 3.0 };
+
+                        Line X2 = new Line() 
+                        { 
+                            X1 = _Margin + (_sq - _SymbolSizeX) / 2 + (j * _sq) + _SymbolSizeX, 
+                            Y1 = _Margin + (_sq - _SymbolSizeX) / 2 + (i * _sq), 
+                            X2 = _Margin + (_sq - _SymbolSizeX) / 2 + (j * _sq), 
+                            Y2 = _Margin + (_sq - _SymbolSizeX) / 2 + (i * _sq) + _SymbolSizeX, 
+                            Stroke = XStroke, 
+                            StrokeThickness = _sq/18 
+                        };
                         canvas.Children.Add(X2);
                     }
                     else if (playField[i, j] == 2)
                     {
-                        Ellipse OE = new Ellipse() { Margin = new Thickness(20 + (j * 100), 20 + (i * 100), 0, 0), Width = 100, Height = 100, Stroke = OStroke, StrokeThickness = 3.0 };
+                        Ellipse OE = new Ellipse() 
+                        { 
+                            Margin = new Thickness(_Margin + (_sq-_SymbolSizeO)/2 + (j * _sq), _Margin + (_sq - _SymbolSizeO) / 2 + (i * _sq), 0, 0),
+                            Width = _SymbolSizeO, 
+                            Height = _SymbolSizeO, 
+                            Stroke = OStroke, 
+                            StrokeThickness = _sq/20
+                        };
                         canvas.Children.Add(OE);
                     }
                 }
             }
+            for (int i = 0; i < 3; i++)
+            {
+                //check rows
+                if (playField[i, 0] != 0)
+                {
+                    if (playField[i, 0] == playField[i, 1] && playField[i, 0] == playField[i, 2])
+                    {
+                        double _Width = 1.1 * _maxSquare;
+                        double _Height = 1.3 * _sq;
+
+                        Ellipse EWinRow = new Ellipse()
+                        {
+                            Width = _Width,
+                            Height = _Height,
+                            Stroke = WinStroke,
+                            StrokeThickness = _sq / 30,
+                            RenderTransform = new TranslateTransform(_Margin-(_Width-_maxSquare)/2, _Margin - (_Height - _sq) / 2 + i*_sq)
+                        };
+                        canvas.Children.Add(EWinRow);
+                    }
+                }
+                //check colums
+                if (playField[0, i] != 0)
+                {
+                    if (playField[0, i] == playField[1, i] && playField[0, i] == playField[2, i])
+                    {
+                        double _Width = 1.3 * _sq;
+                        double _Height = 1.1 * _maxSquare;
+
+                        Ellipse EWinColum = new Ellipse()
+                        {
+                            Width = _Width,
+                            Height = _Height,
+                            Stroke = WinStroke,
+                            StrokeThickness = _sq / 30,
+                            RenderTransform = new TranslateTransform(_Margin - (_Width - _sq) / 2 + i * _sq, _Margin - (_Height - _maxSquare) / 2)
+                        };
+                       
+                        canvas.Children.Add(EWinColum);
+                    }
+                }
+            }
+
+            //check diagonal 1
+            if (playField[0, 0] != 0 && playField[0, 0] == playField[1, 1] && playField[0, 0] == playField[2, 2])
+            {
+                double _Width = 1.4 * _maxSquare;
+                double _Height = 1.3 * _sq;
+
+                Ellipse EWinDiagonal1 = new Ellipse()
+                {
+                    Width = _Width,
+                    Height = _Height,
+                    Stroke = WinStroke,
+                    StrokeThickness = _sq / 30,
+                };
+
+                // Create a TransformGroup to combine transformations
+                TransformGroup transformGroup = new TransformGroup();
+                transformGroup.Children.Add(new TranslateTransform(_Margin - (_Width - _maxSquare) / 2, _Margin - (_Height - _sq) / 2 + _sq));
+                transformGroup.Children.Add(new RotateTransform(45, _maxPossibleSquare / 2, _maxPossibleSquare / 2));
+
+                // Assign the combined transformation to the Ellipse
+                EWinDiagonal1.RenderTransform = transformGroup;
+
+                // Add the Ellipse to the canvas
+                canvas.Children.Add(EWinDiagonal1);
+
+            }
+
+            //check diagonal 2
+            if (playField[0, 2] != 0 && playField[0, 2] == playField[1, 1] && playField[0, 2] == playField[2, 0])
+            {
+                double _Width = 1.4 * _maxSquare;
+                double _Height = 1.2 * _sq;
+
+                Ellipse EWinDiagonal2 = new Ellipse()
+                {
+                    Width = _Width,
+                    Height = _Height,
+                    Stroke = WinStroke,
+                    StrokeThickness = _sq / 30,
+                };
+
+                // Create a TransformGroup to combine transformations
+                TransformGroup transformGroup = new TransformGroup();
+                transformGroup.Children.Add(new TranslateTransform(_Margin - (_Width - _maxSquare) / 2, _Margin - (_Height - _sq) / 2 + _sq));
+                transformGroup.Children.Add(new RotateTransform(-45, _maxPossibleSquare / 2, _maxPossibleSquare / 2));
+
+                // Assign the combined transformation to the Ellipse
+                EWinDiagonal2.RenderTransform = transformGroup;
+
+                // Add the Ellipse to the canvas
+                canvas.Children.Add(EWinDiagonal2);
+            }
+
         }
     }
+    
 
     public class B_Field_TTT : IB_Field_TTT
     {
+        double _CanvasHeigth;
+        double _CanvasWidth;
+        private readonly double _MarginPercentage = 0.1;
+
         int[,] _Field = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+
+        IB_Rules_TTT _Rules;
+        public B_Field_TTT (IB_Rules_TTT rules)
+        {
+            _Rules = rules; 
+        }
 
         public int this[int r, int c]
         {
@@ -86,6 +234,42 @@ namespace OOPGames
             }
         }
 
+        public double Height
+        {
+            get
+            {
+                return _CanvasHeigth;
+            }
+            set
+            {
+                _CanvasHeigth = value;
+            }
+        }
+
+        public double Width
+        {
+            get
+            {
+                return _CanvasWidth;
+            }
+            set
+            {
+                _CanvasWidth = value;
+            }
+        }
+
+        public double MarginPercentage
+        {
+            get
+            {
+                return _MarginPercentage;
+            }
+        }
+
+        public IB_Rules_TTT Rules_TTT
+        {
+            get { return _Rules; }
+        }
 
         public bool CanBePaintedBy(IPaintGame painter)
         {
@@ -94,7 +278,12 @@ namespace OOPGames
     }
     public class B_Rules_TTT : IB_Rules_TTT
     {
-        B_Field_TTT _Field = new B_Field_TTT();
+        B_Field_TTT _Field;
+
+        public B_Rules_TTT()
+        {
+            _Field = new B_Field_TTT(this);
+        }
         public IB_Field_TTT TTTField
         {
             get
@@ -133,39 +322,51 @@ namespace OOPGames
 
         public int CheckIfPLayerWon()
         {
+            int _winner = CheckIfPLayerWon_TTT(TTTField);
+            if (_winner == 0)
+            {
+                return -1;
+            }
+            else
+            {
+                return _winner;
+            }
+        }
+        public int CheckIfPLayerWon_TTT(IB_Field_TTT field)
+        {
             for (int i = 0; i < 3; i++)
             {
                 //check rows
-                if (_Field[i, 0] != 0)
+                if (field[i, 0] != 0)
                 {
-                    if (_Field[i, 0] == _Field[i, 1] && _Field[i, 0] == _Field[i, 2])
+                    if (field[i, 0] == field[i, 1] && field[i, 0] == field[i, 2])
                     {
-                        return _Field[i, 0];
+                        return field[i, 0];
                     }
                 }
                 //check colums
-                if (_Field[0, i] != 0)
+                if (field[0, i] != 0)
                 {
-                    if (_Field[0, i] == _Field[1, i] && _Field[0, i] == _Field[2, i])
+                    if (field[0, i] == field[1, i] && field[0, i] == field[2, i])
                     {
-                        return _Field[0, i];
+                        return field[0, i];
                     }
                 }
             }
 
             //check diagonal 1
-            if (_Field[0, 0] != 0 && _Field[0, 0] == _Field[1, 1] && _Field[0, 0] == _Field[2, 2])
+            if (field[0, 0] != 0 && field[0, 0] == field[1, 1] && field[0, 0] == field[2, 2])
             {
-                return _Field[0, 0];
+                return field[0, 0];
             }
 
             //check diagonal 2
-            if (_Field[0, 2] != 0 && _Field[0, 2] == _Field[1, 1] && _Field[0, 2] == _Field[2, 0])
+            if (field[0, 2] != 0 && field[0, 2] == field[1, 1] && field[0, 2] == field[2, 0])
             {
-                return _Field[0, 2];
+                return field[0, 2];
             }
 
-            return -1;
+            return 0;
             
         }
         
@@ -173,7 +374,7 @@ namespace OOPGames
 
         public void ClearField()
         {
-            _Field = new B_Field_TTT();
+            _Field = new B_Field_TTT(this);
         }
 
         public void DoMove(IPlayMove move)
@@ -188,7 +389,7 @@ namespace OOPGames
         {
             if (move.Row >= 0 && move.Row < 3 && move.Column >= 0 && move.Column < 3)
             {
-                _Field[move.Row, move.Column] = move.PlayerNumber;
+                TTTField[move.Row, move.Column] = move.PlayerNumber;
             }
         }
     }
@@ -314,9 +515,9 @@ namespace OOPGames
 
     //Erstellt eine Klasse B_ComputerPlayerSchlau_TTT aus der Abstrakten Klasse B_BasePlayer
     //und der Interface Klasse IB_ComputerPlayerSchlau_TTT
-    public class B_ComputerPlayerSchlau_TTT : B_BasePlayer, IB_ComputerPlayerSchlau_TTT
+    public class B_ComputerPlayerSchlau_TTT : B_BasePlayer, IB_ComputerPlayer_TTT
     {
-
+        
         //Überschreibt den Angezeigten Name der Klasse im Auswahlbereich
         public override string Name
         {
@@ -347,15 +548,21 @@ namespace OOPGames
             }
         }
 
-        private int Minimax(int[,] board, int depth, bool isMaximizing)
+
+        private int Minimax(IB_Field_TTT board, int depth, bool isMaximizing, IB_Field_TTT field)
         {
-            int winner = CheckWinner(board);
+            int winner = field.Rules_TTT.CheckIfPLayerWon_TTT(board);
+
             if (winner != 0)
             {
                 return winner == this.PlayerNumber ? 1 : -1;
             }
 
-            if (IsBoardFull(board)) return 0;
+            if (!field.Rules_TTT.MovesPossible)
+            {
+                return 0;
+            }
+
 
             if (isMaximizing)
             {
@@ -367,7 +574,7 @@ namespace OOPGames
                         if (board[r, c] == 0)
                         {
                             board[r, c] = this.PlayerNumber;
-                            int score = Minimax(board, depth + 1, false);
+                            int score = Minimax(board, depth + 1, false, field);
                             board[r, c] = 0;
                             bestScore = Math.Max(score, bestScore);
                         }
@@ -386,7 +593,7 @@ namespace OOPGames
                         if (board[r, c] == 0)
                         {
                             board[r, c] = opponent;
-                            int score = Minimax(board, depth + 1, true);
+                            int score = Minimax(board, depth + 1, true, field);
                             board[r, c] = 0;
                             bestScore = Math.Min(score, bestScore);
                         }
@@ -398,14 +605,7 @@ namespace OOPGames
 
         public IB_Move_TTT GetTTTMove(IB_Field_TTT field)
         {
-            int[,] board = new int[3, 3];
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    board[i, j] = field[i, j];
-                }
-            }
+            IB_Field_TTT board = field;
 
             int bestScore = int.MinValue;
             (int, int) bestMove = (-1, -1);
@@ -417,7 +617,7 @@ namespace OOPGames
                     if (board[r, c] == 0)
                     {
                         board[r, c] = this.PlayerNumber;
-                        int score = Minimax(board, 0, false);
+                        int score = Minimax(board, 0, false, field);
                         board[r, c] = 0;
 
                         if (score > bestScore)
@@ -430,43 +630,6 @@ namespace OOPGames
             }
 
             return new B_Move_TTT(bestMove.Item1, bestMove.Item2, this.PlayerNumber);
-
-            //return null;
-        }
-        private bool IsBoardFull(int[,] board)
-        {
-            for (int r = 0; r < 3; r++)
-            {
-                for (int c = 0; c < 3; c++)
-                {
-                    if (board[r, c] == 0) return false;
-                }
-            }
-            return true;
-        }
-
-        // Prüft, ob ein Spieler gewonnen hat
-        private int CheckWinner(int[,] board)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                // Überprüfe Zeilen
-                if (board[i, 0] != 0 && board[i, 0] == board[i, 1] && board[i, 0] == board[i, 2])
-                    return board[i, 0];
-
-                // Überprüfe Spalten
-                if (board[0, i] != 0 && board[0, i] == board[1, i] && board[0, i] == board[2, i])
-                    return board[0, i];
-            }
-
-            // Überprüfe Diagonalen
-            if (board[0, 0] != 0 && board[0, 0] == board[1, 1] && board[0, 0] == board[2, 2])
-                return board[0, 0];
-
-            if (board[0, 2] != 0 && board[0, 2] == board[1, 1] && board[0, 2] == board[2, 0])
-                return board[0, 2];
-
-            return 0; // Kein Gewinner
         }
     }
 
@@ -500,14 +663,19 @@ namespace OOPGames
         }
 
         public IB_Move_TTT GetTTTMove(IB_Field_TTT field, IClickSelection selection)
+
         {
+            double _maxPossibleSquare = Math.Min(field.Height, field.Width);
+            double _Margin = _maxPossibleSquare * field.MarginPercentage;
+            double _maxSquare = _maxPossibleSquare - 2 * _Margin;
+            double _sq = _maxSquare / 3;
 
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (selection.XClickPos > 20 + (j * 100) && selection.XClickPos < 120 + (j * 100) &&
-                        selection.YClickPos > 20 + (i * 100) && selection.YClickPos < 120 + (i * 100) &&
+                    if (selection.XClickPos > _Margin + (j * _sq) && selection.XClickPos < _sq + _Margin + (j * _sq) &&
+                        selection.YClickPos > _Margin + (i * _sq) && selection.YClickPos < _sq + _Margin + (i * _sq) &&
                         field[i, j] <= 0)
                     {
                         return new B_Move_TTT(i, j, this.PlayerNumber);

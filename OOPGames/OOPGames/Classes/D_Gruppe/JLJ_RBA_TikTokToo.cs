@@ -253,6 +253,7 @@ namespace OOPGames
             //canvas.Children.Add(bone2);
         }
     }
+    
 
     public class D_RulesTikTokToo : ID_TTTRules
     {
@@ -283,7 +284,7 @@ namespace OOPGames
             }
         }
 
-        
+
 
         public int CheckIfPLayerWon()
         {
@@ -328,7 +329,7 @@ namespace OOPGames
             if (move is ID_TTTMove)
             {
                 DoTicTacToeMove((ID_TTTMove)move);
-            } 
+            }
         }
 
         public void DoTicTacToeMove(ID_TTTMove move)
@@ -342,7 +343,7 @@ namespace OOPGames
 
     public class D_FieldTikTokToo : ID_TTTGameField
     {
-        
+
 
         public bool CanBePaintedBy(IPaintGame painter)
         {
@@ -376,7 +377,7 @@ namespace OOPGames
     }
 
     public class D_MoveTikTokToo : ID_TTTMove
-    {   
+    {
         int _PlayerNumber = 0;
 
         int _Row = 0;
@@ -419,27 +420,27 @@ namespace OOPGames
 
         public ID_TTTMove GetMove(IMoveSelection selection, ID_TTTGameField field)
         {
-           
 
-                if (selection is IClickSelection)
+
+            if (selection is IClickSelection)
+            {
+                IClickSelection sel = (IClickSelection)selection;
+                for (int i = 0; i < 3; i++)
                 {
-                    IClickSelection sel = (IClickSelection)selection;
-                    for (int i = 0; i < 3; i++)
+                    for (int j = 0; j < 3; j++)
                     {
-                        for (int j = 0; j < 3; j++)
+                        if (sel.XClickPos > 20 + (j * 100) && sel.XClickPos < 120 + (j * 100) &&
+                            sel.YClickPos > 20 + (i * 100) && sel.YClickPos < 120 + (i * 100) &&
+                            field[i, j] <= 0)
                         {
-                            if (sel.XClickPos > 20 + (j * 100) && sel.XClickPos < 120 + (j * 100) &&
-                                sel.YClickPos > 20 + (i * 100) && sel.YClickPos < 120 + (i * 100) &&
-                                field[i, j] <= 0)
-                            {
-                                return new D_MoveTikTokToo(i, j, _PlayerNumber);
-                            }
+                            return new D_MoveTikTokToo(i, j, _PlayerNumber);
                         }
                     }
                 }
-                return null;
-            
-            
+            }
+            return null;
+
+
         }
 
         public IPlayMove GetMove(IMoveSelection selection, IGameField field)
@@ -497,45 +498,45 @@ namespace OOPGames
                 return winningMove;
             }
 
-                // 2. Schritt: Prüfen, ob der Gegner gewinnen könnte, und blockieren
-                int opponentNumber = _PlayerNumber == 1 ? 2 : 1;
+            // 2. Schritt: Prüfen, ob der Gegner gewinnen könnte, und blockieren
+            int opponentNumber = _PlayerNumber == 1 ? 2 : 1;
             ID_TTTMove blockingMove = FindWinningMove(field, opponentNumber);
-                if (blockingMove != null)
-                {
-                    return blockingMove;
-                }
+            if (blockingMove != null)
+            {
+                return blockingMove;
+            }
 
-                // 3. Schritt: Falls weder Gewinn noch Block möglich ist, Zentrum wählen
-                if (field[1, 1] == 0)
-                {
-                    return new D_MoveTikTokToo(1, 1, _PlayerNumber);
-                }
+            // 3. Schritt: Falls weder Gewinn noch Block möglich ist, Zentrum wählen
+            if (field[1, 1] == 0)
+            {
+                return new D_MoveTikTokToo(1, 1, _PlayerNumber);
+            }
 
-                // 4. Schritt: Ecken besetzen, falls das Zentrum schon belegt ist
-                int[,] ecken = new int[,] { { 0, 0 }, { 0, 2 }, { 2, 0 }, { 2, 2 } };
-                for (int i = 0; i < ecken.GetLength(0); i++)
+            // 4. Schritt: Ecken besetzen, falls das Zentrum schon belegt ist
+            int[,] ecken = new int[,] { { 0, 0 }, { 0, 2 }, { 2, 0 }, { 2, 2 } };
+            for (int i = 0; i < ecken.GetLength(0); i++)
+            {
+                int row = ecken[i, 0];
+                int col = ecken[i, 1];
+                if (field[row, col] == 0)
                 {
-                    int row = ecken[i, 0];
-                    int col = ecken[i, 1];
-                    if (field[row, col] == 0)
+                    return new D_MoveTikTokToo(row, col, _PlayerNumber);
+                }
+            }
+
+            // 5. Schritt: Alle verbleibenden freien Felder der Reihe nach prüfen
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (field[i, j] == 0)
                     {
-                        return new D_MoveTikTokToo(row, col, _PlayerNumber);
+                        return new D_MoveTikTokToo(i, j, _PlayerNumber);
                     }
                 }
-
-                // 5. Schritt: Alle verbleibenden freien Felder der Reihe nach prüfen
-                for (int i = 0; i < 3; i++)
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        if (field[i, j] == 0)
-                        {
-                            return new D_MoveTikTokToo(i, j, _PlayerNumber);
-                        }
-                    }
-                }
+            }
             return null;
-           
+
         }
 
         // Hilfsmethode, um einen Gewinnzug für den Spieler zu finden
@@ -584,6 +585,6 @@ namespace OOPGames
             _PlayerNumber = playerNumber;
         }
 
-     
+
     }
 }
