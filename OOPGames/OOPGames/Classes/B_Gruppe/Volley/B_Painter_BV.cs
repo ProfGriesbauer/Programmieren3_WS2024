@@ -55,7 +55,7 @@ namespace OOPGames
             Canvas.SetLeft(scorePlayer1, 10);
             Canvas.SetTop(scorePlayer1, 10);
             canvas.Children.Add(scorePlayer1);
-
+            
             TextBlock scorePlayer2 = new TextBlock
             {
                 Text = $"{field.Rules_BV.Points[1]}",
@@ -65,6 +65,7 @@ namespace OOPGames
             Canvas.SetRight(scorePlayer2, 10);
             Canvas.SetTop(scorePlayer2, 10);
             canvas.Children.Add(scorePlayer2);
+            
          }
 
 
