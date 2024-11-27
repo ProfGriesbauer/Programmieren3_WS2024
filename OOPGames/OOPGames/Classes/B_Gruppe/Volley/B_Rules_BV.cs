@@ -8,6 +8,12 @@ namespace OOPGames
 {
     public class B_Rules_BV : IB_Rules_BV
     {
+        B_Field_BV _Field;
+
+        public B_Rules_BV()
+        {
+            _Field = new B_Field_BV(this);
+        }
         public string Name => "Blobby Volley Rules";
         public int[,] Points { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

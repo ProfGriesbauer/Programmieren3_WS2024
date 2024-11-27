@@ -39,37 +39,11 @@ namespace OOPGames
             canvas.Children.Add(net);
 
             // Spieler zeichnen
-            Ellipse player1 = new Ellipse
-            {
-                Width = 50,
-                Height = 50,
-                Fill = Brushes.Blue
-            };
-            Canvas.SetLeft(player1, field.Player1.Pos_x);
-            Canvas.SetTop(player1, field.Player1.Pos_y);
-            canvas.Children.Add(player1);
-
-            Ellipse player2 = new Ellipse
-            {
-                Width = 50,
-                Height = 50,
-                Fill = Brushes.Red
-            };
-            Canvas.SetLeft(player2, field.Player2.Pos_x);
-            Canvas.SetTop(player2, field.Player2.Pos_y);
-            canvas.Children.Add(player2);
+            field.Player1.B_Paint_Player(canvas);
+            field.Player2.B_Paint_Player(canvas);
 
             // Ball zeichnen
-            Ellipse ball = new Ellipse
-            {
-                Width = 30,
-                Height = 30,
-                Fill = Brushes.Yellow
-            };
-            Canvas.SetLeft(ball, field.Ball.Pos_x);
-            Canvas.SetTop(ball, field.Ball.Pos_y);
-            canvas.Children.Add(ball);
-        
+            field.Ball.B_Paint_Ball(canvas);        
          }
 
 
