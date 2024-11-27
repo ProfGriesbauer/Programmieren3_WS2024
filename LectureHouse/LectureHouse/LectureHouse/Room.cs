@@ -7,7 +7,7 @@ using System.Transactions;
 
 namespace LectureHouse
 {
-    public interface IRoom : IEGerateBesuchbar
+    public interface IRoom : IEGerateBesuchbar, ISerializable
     {
         public void AlleLichterAn();
 
@@ -94,6 +94,21 @@ namespace LectureHouse
         }
 
         public abstract void AllesAusUndRunter();
+
+        public void deserialize(string str)
+        {
+            int c = int.Parse(str);
+            _lights.Clear();
+            for(int i = 0; i < c; i++)
+            {
+                _lights.Add(new Light());
+            }
+        }
+
+        public string serialize()
+        {
+            return "|" + _lights.Count;
+        }
 
         public void willkommen(EGerateBesucher besucher)
         {

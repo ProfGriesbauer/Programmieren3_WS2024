@@ -3,6 +3,11 @@
 using LectureHouse;
 using System.Diagnostics;
 
+void testEvents (object sender, EventArgs e)
+{
+    Console.WriteLine("testtestEvents");
+}
+
 LectureHouse.House testHaus = new LectureHouse.House();
 LectureHouse.House testHaus2 = new LectureHouse.House(77, 66);
 LectureHouse.IHouse testItf = testHaus;
@@ -11,11 +16,27 @@ LectureHouse.House.GibMirPIAlsFloat();
 
 testHaus.AlleLichterMainRoom = true;
 testHaus.AlleLichterMainRoom = false;
+
+testHaus.RaumDazu += testEvents;
+
 testHaus.RaumHinzufuegen(new NormalerRoom());
 testHaus.RaumHinzufuegen(new NormalerRoom());
 testHaus.RaumHinzufuegen(new NormalerRoom());
 testHaus.RaumHinzufuegen(new NormalerRoom());
 testHaus.RaumHinzufuegen(new NormalerRoom());
+
+
+foreach (IRoom r in testHaus)
+{
+    Console.WriteLine(r.ToString());
+}
+
+string strInhalt = testHaus.serialize();
+Console.WriteLine(strInhalt);
+
+LectureHouse.House LoadHouse = testHaus.HausErzeugerFabnrik(56,78);
+LoadHouse.deserialize(strInhalt);
+Console.WriteLine(LoadHouse.serialize());
 
 LectureHouse.EGerateBesucher meinBEsucher = new EGerateBesucher();
 try

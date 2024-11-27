@@ -78,6 +78,7 @@ namespace OOPGames
             _activeRules = rules;
         }
 
+
         public IEnumerable<IPaintGame> Painters { get { return _Painters; } }
 
         public IEnumerable<IGamePlayer> Players {  get { return _Players; } }

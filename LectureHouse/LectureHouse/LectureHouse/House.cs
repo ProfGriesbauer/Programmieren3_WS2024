@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -7,6 +8,13 @@ using System.Threading.Tasks;
 
 namespace LectureHouse
 {
+    public interface ISerializable
+    {
+        string serialize();
+
+        void deserialize(string str);
+    }
+
     public interface IEGerateBesuchbar
     {
         public void willkommen(EGerateBesucher besucher);
@@ -40,16 +48,23 @@ namespace LectureHouse
 
         public IList<IRoom> AlleRäume { get; }
     }
-    public class House : IHouse, IEGerateBesuchbar
+    public class House : IHouse, IEGerateBesuchbar, ISerializable, IEnumerable<IRoom>, IComparable<House>
     {
         float _StromV; //in A
         float _WasserV = 88;
+
+        public EventHandler RaumDazu;
 
         IRoom _mainRoom;
 
         IList<IRoom> _Rooms = new List<IRoom>();
 
         public static double PI = 3.14157535;
+
+        public House HausErzeugerFabnrik(float stromV, float wasserV)
+        {
+            return new House(stromV, wasserV);
+        }
 
         public House ()
         {
@@ -145,13 +160,9 @@ namespace LectureHouse
             return _WasserV;
         }
 
-        public float GibMirDenStromVerbauchInmA()
-        {
-            return _StromV * 1000;
-        }
-
         public void RaumHinzufuegen(IRoom room)
         {
+            RaumDazu(this, new EventArgs());
             _Rooms.Add(room);
         }
 
@@ -163,6 +174,50 @@ namespace LectureHouse
             {
                 r.willkommen(besucher);
             }
+        }
+        public float GibMirDenStromVerbauchInmA()
+        {
+            return _StromV * 1000;
+        }
+
+        public string serialize()
+        {
+            string str = "";
+            foreach(IRoom room in _Rooms) 
+            {
+                str = str + room.serialize();
+            }
+            return _StromV + "|" + _WasserV + str;
+        }
+
+        public void deserialize(string str)
+        {
+            string[] strs = str.Split('|');
+            _StromV = float.Parse(strs[0]);
+            _WasserV = float.Parse(strs[1]);
+            _Rooms.Clear();
+            for (int i = 2; i < strs.Count(); i++)
+            {
+                NormalerRoom nr = new NormalerRoom();
+                nr.deserialize(strs[i]);
+                _Rooms.Add(nr);
+            }
+        }
+
+        public IEnumerator<IRoom> GetEnumerator()
+        {
+            return _Rooms.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _Rooms.GetEnumerator();
+        }
+
+        public int CompareTo(House? other)
+        {
+            if (other == null) return -1;
+            else return (other._WasserV == _WasserV && other._StromV == _StromV) ? 0 : -1;
         }
     }
 }
