@@ -49,9 +49,16 @@ namespace OOPGames
 
         }
 
-
-
-        public bool MovesPossible => throw new NotImplementedException();
+        public bool MovesPossible
+        {
+            get
+            {
+                if (CheckIfPLayerWon() < 0) {
+                    return true;
+                }
+                return false;
+            }
+        }
 
         public int CheckIfPLayerWon()
         {
@@ -62,10 +69,10 @@ namespace OOPGames
                     return i;
                 }
             }
-            return 0;
+            return -1;
         }
 
-        public void CheckIfPLayerScored(IB_Field_BV Field_BV)
+        public void CheckIfPLayerScored()
         {
             int _On_Ground = Field_BV.Ball.B_On_Ground();
             if (_On_Ground >= 0)
@@ -88,17 +95,41 @@ namespace OOPGames
 
         public void StartedGameCall()
         {
-            throw new NotImplementedException();
+            TickGameCall();
         }
 
         public void TickGameCall()
         {
-            throw new NotImplementedException();
+            CheckIfPLayerScored();
         }
 
         public void ScoredReset(int scorer)
         {
-            throw new NotImplementedException();
+            //Reset Ball
+            if (scorer == 0)
+            {
+                Field_BV.Ball.Pos_x = Field_BV.Width / 4;
+            }
+            else if (scorer == 1)
+            {
+                Field_BV.Ball.Pos_x = (Field_BV.Width / 4)*3;
+            }
+            Field_BV.Ball.Pos_y = Field_BV.Height*0.7;
+            Field_BV.Ball.Velo_x = 0;
+            Field_BV.Ball.Velo_y = 0;
+
+
+            //Reset Players
+            Field_BV.Player1.Pos_x = Field_BV.Width / 4;
+            Field_BV.Player1.Pos_y = 0;
+            Field_BV.Player1.Velo_x = 0;
+            Field_BV.Player1.Velo_y = 0;
+
+            Field_BV.Player2.Pos_x = Field_BV.Width / 4;
+            Field_BV.Player2.Pos_y = 0;
+            Field_BV.Player2.Velo_x = 0;
+            Field_BV.Player2.Velo_y = 0;
+
         }
     }
 }

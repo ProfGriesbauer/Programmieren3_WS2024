@@ -38,7 +38,7 @@ namespace OOPGames
 
         //Returns the number of a player who scored the current Ball
         //RETURN -1 IF NO PLAYER SCORED (Ball is still in the air)
-        void CheckIfPLayerScored(IB_Field_BV field);
+        void CheckIfPLayerScored();
 
         //Resets the Game Field after a player scored
         void ScoredReset(int scorer);
