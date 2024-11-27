@@ -31,17 +31,19 @@ namespace OOPGames
             }
         }
 
-        public void B_Move_Player()
+        public void B_Move_Player(IB_Field_BV field)
         {
             // Update player position based on velocity
             Pos_x += Velo_x;
             Pos_y += Velo_y;
 
+
             // Keep player within boundaries
             if (Pos_x < Playersize / 2) Pos_x = Playersize / 2;
-            if (Pos_x > 1000 - Playersize / 2) Pos_x = 1000 - Playersize / 2; // Assuming 1000 as canvas width
-            if (Pos_y > 500 - Playersize / 2) Pos_y = 500 - Playersize / 2; // Assuming 500 as canvas height
+            if (Pos_x > field.Width - Playersize / 2) Pos_x = field.Width - Playersize / 2; // Assuming 1000 as canvas width
+            if (Pos_y > field.Height - Playersize / 2) Pos_y = field.Height - Playersize / 2; // Assuming 500 as canvas height
         }
+
 
         public Canvas B_Paint_Player(Canvas canvas)
         {

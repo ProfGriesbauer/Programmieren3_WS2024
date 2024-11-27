@@ -88,12 +88,12 @@ namespace OOPGames
 
         public void StartedGameCall()
         {
-            throw new NotImplementedException();
+            var field = (B_Field_BV)CurrentField;
         }
 
         public void TickGameCall()
         {
-            throw new NotImplementedException();
+            var field = (B_Field_BV)CurrentField;
         }
 
         public void ScoredReset(int scorer)

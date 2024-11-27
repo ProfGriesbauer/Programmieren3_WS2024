@@ -67,7 +67,7 @@ namespace OOPGames
         Canvas B_Paint_Player(Canvas canvas);
 
         //
-        void B_Move_Player();
+        void B_Move_Player(IB_Field_BV field);
     }
 
     public interface IB_HumanPlayer_BV : IB_Player_BV
@@ -98,6 +98,6 @@ namespace OOPGames
         int B_On_Ground();
 
         //Move
-        void B_Move_Ball();
+        void B_Move_Ball(IB_Field_BV field);
     }
 }
