@@ -26,26 +26,26 @@ namespace OOPGames
 
             canvas.Children.Clear();
 
-            //// Vogel zeichnen
-            //var bird = new Ellipse
-            //{
-            //    Width = field.Bird.Radius * 2,
-            //    Height = field.Bird.Radius * 2,
-            //    Fill = Brushes.Yellow
-            //};
-            //Canvas.SetTop(bird, field.Bird.Y - field.Bird.Radius);
-            //Canvas.SetLeft(bird, field.Bird.X - field.Bird.Radius);
-            //canvas.Children.Add(bird);
+            // Vogel zeichnen
+            var bird = new Ellipse
+            {
+                Width = field.Bird.Radius * 2,
+                Height = field.Bird.Radius * 2,
+                Fill = Brushes.Yellow
+            };
+            Canvas.SetTop(bird, field.Bird.Y - field.Bird.Radius);
+            Canvas.SetLeft(bird, field.Bird.X - field.Bird.Radius);
+            canvas.Children.Add(bird);
 
             // Vogel zeichnen als Bild
             var birdImage = new Image
             {
-                Width = field.Bird.Radius * 2,
-                Height = field.Bird.Radius * 2,
-                Source = new BitmapImage(new Uri("C:\Users\Leonr\Documents\Uni\Programmiern_3_WS24_25\Grafiken\bird.png", UriKind.RelativeOrAbsolute))
+                Width = (field.Bird.Radius * 2.7),
+                Height = (field.Bird.Radius * 2.7),
+                Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/bird.png", UriKind.Relative))
             };
-            Canvas.SetTop(birdImage, field.Bird.Y - field.Bird.Radius);
-            Canvas.SetLeft(birdImage, field.Bird.X - field.Bird.Radius);
+            Canvas.SetTop(birdImage, (field.Bird.Y - field.Bird.Radius)-4);
+            Canvas.SetLeft(birdImage, (field.Bird.X - field.Bird.Radius)-4);
             canvas.Children.Add(birdImage);
 
             // Hindernisse zeichnen
