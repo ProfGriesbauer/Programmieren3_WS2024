@@ -4,43 +4,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace OOPGames
 {
-    public class B_HumanPlayer_BV : IB_Player_BV
+    public class B_HumanPlayer_BV : B_Player_BV 
     {
-        public string Name => "Blobby Volley Player";
-        public double Pos_x { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Pos_y { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Velo_x { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Velo_y { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Playersize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public int PlayerNumber => throw new NotImplementedException();
-
-        public void B_Move_Player()
+        public override string Name
         {
-            throw new NotImplementedException();
+            get
+            {
+                return "Gruppe B BV HumanPlayer";
+            }
         }
-
-        public Canvas B_Paint_Player(Canvas canvas)
+        public override IGamePlayer Clone()
         {
-            throw new NotImplementedException();
+            B_HumanPlayer_BV BV_Human = new B_HumanPlayer_BV();
+            BV_Human.SetPlayerNumber(this.PlayerNumber);
+            return BV_Human;
         }
-
-        public bool CanBeRuledBy(IGameRules rules)
+        public void HandleInput(Key key)
         {
-            throw new NotImplementedException();
-        }
-
-        public IGamePlayer Clone()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetPlayerNumber(int playerNumber)
-        {
-            throw new NotImplementedException();
+            // Handle movement based on key input
+            switch (key)
+            {
+                case Key.Left:
+                case Key.A:
+                    Velo_x = -5; // Move left
+                    break;
+                case Key.Right:
+                case Key.D:
+                    Velo_x = 5; // Move right
+                    break;
+                case Key.Up:
+                case Key.W:
+                    Velo_y = -5; // Jump up
+                    break;
+                case Key.Down:
+                case Key.S:
+                    Velo_y = 5; // Move down
+                    break;
+                default:
+                    Velo_x = 0;
+                    Velo_y = 0;
+                    break;
+            }
         }
     }
 }

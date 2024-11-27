@@ -32,12 +32,16 @@ namespace OOPGames
 
     public interface IB_Rules_BV : IGameRules2
     {
+        //Points Player 1 Points[0]
+        //Points Player 2 Points[1]
+        int[] Points { get; set; }
 
-        int[,] Points { get; set; }
+        //Returns the number of a player who scored the current Ball
+        //RETURN -1 IF NO PLAYER SCORED (Ball is still in the air)
+        void CheckIfPLayerScored(IB_Field_BV field);
 
-        //Returns the number of a player who won if he has reached 10 points
-        //RETURN -1 IF NO PLAYER WON
-        int CheckIfPLayerWon_Volley(int[,] points);
+        //Resets the Game Field after a player scored
+        void ScoredReset(int scorer);
 
         //Gets the current state of the game field; the class implementing
         //this interface should hold a game field corresponding to the rules it implements
@@ -89,7 +93,11 @@ namespace OOPGames
         //Paints the Player on the PlayField
         Canvas B_Paint_Ball(Canvas canvas);
 
-        //
+        //Check if the Ball is on the ground and returns the playernumber who scored (Left = 0; Right = 1)
+        //returns -1 if the ball is still in the air
+        int B_On_Ground();
+
+        //Move
         void B_Move_Ball();
     }
 }
