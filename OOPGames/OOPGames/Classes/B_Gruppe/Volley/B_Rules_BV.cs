@@ -90,7 +90,11 @@ namespace OOPGames
 
         public void DoMove(IPlayMove move)
         {
-            throw new NotImplementedException();
+            if (move is B_Move_BV)
+            {
+                var bird = ((FlappyField)CurrentField).Bird;
+                bird.moveUp(-13); // Vogel springt nach oben
+            }
         }
 
         public void StartedGameCall()
