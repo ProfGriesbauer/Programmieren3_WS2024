@@ -18,8 +18,11 @@ namespace OOPGames
         double Height { get; set; }
         double Width { get; set; }
 
-        //Margin for the Playfield
-        double MarginPercentage { get; }
+        //objects for the net and ground
+        IB_Ground_BV Ground { get; set; }
+        IB_Net_BV Net { get; set; }
+
+
 
         //objects for the player and ball states
         IB_Ball_BV Ball { get; set; }
@@ -50,6 +53,9 @@ namespace OOPGames
 
     public interface IB_Move_BV : IPlayMove
     {
+        bool MoveLeft { get; }
+        bool MoveRight { get; }
+        bool Jump {  get; }
 
     }
 
@@ -72,14 +78,24 @@ namespace OOPGames
 
     public interface IB_HumanPlayer_BV : IB_Player_BV
     {
-
+        IB_Move_BV GetMove(IB_Field_BV field, IKeySelection key);
     }
 
     public interface IB_ComputerPlayer_BV : IB_Player_BV
     {
-
+        IB_Move_BV GetMove(IB_Field_BV field);
     }
-
+    public interface IB_Ground_BV
+    {
+        double Height { get; set; }
+        void B_Paint_Ground(Canvas canvas);
+    }
+    public interface IB_Net_BV
+    {
+        double Height { get; set; }
+        double Width { get; set; }
+        void B_Paint_Net(Canvas canvas, IB_Ground_BV ground);
+    }
     public interface IB_Ball_BV
     {
         //Values for the current Position
@@ -88,16 +104,16 @@ namespace OOPGames
         double Velo_x { get; set; }
         double Velo_y { get; set; }
 
-        double Ballsize { get; set; }
+       double Ballsize { get; set; }
 
         //Paints the Player on the PlayField
-        Canvas B_Paint_Ball(Canvas canvas);
+        void B_Paint_Ball(Canvas canvas);
 
         //Check if the Ball is on the ground and returns the playernumber who scored (Left = 0; Right = 1)
         //returns -1 if the ball is still in the air
-        int B_On_Ground();
+        int B_On_Ground(IB_Field_BV field);
 
-        //Move
-        void B_Move_Ball();
+        //Moved
+        void B_Move_Ball(IB_Field_BV field);
     }
 }

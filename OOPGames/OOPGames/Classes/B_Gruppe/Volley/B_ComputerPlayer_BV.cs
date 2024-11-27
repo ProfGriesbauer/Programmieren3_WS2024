@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace OOPGames
 {
-    public class B_ComputerPlayer_BV : B_Player_BV
+    public class B_ComputerPlayer_BV : B_Player_BV, IB_ComputerPlayer_BV
     {
         public override string Name
          {
@@ -21,6 +21,11 @@ namespace OOPGames
             B_ComputerPlayer_BV BV_Computer = new B_ComputerPlayer_BV();
             BV_Computer.SetPlayerNumber(this.PlayerNumber);
             return BV_Computer;
+        }
+
+        public IB_Move_BV GetMove(IB_Field_BV field)
+        {
+            throw new NotImplementedException();
         }
 
         public void UpdatePositionToTrackBall(IB_Ball_BV ball)

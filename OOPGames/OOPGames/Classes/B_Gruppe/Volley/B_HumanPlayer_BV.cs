@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace OOPGames
 {
-    public class B_HumanPlayer_BV : B_Player_BV 
+    public class B_HumanPlayer_BV : B_Player_BV, IB_HumanPlayer_BV
     {
         public override string Name
         {
@@ -23,32 +23,29 @@ namespace OOPGames
             BV_Human.SetPlayerNumber(this.PlayerNumber);
             return BV_Human;
         }
-        public void HandleInput(Key key)
+
+        public IB_Move_BV GetMove(IB_Field_BV field, IKeySelection key)
         {
-            // Handle movement based on key input
-            switch (key)
+            bool _MoveLeft = false;
+            bool _MoveRight = false;
+            bool _Jump = false;
+           
+            switch (key.Key)
             {
-                case Key.Left:
                 case Key.A:
-                    Velo_x = -5; // Move left
+                case Key.J:
+                    _MoveLeft = true; // Move left
                     break;
-                case Key.Right:
                 case Key.D:
-                    Velo_x = 5; // Move right
+                case Key.L:
+                    _MoveRight = true; // Move right
                     break;
-                case Key.Up:
                 case Key.W:
-                    Velo_y = -5; // Jump up
-                    break;
-                case Key.Down:
-                case Key.S:
-                    Velo_y = 5; // Move down
-                    break;
-                default:
-                    Velo_x = 0;
-                    Velo_y = 0;
+                case Key.I:
+                    _Jump = true; // Jump up
                     break;
             }
+            return new B_Move_BV (this.PlayerNumber, _MoveLeft, _MoveRight, _Jump );
         }
     }
 }

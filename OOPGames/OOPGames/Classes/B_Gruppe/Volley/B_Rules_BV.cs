@@ -8,6 +8,7 @@ namespace OOPGames
 {
     public class B_Rules_BV : IB_Rules_BV
     {
+        bool _firstStart = true;
         public string Name => "Blobby Volley Rules";
 
         private B_Field_BV _Field;
@@ -74,7 +75,7 @@ namespace OOPGames
 
         public void CheckIfPLayerScored()
         {
-            int _On_Ground = Field_BV.Ball.B_On_Ground();
+            int _On_Ground = Field_BV.Ball.B_On_Ground(Field_BV);
             if (_On_Ground >= 0)
             {
                 Points[_On_Ground]++;
@@ -98,12 +99,18 @@ namespace OOPGames
 
         public void StartedGameCall()
         {
-            ScoredReset(new Random().Next(0, 2));
+            //ScoredReset(new Random().Next(0, 2));
         }
 
         public void TickGameCall()
         {
+            if (_firstStart)
+            {
+                ScoredReset(new Random().Next(0, 2));
+                _firstStart = false;
+            }
             CheckIfPLayerScored();
+            Field_BV.Ball.B_Move_Ball(Field_BV);
         }
 
         public void ScoredReset(int scorer)
@@ -124,12 +131,12 @@ namespace OOPGames
 
             //Reset Players
             Field_BV.Player1.Pos_x = Field_BV.Width / 4;
-            Field_BV.Player1.Pos_y = 0;
+            Field_BV.Player1.Pos_y = Field_BV.Height - Field_BV.Ground.Height;
             Field_BV.Player1.Velo_x = 0;
             Field_BV.Player1.Velo_y = 0;
 
-            Field_BV.Player2.Pos_x = Field_BV.Width / 4;
-            Field_BV.Player2.Pos_y = 0;
+            Field_BV.Player2.Pos_x = Field_BV.Width / 4 * 3;
+            Field_BV.Player2.Pos_y = Field_BV.Height-Field_BV.Ground.Height;
             Field_BV.Player2.Velo_x = 0;
             Field_BV.Player2.Velo_y = 0;
 

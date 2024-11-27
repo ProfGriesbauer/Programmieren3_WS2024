@@ -9,59 +9,55 @@ using OOPGames;
 
 namespace OOPGames
 {
-    internal class B_Field_BV : IB_Field_BV
+    public class B_Field_BV : IB_Field_BV
     {
-        private double _height;
-        private double _width;
-        private IB_Ball_BV _ball;
-        private IB_Player_BV _player1;
-        private IB_Player_BV _player2;
-        private IB_Rules_BV _rules;
+        IB_Ground_BV _ground;
+        IB_Net_BV _net;
+
+        IB_Ball_BV _ball;
+
+        IB_Player_BV _player1;
+        IB_Player_BV _player2;
+
+        IB_Rules_BV _rules;
 
         public B_Field_BV(IB_Rules_BV rules)
         {
-            _height = 600;
-            _width = 600;
-            _ball = new BV_Ball();
+            _ground = new B_Ground_BV();
+            _net = new B_Net_BV();
+
+            _ball = new B_Ball_BV();
 
             _player1 = new B_HumanPlayer_BV();
             _player2 = new B_HumanPlayer_BV();
 
             _rules = rules;
         }
+        public double Height { get; set; }
+        public double Width { get; set; }
 
-        public double Height
+        public IB_Ground_BV Ground
         {
             get
             {
-                return _height;
+                return _ground;
             }
             set
             {
-                _height = value;
+                _ground = value;
             }
         }
-
-        public double Width
+        public IB_Net_BV Net
         {
             get
             {
-                return _width;
+                return _net;
             }
             set
             {
-                _width = value;
+                _net = value;
             }
         }
-
-        public double MarginPercentage
-        {
-            get
-            {
-                return 0.1; // Beispielwert
-            }
-        }
-
         public IB_Ball_BV Ball
         {
             get
