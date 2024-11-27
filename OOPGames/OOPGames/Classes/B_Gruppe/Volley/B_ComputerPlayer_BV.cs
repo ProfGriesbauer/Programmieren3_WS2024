@@ -7,40 +7,37 @@ using System.Windows.Controls;
 
 namespace OOPGames
 {
-    public class B_ComputerPlayer_BV : IB_Player_BV
+    public class B_ComputerPlayer_BV : B_Player_BV
     {
-        public string Name => "Blobby Volley Computer";
-        public double Pos_x { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Pos_y { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Velo_x { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Velo_y { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Playersize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public int PlayerNumber => throw new NotImplementedException();
-
-        public void B_Move_Player()
+        public override string Name
+         {
+            get
+            {
+                return "Gruppe B BV ComputerPlayer";
+            }
+        }
+        public override IGamePlayer Clone()
         {
-            throw new NotImplementedException();
+            B_ComputerPlayer_BV BV_Computer = new B_ComputerPlayer_BV();
+            BV_Computer.SetPlayerNumber(this.PlayerNumber);
+            return BV_Computer;
         }
 
-        public Canvas B_Paint_Player(Canvas canvas)
+        public void UpdatePositionToTrackBall(IB_Ball_BV ball)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool CanBeRuledBy(IGameRules rules)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IGamePlayer Clone()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetPlayerNumber(int playerNumber)
-        {
-            throw new NotImplementedException();
+            // Simple AI: Move towards the ball horizontally
+            if (ball.Pos_x > Pos_x + 10)
+            {
+                Velo_x = 5; // Move right
+            }
+            else if (ball.Pos_x < Pos_x - 10)
+            {
+                Velo_x = -5; // Move left
+            }
+            else
+            {
+                Velo_x = 0; // Stay still if close enough to the ball
+            }
         }
     }
 }
