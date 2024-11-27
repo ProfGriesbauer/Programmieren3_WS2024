@@ -88,6 +88,7 @@
     <Compile Include="Classes\B_Gruppe\Volley\B_ComputerPlayer_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Field_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_HumanPlayer_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Move_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Painter_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Player_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Rules_BV.cs" />
