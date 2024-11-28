@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.TextFormatting;
 
 namespace OOPGames
 {
@@ -38,32 +39,34 @@ namespace OOPGames
         public IPlayMove GetMove(IGameField field)
         {
             Random random = new Random();
-            int randomRow = random.Next(1, 3);
-            int randomColumn = random.Next(1, 3);
-
-            while (true)
+            int randomRow = random.Next(0, 3);
+            int randomColumn = random.Next(0, 3);
+            int maxw = 0;
+            while (maxw < 100)
             {
+                maxw++;
                 if (field is IA_TicTacToeField)
                 {
                     IA_TicTacToeField myField = ((IA_TicTacToeField)field);
 
                     if (myField[randomRow, randomColumn] <= 0)
                     {
-                        break;
+                        return new A_Move(randomRow, randomColumn, _playerNumber);
                     }
 
                     else
                     {
-                        randomRow = random.Next(1, 3);
-                        randomColumn = random.Next(1, 3);
+                        randomRow = random.Next(0, 3);
+                        randomColumn = random.Next(0, 3);
                     }
                 }
                 else
-                break;
+                    return null;
                 
             }
 
-            return new A_Move(randomRow, randomColumn, _playerNumber);
+            return null;
+            
         }
 
         public void SetPlayerNumber(int playerNumber)
