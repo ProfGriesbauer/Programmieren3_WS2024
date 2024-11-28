@@ -14,6 +14,21 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -68,10 +83,16 @@
     <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Move.cs" />
     <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Painter.cs" />
     <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Rules.cs" />
+    <Compile Include="Classes\A_Gruppe\Painter_A.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Ball_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_ComputerPlayer_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Field_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Ground_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_HumanPlayer_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Move_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Net_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Painter_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Player_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Rules_BV.cs" />
     <Compile Include="Classes\C_Gruppe\MemoryV3.cs" />
     <Compile Include="Classes\C_Gruppe\Rabea.cs" />
@@ -79,6 +100,8 @@
     <Compile Include="Classes\E_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\F_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\G_Gruppe\Bug.cs" />
+    <Compile Include="Classes\G_Gruppe\G_Matthias_Hofmann_Move.cs" />
+    <Compile Include="Classes\G_Gruppe\G_Matthias_Hofmann_Rules.cs" />
     <Compile Include="Classes\G_Gruppe\OliverMarcus_TicTacToe.cs" />
     <Compile Include="Classes\G_Gruppe\Snake.cs" />
     <Compile Include="Classes\I_Gruppe\Vorname_Nachname_XXX.cs" />
@@ -89,10 +112,9 @@
     <Compile Include="Classes\X_Griesbauer\Josef_Griesbauer_BaseTicTacToe.cs" />
     <Compile Include="Classes\X_Griesbauer\Josef_Griesbauer_TicTacToe.cs" />
     <Compile Include="Interfaces\A_Gruppe\IA_TicTacToeField.cs" />
+    <Compile Include="Interfaces\A_Gruppe\Matthias_Hofmann_IPainter.cs" />
     <Compile Include="Interfaces\B_Gruppe\Volley\B_IVolley.cs" />
     <Compile Include="Interfaces\D_Gruppe\JLJ_IFlappyBird.cs" />
-    <Compile Include="Classes\G_Gruppe\G_mmo_Bug.cs" />
-    <Compile Include="Interfaces\G_Gruppe\G_Bug_Painter.cs" />
     <Compile Include="Interfaces\G_Gruppe\InterfaceBug.cs" />
     <Compile Include="Interfaces\I_Gruppe\Vorname_Nachname_IXXX.cs" />
     <Compile Include="Interfaces\J_Gruppe\Vorname_Nachname_IXXX.cs" />
@@ -140,6 +162,20 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Classes\D_Gruppe\Grafiken\bird.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 und x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
