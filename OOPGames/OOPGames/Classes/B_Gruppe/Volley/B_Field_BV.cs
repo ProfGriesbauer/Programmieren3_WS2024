@@ -16,10 +16,10 @@ namespace OOPGames
 
         IB_Ball_BV _ball;
 
-        IB_Player_BV _player1;
-        IB_Player_BV _player2;
+        IB_Player_BV[] _player = new IB_Player_BV[2];
 
         IB_Rules_BV _rules;
+
 
         public B_Field_BV(IB_Rules_BV rules)
         {
@@ -28,8 +28,10 @@ namespace OOPGames
 
             _ball = new B_Ball_BV();
 
-            _player1 = new B_HumanPlayer_BV();
-            _player2 = new B_HumanPlayer_BV();
+            _player[0] = new B_HumanPlayer_BV();
+            _player[0].SetPlayerNumber(1);
+            _player[1] = new B_HumanPlayer_BV();
+            _player[1].SetPlayerNumber(2);
 
             _rules = rules;
         }
@@ -70,29 +72,18 @@ namespace OOPGames
             }
         }
 
-        public IB_Player_BV Player1
+        public IB_Player_BV[] Player
         {
             get
             {
-                return _player1;
+                return _player;
             }
             set
             {
-                _player1 = value;
+                _player = value;
             }
         }
 
-        public IB_Player_BV Player2
-        {
-            get
-            {
-                return _player2;
-            }
-            set
-            {
-                _player2 = value;
-            }
-        }
 
         public IB_Rules_BV Rules_BV
         {

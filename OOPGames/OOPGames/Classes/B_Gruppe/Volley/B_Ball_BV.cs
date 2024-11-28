@@ -32,13 +32,12 @@ namespace OOPGames
 
         public void B_Move_Ball(IB_Field_BV field)
         {
+            //Decrease Velo_y for Gravity
+            Velo_y += 0.01 * field.Height;
+
             // Update ball position based on velocity
             Pos_x += Velo_x;
             Pos_y += Velo_y;
-
-            //Decrease Velo_y for Gravity
-            Velo_y -= 0.01*field.Height;
-
 
             // Simple collision with boundaries
             if (Pos_x < Ballsize / 2 || Pos_x > field.Width - Ballsize / 2)
@@ -63,7 +62,7 @@ namespace OOPGames
                 {
                     return 0; // Bottom collision right
                 }
-                    
+
             }
             return -1; //no collision
 

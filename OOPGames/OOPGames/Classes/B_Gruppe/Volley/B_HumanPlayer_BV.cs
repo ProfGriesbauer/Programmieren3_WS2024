@@ -10,6 +10,7 @@ namespace OOPGames
 {
     public class B_HumanPlayer_BV : B_Player_BV, IB_HumanPlayer_BV
     {
+
         public override string Name
         {
             get
@@ -24,28 +25,56 @@ namespace OOPGames
             return BV_Human;
         }
 
-        public IB_Move_BV GetMove(IB_Field_BV field, IKeySelection key)
+        public IPlayMove GetMove(IMoveSelection selection, IGameField field)
+        {
+            if (selection is IKeySelection && field is IB_Field_BV)
+            {
+                return GetMoveBV((IB_Field_BV)field, (IKeySelection)selection);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key)
         {
             bool _MoveLeft = false;
             bool _MoveRight = false;
             bool _Jump = false;
-           
-            switch (key.Key)
+
+            if (this.PlayerNumber == 1)
             {
-                case Key.A:
-                case Key.J:
-                    _MoveLeft = true; // Move left
-                    break;
-                case Key.D:
-                case Key.L:
-                    _MoveRight = true; // Move right
-                    break;
-                case Key.W:
-                case Key.I:
-                    _Jump = true; // Jump up
-                    break;
+                switch (key.Key)
+                {
+                    case Key.A:
+                        _MoveLeft = true; // Move left
+                        break;
+                    case Key.D:
+                        _MoveRight = true; // Move right
+                        break;
+                    case Key.W:
+                        _Jump = true; // Jump up
+                        break;
+                }
             }
-            return new B_Move_BV (this.PlayerNumber, _MoveLeft, _MoveRight, _Jump );
+            else if (this.PlayerNumber == 2)
+            {
+                switch (key.Key)
+                {
+                    case Key.J:
+                        _MoveLeft = true; // Move left
+                        break;
+                    case Key.L:
+                        _MoveRight = true; // Move right
+                        break;
+                    case Key.I:
+                        _Jump = true; // Jump up
+                        break;
+                }
+            }
+
+            return new B_Move_BV(this.PlayerNumber, _MoveLeft, _MoveRight, _Jump);
         }
     }
 }

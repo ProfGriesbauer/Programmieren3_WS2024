@@ -26,10 +26,10 @@ namespace OOPGames
 
             // Netz zeichnen
             field.Net.B_Paint_Net(canvas, field.Ground);
-    
+
             // Spieler zeichnen
-            field.Player1.B_Paint_Player(canvas);
-            field.Player2.B_Paint_Player(canvas);
+            field.Player[0].B_Paint_Player(canvas);
+            field.Player[1].B_Paint_Player(canvas);
 
             // Ball zeichnen
             field.Ball.B_Paint_Ball(canvas);
@@ -54,7 +54,7 @@ namespace OOPGames
             Canvas.SetRight(scorePlayer2, 10);
             Canvas.SetTop(scorePlayer2, 10);
             canvas.Children.Add(scorePlayer2);
-         }
+        }
 
 
         public void PaintGameField(Canvas canvas, IGameField playField)

@@ -26,8 +26,8 @@ namespace OOPGames
 
         //objects for the player and ball states
         IB_Ball_BV Ball { get; set; }
-        IB_Player_BV Player1 { get; set; }
-        IB_Player_BV Player2 { get; set; }
+        IB_Player_BV[] Player { get; set; }
+
 
 
         IB_Rules_BV Rules_BV { get; }
@@ -55,7 +55,7 @@ namespace OOPGames
     {
         bool MoveLeft { get; }
         bool MoveRight { get; }
-        bool Jump {  get; }
+        bool Jump { get; }
 
     }
 
@@ -73,17 +73,17 @@ namespace OOPGames
         Canvas B_Paint_Player(Canvas canvas);
 
         //
-        void B_Move_Player();
+        void B_Move_Player(IB_Field_BV field);
     }
 
-    public interface IB_HumanPlayer_BV : IB_Player_BV
+    public interface IB_HumanPlayer_BV : IB_Player_BV, IHumanGamePlayer
     {
-        IB_Move_BV GetMove(IB_Field_BV field, IKeySelection key);
+        IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key);
     }
 
-    public interface IB_ComputerPlayer_BV : IB_Player_BV
+    public interface IB_ComputerPlayer_BV : IB_Player_BV, IComputerGamePlayer
     {
-        IB_Move_BV GetMove(IB_Field_BV field);
+        IB_Move_BV GetMoveBV(IB_Field_BV field);
     }
     public interface IB_Ground_BV
     {
@@ -104,7 +104,7 @@ namespace OOPGames
         double Velo_x { get; set; }
         double Velo_y { get; set; }
 
-       double Ballsize { get; set; }
+        double Ballsize { get; set; }
 
         //Paints the Player on the PlayField
         void B_Paint_Ball(Canvas canvas);
