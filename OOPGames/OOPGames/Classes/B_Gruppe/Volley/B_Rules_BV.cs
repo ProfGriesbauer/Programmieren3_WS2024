@@ -8,11 +8,11 @@ namespace OOPGames
 {
     public class B_Rules_BV : IB_Rules_BV
     {
+        bool _firstStart = true;
         public string Name => "Blobby Volley Rules";
 
         private B_Field_BV _Field;
         private int[] _Points = new int[2];
-        
 
         public B_Rules_BV()
         {
@@ -43,7 +43,7 @@ namespace OOPGames
                 return _Points;
             }
 
-            set 
+            set
             {
                 _Points = value;
             }
@@ -54,7 +54,8 @@ namespace OOPGames
         {
             get
             {
-                if (CheckIfPLayerWon() < 0) {
+                if (CheckIfPLayerWon() < 0)
+                {
                     return true;
                 }
                 return false;
@@ -75,7 +76,7 @@ namespace OOPGames
 
         public void CheckIfPLayerScored()
         {
-            int _On_Ground = Field_BV.Ball.B_On_Ground();
+            int _On_Ground = Field_BV.Ball.B_On_Ground(Field_BV);
             if (_On_Ground >= 0)
             {
                 Points[_On_Ground]++;
@@ -93,21 +94,62 @@ namespace OOPGames
         {
             if (move is B_Move_BV)
             {
-                var bird = ((FlappyField)CurrentField).Bird;
-                bird.moveUp(-13); // Vogel springt nach oben
+                DoMoveBV((IB_Move_BV)move);
+            }
+        }
+
+        public void DoMoveBV(IB_Move_BV move)
+        {
+
+            if (move.MoveLeft && !move.MoveRight)
+            {
+                Field_BV.Player[move.PlayerNumber - 1].Velo_x = -15;
+            }
+            else if (!move.MoveLeft && move.MoveRight)
+            {
+                Field_BV.Player[move.PlayerNumber - 1].Velo_x = 15;
+            }
+            else
+            {
+                Field_BV.Player[move.PlayerNumber - 1].Velo_x = 0;
+            }
+
+            //If Jump Move
+            if (move.Jump)
+            {
+                //Check if Player is on Ground or slightly above
+                if (Field_BV.Player[move.PlayerNumber - 1].Pos_x <= Field_BV.Height - Field_BV.Ground.Height * 1.1)
+                {
+                    Field_BV.Player[move.PlayerNumber - 1].Velo_y = 50;
+                }
             }
         }
 
         public void StartedGameCall()
         {
-           
-            TickGameCall();
+            _firstStart = true;
+            Points[0] = 0;
+            Points[1] = 0;
+
         }
 
         public void TickGameCall()
         {
-            
+            //Sets the Ball and Playerpositions at first Start
+            if (_firstStart)
+            {
+                ScoredReset(new Random().Next(0, 2));
+                _firstStart = false;
+            }
+
+            //Checks if Ball is on Ground an resets Game if so
             CheckIfPLayerScored();
+
+            //Moves Ball and Players
+            Field_BV.Ball.B_Move_Ball(Field_BV);
+            Field_BV.Player[0].B_Move_Player(Field_BV);
+            Field_BV.Player[1].B_Move_Player(Field_BV);
+
         }
 
         public void ScoredReset(int scorer)
@@ -119,23 +161,23 @@ namespace OOPGames
             }
             else if (scorer == 1)
             {
-                Field_BV.Ball.Pos_x = (Field_BV.Width / 4)*3;
+                Field_BV.Ball.Pos_x = (Field_BV.Width / 4) * 3;
             }
-            Field_BV.Ball.Pos_y = Field_BV.Height*0.7;
+            Field_BV.Ball.Pos_y = Field_BV.Height * 0.7;
             Field_BV.Ball.Velo_x = 0;
             Field_BV.Ball.Velo_y = 0;
 
 
             //Reset Players
-            Field_BV.Player1.Pos_x = Field_BV.Width / 4;
-            Field_BV.Player1.Pos_y = 0;
-            Field_BV.Player1.Velo_x = 0;
-            Field_BV.Player1.Velo_y = 0;
+            Field_BV.Player[0].Pos_x = Field_BV.Width / 4;
+            Field_BV.Player[0].Pos_y = Field_BV.Height - Field_BV.Ground.Height;
+            Field_BV.Player[0].Velo_x = 0;
+            Field_BV.Player[0].Velo_y = 0;
 
-            Field_BV.Player2.Pos_x = Field_BV.Width / 4;
-            Field_BV.Player2.Pos_y = 0;
-            Field_BV.Player2.Velo_x = 0;
-            Field_BV.Player2.Velo_y = 0;
+            Field_BV.Player[1].Pos_x = Field_BV.Width / 4 * 3;
+            Field_BV.Player[1].Pos_y = Field_BV.Height - Field_BV.Ground.Height;
+            Field_BV.Player[1].Velo_x = 0;
+            Field_BV.Player[1].Velo_y = 0;
 
         }
     }
