@@ -98,6 +98,7 @@ namespace OOPGames
     }
     public interface IB_Ball_BV
     {
+        bool GravityOn { get; set; }
         //Values for the current Position
         double Pos_x { get; set; }
         double Pos_y { get; set; }
