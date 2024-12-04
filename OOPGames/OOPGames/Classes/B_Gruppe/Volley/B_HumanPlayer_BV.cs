@@ -4,43 +4,77 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace OOPGames
 {
-    public class B_HumanPlayer_BV : IB_Player_BV
+    public class B_HumanPlayer_BV : B_Player_BV, IB_HumanPlayer_BV
     {
-        public string Name => "Blobby Volley Player";
-        public double Pos_x { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Pos_y { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Velo_x { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Velo_y { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Playersize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public int PlayerNumber => throw new NotImplementedException();
-
-        public void B_Move_Player()
+        public override string Name
         {
-            throw new NotImplementedException();
+            get
+            {
+                return "Gruppe B BV HumanPlayer";
+            }
+        }
+        public override IGamePlayer Clone()
+        {
+            B_HumanPlayer_BV BV_Human = new B_HumanPlayer_BV();
+            BV_Human.SetPlayerNumber(this.PlayerNumber);
+            return BV_Human;
         }
 
-        public Canvas B_Paint_Player(Canvas canvas)
+        public IPlayMove GetMove(IMoveSelection selection, IGameField field)
         {
-            throw new NotImplementedException();
+            if (selection is IKeySelection && field is IB_Field_BV)
+            {
+                return GetMoveBV((IB_Field_BV)field, (IKeySelection)selection);
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        public bool CanBeRuledBy(IGameRules rules)
+        public IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key)
         {
-            throw new NotImplementedException();
-        }
+            bool _MoveLeft = false;
+            bool _MoveRight = false;
+            bool _Jump = false;
 
-        public IGamePlayer Clone()
-        {
-            throw new NotImplementedException();
-        }
+            if (this.PlayerNumber == 1)
+            {
+                switch (key.Key)
+                {
+                    case Key.A:
+                        _MoveLeft = true; // Move left
+                        break;
+                    case Key.D:
+                        _MoveRight = true; // Move right
+                        break;
+                    case Key.W:
+                        _Jump = true; // Jump up
+                        break;
+                }
+            }
+            else if (this.PlayerNumber == 2)
+            {
+                switch (key.Key)
+                {
+                    case Key.J:
+                        _MoveLeft = true; // Move left
+                        break;
+                    case Key.L:
+                        _MoveRight = true; // Move right
+                        break;
+                    case Key.I:
+                        _Jump = true; // Jump up
+                        break;
+                }
+            }
 
-        public void SetPlayerNumber(int playerNumber)
-        {
-            throw new NotImplementedException();
+            return new B_Move_BV(this.PlayerNumber, _MoveLeft, _MoveRight, _Jump);
         }
     }
 }
