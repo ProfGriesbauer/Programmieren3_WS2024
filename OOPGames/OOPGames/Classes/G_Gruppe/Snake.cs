@@ -121,6 +121,11 @@ namespace OOPGames
         {
             //throw new NotImplementedException();
         }
+
+        public bool CheckIfWallIsTouched(Canvas canvas, int xPositionBug, int yPositionBug)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class omSnakeField : OMM_BugField

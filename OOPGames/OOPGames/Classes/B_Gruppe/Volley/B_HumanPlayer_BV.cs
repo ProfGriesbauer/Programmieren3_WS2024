@@ -8,8 +8,9 @@ using System.Windows.Input;
 
 namespace OOPGames
 {
-    public class B_HumanPlayer_BV : B_Player_BV 
+    public class B_HumanPlayer_BV : B_Player_BV, IB_HumanPlayer_BV
     {
+
         public override string Name
         {
             get
@@ -23,32 +24,61 @@ namespace OOPGames
             BV_Human.SetPlayerNumber(this.PlayerNumber);
             return BV_Human;
         }
-        public void HandleInput(Key key)
+
+        public IPlayMove GetMove(IMoveSelection selection, IGameField field)
         {
-            // Handle movement based on key input
-            switch (key)
+            if (selection is IKeySelection && field is IB_Field_BV)
             {
-                case Key.Left:
+                return GetMoveBV((IB_Field_BV)field, (IKeySelection)selection);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key)
+        {
+            bool _MoveLeft = false;
+            bool _MoveRight = false;
+            bool _Jump = false;
+            int pn = -1;
+
+
+            switch (key.Key)
+            {
                 case Key.A:
-                    Velo_x = -5; // Move left
+                    pn = 1;
+                    _MoveLeft = true; // Move left
                     break;
-                case Key.Right:
                 case Key.D:
-                    Velo_x = 5; // Move right
+                    pn = 1;
+                    _MoveRight = true; // Move right
                     break;
-                case Key.Up:
                 case Key.W:
-                    Velo_y = -5; // Jump up
-                    break;
-                case Key.Down:
-                case Key.S:
-                    Velo_y = 5; // Move down
-                    break;
-                default:
-                    Velo_x = 0;
-                    Velo_y = 0;
+                    pn = 1;
+                    _Jump = true; // Jump up
                     break;
             }
+
+            switch (key.Key)
+            {
+                case Key.J:
+                    pn = 2;
+                    _MoveLeft = true; // Move left
+                    break;
+                case Key.L:
+                    pn = 2;
+                    _MoveRight = true; // Move right
+                    break;
+                case Key.I:
+                    pn = 2;
+                    _Jump = true; // Jump up
+                    break;
+            }
+
+
+            return pn != -1 ? new B_Move_BV(pn, _MoveLeft, _MoveRight, _Jump) : null;
         }
     }
 }

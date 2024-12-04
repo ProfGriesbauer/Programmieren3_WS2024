@@ -45,12 +45,12 @@ namespace OOPGames
         void TickGameCall();
     }
 
-    //Neues Interface für Singleplayer Modus mit erweiterung einer Benutzerdefinierten Textanzeige in der Statusleiste
-
+    //Neues Interface für Singleplayer Modus mit erweiterung einer Benutzerdefinierten Textanzeige in der Statusleist
     public interface IGameRules3 : IGameRules2
     {
         String StatusBar();
     }
+
 
     //Game field compatible with the given rules.
     //DIESES INTERFACE NICHT ÄNDERN!

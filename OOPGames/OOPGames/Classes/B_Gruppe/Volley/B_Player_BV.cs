@@ -11,7 +11,14 @@ namespace OOPGames
 {
     public abstract class B_Player_BV : IB_Player_BV
     {
-        int _PlayerNumber = 0;
+        int _PlayerNumber;
+        public int PlayerNumber
+        {
+            get
+            {
+                return _PlayerNumber;
+            }
+        }
         public double Pos_x { get; set; }
         public double Pos_y { get; set; }
         public double Velo_x { get; set; }
@@ -23,24 +30,50 @@ namespace OOPGames
             get;
         }
 
-        public int PlayerNumber
+        public void B_Move_Player(IB_Field_BV field)
         {
-            get
-            {
-                return _PlayerNumber;
-            }
-        }
+            double _groundLevel = field.Height - field.Ground.Height;
+            //Decrease Velo_y for Gravity
+            Velo_y += 0.01 * field.Height;
 
-        public void B_Move_Player()
-        {
             // Update player position based on velocity
             Pos_x += Velo_x;
             Pos_y += Velo_y;
 
             // Keep player within boundaries
-            if (Pos_x < Playersize / 2) Pos_x = Playersize / 2;
-            if (Pos_x > 1000 - Playersize / 2) Pos_x = 1000 - Playersize / 2; // Assuming 1000 as canvas width
-            if (Pos_y > 500 - Playersize / 2) Pos_y = 500 - Playersize / 2; // Assuming 500 as canvas height
+            // Keep above Ground
+            if (Pos_y + Playersize / 2 > _groundLevel)
+            {
+                Pos_y = _groundLevel - Playersize / 2;
+                Velo_y = 0;
+            }
+            //Keep in Playfield and on the correct side
+            if (PlayerNumber == 1)
+            {
+                if (Pos_x - Playersize / 2 < 0)
+                {
+                    Pos_x = Playersize / 2;
+                    Velo_x = 0;
+                }
+                if (Pos_x + Playersize / 2 > field.Width / 2 - field.Net.Width / 2)
+                {
+                    Pos_x = field.Width / 2 - field.Net.Width / 2 - Playersize / 2;
+                    Velo_x = 0;
+                }
+            }
+            if (PlayerNumber == 2)
+            {
+                if (Pos_x + Playersize / 2 > field.Width)
+                {
+                    Pos_x = field.Width - Playersize / 2;
+                    Velo_x = 0;
+                }
+                if (Pos_x - Playersize / 2 < field.Width / 2 + field.Net.Width / 2)
+                {
+                    Pos_x = field.Width / 2 + field.Net.Width / 2 + Playersize / 2;
+                    Velo_x = 0;
+                }
+            }
         }
 
         public Canvas B_Paint_Player(Canvas canvas)
@@ -63,7 +96,7 @@ namespace OOPGames
         }
 
         public abstract IGamePlayer Clone();
-        
+
 
         public void SetPlayerNumber(int playerNumber)
         {

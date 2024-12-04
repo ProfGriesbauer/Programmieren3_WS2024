@@ -34,6 +34,9 @@ namespace OOPGames
         //it implements
         OMM_BugField BugField { get; }
 
+        bool CheckIfWallIsTouched(Canvas canvas, int xPositionBug, int yPositionBug);
+
+
         //Adds the given move to the current tictactoe field if possible
         void DoBugMove(OMM_BugMove move);
     }
