@@ -9,15 +9,16 @@ using System.Windows.Shapes;
 
 namespace OOPGames
 {
-    public class BV_Ball : IB_Ball_BV
+    public class B_Ball_BV : IB_Ball_BV
     {
+        public bool GravityOn { get; set; }
         public double Pos_x { get; set; }
         public double Pos_y { get; set; }
         public double Velo_x { get; set; }
         public double Velo_y { get; set; }
-        public double Ballsize { get; set; } = 20; // Default ball size
+        public double Ballsize { get; set; } = 75; // Default ball size
 
-        public Canvas B_Paint_Ball(Canvas canvas)
+        public void B_Paint_Ball(Canvas canvas)
         {
             Ellipse ball = new Ellipse
             {
@@ -28,24 +29,46 @@ namespace OOPGames
             Canvas.SetLeft(ball, Pos_x - Ballsize / 2);
             Canvas.SetTop(ball, Pos_y - Ballsize / 2);
             canvas.Children.Add(ball);
-            return canvas;
         }
 
-        public void B_Move_Ball()
+        public void B_Move_Ball(IB_Field_BV field)
         {
+            //Decrease Velo_y for Gravity
+            if (GravityOn)
+            {
+                Velo_y += 0.01 * field.Height;
+            }
+
+
             // Update ball position based on velocity
             Pos_x += Velo_x;
             Pos_y += Velo_y;
 
             // Simple collision with boundaries
-            if (Pos_x < Ballsize / 2 || Pos_x > 1000 - Ballsize / 2) Velo_x *= -1; // Assuming 1000 as canvas width
-            if (Pos_y < Ballsize / 2) Velo_y *= -1; // Ceiling collision
+            if (Pos_x < Ballsize / 2 || Pos_x > field.Width - Ballsize / 2)
+            {
+                Velo_x *= -1; // Assuming 1000 as canvas width
+            }
+            if (Pos_y < Ballsize / 2)
+            {
+                Velo_y *= -1; // Ceiling collision
+            }
         }
 
-        public int B_On_Ground()
+        public int B_On_Ground(IB_Field_BV field)
         {
-            if (Pos_y > Ballsize / 2) return 1; // Bottom collision left
-            if (Pos_y > Ballsize / 2) return 0; // Bottom collision right
+            if (Pos_y > field.Height - field.Ground.Height - Ballsize / 2)
+            {
+                if (Pos_x < field.Width / 2)
+                {
+                    return 1; // Bottom collision left
+                }
+                else if (Pos_x > field.Width / 2)
+                {
+                    return 0; // Bottom collision right
+                }
+
+            }
             return -1; //no collision
 
         }

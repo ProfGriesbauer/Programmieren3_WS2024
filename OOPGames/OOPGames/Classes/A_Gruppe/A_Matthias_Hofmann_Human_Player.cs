@@ -47,9 +47,9 @@ namespace OOPGames
             {
                 IA_TicTacToeField myfield = (IA_TicTacToeField)field;
                 IClickSelection sel = (IClickSelection)selection;
-                for (int row = 0; row < myfield.rows; row++)
+                for (int row = 0; row <= myfield.rows-1; row++)
                 {
-                    for (int column = 0; column < myfield.columns; column++)
+                    for (int column = 0; column <= myfield.columns-1; column++)
                     {
                         if (sel.XClickPos < (column+1) * myfield.cellWidth && sel.YClickPos < (row+1) * myfield.cellHeight&&
                            myfield[row, column] <= 0)

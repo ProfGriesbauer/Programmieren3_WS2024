@@ -55,9 +55,9 @@ namespace OOPGames
                 canvas.Children.Clear();
 
                 // Durchlaufen der Spielfelder, um jede Zelle zu zeichnen
-                for (int row = 0; row < myCurrentField.rows; row++)
+                for (int row = 0; row <= myCurrentField.rows-1; row++)
                 {
-                    for (int col = 0; col < myCurrentField.columns; col++)
+                    for (int col = 0; col <= myCurrentField.columns-1; col++)
                     {
                         // Rechteck für jede Zelle erstellen
                         Rectangle cell = new Rectangle
@@ -122,17 +122,17 @@ namespace OOPGames
 
         public void DrawX(Canvas canvas, int row, int column, IA_TicTacToeField field)
         {
-            _rightTopPointX = column * field.cellWidth - 5;
-            _rightTopPointY = row * field.cellHeight -  5;
+            _rightTopPointX = (column + 1) * field.cellWidth;
+            _rightTopPointY = row * field.cellHeight;
 
-            _leftBottomPointX = (column-1) * field.cellWidth + 5;
-            _leftBottomPointY = (row-1) * field.cellHeight + 5;
+            _leftBottomPointX = column * field.cellWidth;
+            _leftBottomPointY = (row+1) * field.cellHeight;
 
-            _leftTopPointX = (column-1) * field.cellWidth - 5;
-            _leftTopPointY = row * field.cellHeight - 5;
+            _leftTopPointX = column * field.cellWidth;
+            _leftTopPointY = row * field.cellHeight;
 
-            _rightBottomPointX = column * field.cellWidth + 5;
-            _rightBottomPointY = (row-1) * field.cellHeight + 5;
+            _rightBottomPointX = (column+1) * field.cellWidth;
+            _rightBottomPointY = (row+1) * field.cellHeight;
 
             _lineColor = Color.FromRgb(255, 0, 0);
             _lineStroke = new SolidColorBrush(_lineColor);
