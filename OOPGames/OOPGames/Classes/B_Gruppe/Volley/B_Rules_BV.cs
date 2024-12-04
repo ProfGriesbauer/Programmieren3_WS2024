@@ -162,7 +162,7 @@ namespace OOPGames
         public void ScoredReset(int scorer)
         {
             //Reset Ball
-            Field_BV.Ball.GravityOn = false;
+            Field_BV.Ball.GravityOn = true;
             if (scorer == 0)
             {
                 Field_BV.Ball.Pos_x = Field_BV.Width / 4;
