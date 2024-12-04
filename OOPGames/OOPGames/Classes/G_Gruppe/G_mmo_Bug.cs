@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace OOPGames
 {
@@ -31,7 +33,8 @@ namespace OOPGames
 
         public bool MovesPossible 
         {
-            get { return !CollisionWithWall(); }
+            //get { return !CollisionWithWall(); }
+            get { return true; }
         }
          
 
@@ -82,7 +85,7 @@ namespace OOPGames
         public void TickGameCall()
         {
             
-            if (_tickCounter ==3)
+            if (_tickCounter ==30)
             {
                 _field.xBugPos = _field.xBugPos + _field.xBugVel;
                 _field.yBugPos = _field.yBugPos + _field.yBugVel;
@@ -144,7 +147,7 @@ namespace OOPGames
 
     
 
-    public class G_Field : IGameField
+    public class G_Field : IG_GameField_Bug
     {
         public bool CanBePaintedBy(IPaintGame painter)
         {
@@ -162,6 +165,17 @@ namespace OOPGames
             set { yBugPos = value; }
         }
 
+        public double xApplePos
+        {
+            get { return xApplePos; }
+            set { xApplePos = value; }
+        }
+        public double yApplePos
+        {
+            get { return yApplePos; }
+            set { yApplePos = value; }
+        }
+
         public double xBugVel
         {
             get { return xBugVel; }
@@ -177,19 +191,22 @@ namespace OOPGames
 
     public class G_Apple : IComputerGamePlayer
     {
-        public string Name => throw new NotImplementedException();
+        public string Name
+        {
+            get { return "Apple Gruppe G"; }
+        }
 
         public int PlayerNumber => throw new NotImplementedException();
 
         public bool CanBeRuledBy(IGameRules rules)
         {
-            throw new NotImplementedException();
-            //Verweis auf eigene Regeln
+            return rules is G_Bug_Rules;
         }
 
         public IGamePlayer Clone()
         {
-            throw new NotImplementedException();
+            A_Human_Player clone = new A_Human_Player();
+            return clone;
         }
 
         public IPlayMove GetMove(IGameField field)
@@ -202,7 +219,6 @@ namespace OOPGames
         public void SetPlayerNumber(int playerNumber)
         {
             throw new NotImplementedException();
-            //Lassen wir weg
         }
 
 
@@ -211,46 +227,44 @@ namespace OOPGames
     public class G_Move : IPlayMove
     {
         
-        public int  PlayerNumber => throw new NotImplementedException();//Wird nicht verwendet
+        public int  PlayerNumber => throw new NotImplementedException();
 
-        public int xBugPosValChange //Werteänderung je nach Tasten Druck wird in GetMove umgesetzt
+        public double xBugPosValChange //Werteänderung je nach Tasten Druck wird in GetMove umgesetzt
         {
             get { return xBugPosValChange; }
             set { xBugPosValChange = value; }
         }
-        public int yBugPosValChange
+        public double yBugPosValChange
         {
             get { return yBugPosValChange; }
             set { yBugPosValChange = value; }
         }
 
-        //public int xBug { get { return _xBug; } } Verwendung ?
-
-        //public int yBug { get { return _yBug; } } Verwendung ?
     }
 
     public class G_Bug : IHumanGamePlayer
     {
-        public string Name => throw new NotImplementedException();
+        public string Name
+        {
+            get { return "Bug Player Gruppe G"; }
+        }
 
         public int PlayerNumber => throw new NotImplementedException();
-        //Wird nicht benötigt
+        
 
         public bool CanBeRuledBy(IGameRules rules)
         {
-            throw new NotImplementedException();
-            //Eigene Regeln implementieren
+            return rules is G_Bug_Rules;
         }
 
         public IGamePlayer Clone()
         {
-            throw new NotImplementedException();
-            //Objekt Klonen
+            A_Human_Player clone = new A_Human_Player();
+            return clone;
         }
 
         public IPlayMove GetMove(IMoveSelection selection, IGameField field)
         {
-            throw new NotImplementedException();
             //Über Key Selection die Richtung abspeichern
             //Arrow Key UP --> Dir = 0
             //Arrow Key Right --> Dir = 1
@@ -262,16 +276,27 @@ namespace OOPGames
                 IKeySelection keySelection = (IKeySelection)selection;
                 if (keySelection.Key == System.Windows.Input.Key.Left)
                 {
-                    //Je nach Taste ein neues G_Move Objekt erzeugen
                     return new G_Move() { xBugPosValChange = -1 };
                 }
+                else if (keySelection.Key == System.Windows.Input.Key.Right)
+                {
+                    return new G_Move() { xBugPosValChange = 1 };
+                }
+                else if (keySelection.Key == System.Windows.Input.Key.Up)
+                {
+                    return new G_Move() { yBugPosValChange = -1 };
+                }
+                else if (keySelection.Key == System.Windows.Input.Key.Down)
+                {
+                    return new G_Move() { yBugPosValChange = 1 };
+                }
             }
+            return null;
         }
 
         public void SetPlayerNumber(int playerNumber)
         {
             throw new NotImplementedException();
-            //Wird nicht benötigt
         }
     }
 
@@ -284,7 +309,46 @@ namespace OOPGames
 
         public void PaintGameField(Canvas canvas, IGameField currentField)
         {
-            throw new NotImplementedException();
+
+            if (currentField is IG_GameField_Bug)
+            {
+                IG_GameField_Bug myCurrentField = (IG_GameField_Bug)currentField;
+
+
+
+                canvas.Children.Clear();
+
+                //Rahmen Zeichnen
+                Color _lineColor = Color.FromRgb(255, 0, 0);
+                Brush _lineStroke = new SolidColorBrush(_lineColor);
+
+                Line line1 = new Line() { X1 = 20, Y1 = 20, X2 = (canvas.ActualWidth - 20), Y2 = 20, Stroke = _lineStroke, StrokeThickness = 3.0 };
+                canvas.Children.Add(line1);
+                Line line2 = new Line() { X1 = 20, Y1 = 20, X2 = 20, Y2 = (canvas.ActualHeight - 20), Stroke = _lineStroke, StrokeThickness = 3.0 };
+                canvas.Children.Add(line2);
+                Line line3 = new Line() { X1 = 20, Y1 = (canvas.ActualHeight - 20), X2 = (canvas.ActualWidth - 20), Y2 = (canvas.ActualHeight - 20), Stroke = _lineStroke, StrokeThickness = 3.0 };
+                canvas.Children.Add(line3);
+                Line line4 = new Line() { X1 = (canvas.ActualWidth - 20), Y1 = (canvas.ActualHeight - 20), X2 = (canvas.ActualWidth - 20), Y2 = 20, Stroke = _lineStroke, StrokeThickness = 3.0 };
+                canvas.Children.Add(line4);
+
+                //Bug zeichnen
+                Rectangle bug = new Rectangle
+                {
+                    Width = 40,
+                    Height = 20,
+                    Fill = Brushes.White,
+                    Stroke = Brushes.Black,
+                    StrokeThickness = 1
+                };
+
+                // Position der Zelle auf der Canvas setzen
+                Canvas.SetLeft(bug, myCurrentField.xBugPos);
+                Canvas.SetTop(bug, myCurrentField.yBugPos);
+
+                // Zelle zum Canvas hinzufügen
+                canvas.Children.Add(bug);
+
+            }
         }
     }
 
