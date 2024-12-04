@@ -66,6 +66,16 @@ namespace OOPGames
         void B_Move_Player();
     }
 
+    public interface IB_HumanPlayer_BV : IB_Player_BV
+    {
+
+    }
+
+    public interface IB_ComputerPlayer_BV : IB_Player_BV
+    {
+
+    }
+
     public interface IB_Ball_BV
     {
         //Values for the current Position
