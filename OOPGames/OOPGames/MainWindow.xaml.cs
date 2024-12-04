@@ -27,6 +27,7 @@ namespace OOPGames
         IGameRules _CurrentRules = null;
         IGamePlayer _CurrentPlayer1 = null;
         IGamePlayer _CurrentPlayer2 = null;
+        Dictionary<Key, bool> _PressedKeys = new Dictionary<Key, bool>();
 
         System.Windows.Threading.DispatcherTimer _PaintTimer = null;
 
@@ -218,6 +219,8 @@ namespace OOPGames
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
+            _PressedKeys[e.Key] = true;
+
             if (_CurrentRules == null) return;
             int winner = _CurrentRules.CheckIfPLayerWon();
             if (winner > 0)
@@ -229,10 +232,62 @@ namespace OOPGames
                 if (_CurrentRules.MovesPossible &&
                     _CurrentPlayer is IHumanGamePlayer)
                 {
-                    IPlayMove pm = ((IHumanGamePlayer)_CurrentPlayer).GetMove(new KeySelection(e.Key), _CurrentRules.CurrentField);
-                    if (pm != null)
+                    bool bMoveAvailable = false;
+                    foreach (var key in _PressedKeys.Keys)
                     {
-                        _CurrentRules.DoMove(pm);
+                        if (_PressedKeys[key])
+                        {
+                            IPlayMove pm = ((IHumanGamePlayer)_CurrentPlayer).GetMove(new KeySelection(key), _CurrentRules.CurrentField);
+                            if (pm != null)
+                            {
+                                _CurrentRules.DoMove(pm);
+                                bMoveAvailable = true;
+                            }
+                        }
+                    }
+
+                    if (bMoveAvailable)
+                    {
+                        _CurrentPlayer = _CurrentPlayer == _CurrentPlayer1 ? _CurrentPlayer2 : _CurrentPlayer1;
+                        Status.Text = "Player " + _CurrentPlayer.PlayerNumber + "'s turn!";
+                    }
+
+                    DoComputerMoves();
+                }
+            }
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            _PressedKeys[e.Key] = false;
+
+            if (_CurrentRules == null) return;
+            int winner = _CurrentRules.CheckIfPLayerWon();
+            if (winner > 0)
+            {
+                Status.Text = "Player" + winner + " Won!";
+            }
+            else
+            {
+                if (_CurrentRules.MovesPossible &&
+                    _CurrentPlayer is IHumanGamePlayer)
+                {
+                    bool bMoveAvailable = false;
+                    foreach (var key in _PressedKeys.Keys)
+                    {
+                        if (_PressedKeys[key])
+                        {
+                            IPlayMove pm = ((IHumanGamePlayer)_CurrentPlayer).GetMove(new KeySelection(key), _CurrentRules.CurrentField);
+                            if (pm != null)
+                            {
+                                _CurrentRules.DoMove(pm);
+                                bMoveAvailable = true;
+                            }
+                        }
+                    }
+
+                    if (bMoveAvailable)
+                    {
                         _CurrentPlayer = _CurrentPlayer == _CurrentPlayer1 ? _CurrentPlayer2 : _CurrentPlayer1;
                         Status.Text = "Player " + _CurrentPlayer.PlayerNumber + "'s turn!";
                     }
