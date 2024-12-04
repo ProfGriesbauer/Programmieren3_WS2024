@@ -1,5 +1,4 @@
-﻿using OOPGames.Classes.C_Gruppe.OOPGames;
-using OOPGames.Classes.C_Gruppe.OOPGames.Classes.C_Gruppe.OOPGames;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
