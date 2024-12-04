@@ -7,40 +7,54 @@ using System.Windows.Controls;
 
 namespace OOPGames
 {
-    public class B_ComputerPlayer_BV : IB_Player_BV
+    public class B_ComputerPlayer_BV : B_Player_BV, IB_ComputerPlayer_BV
     {
-        public string Name => "Blobby Volley Computer";
-        public double Pos_x { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Pos_y { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Velo_x { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Velo_y { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Playersize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public int PlayerNumber => throw new NotImplementedException();
-
-        public void B_Move_Player()
+        public override string Name
         {
-            throw new NotImplementedException();
+            get
+            {
+                return "Gruppe B BV ComputerPlayer";
+            }
+        }
+        public override IGamePlayer Clone()
+        {
+            B_ComputerPlayer_BV BV_Computer = new B_ComputerPlayer_BV();
+            BV_Computer.SetPlayerNumber(this.PlayerNumber);
+            return BV_Computer;
         }
 
-        public Canvas B_Paint_Player(Canvas canvas)
+        public IPlayMove GetMove(IGameField field)
         {
-            throw new NotImplementedException();
+            if (field is IB_Field_BV)
+            {
+                return GetMoveBV((IB_Field_BV)field);
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        public bool CanBeRuledBy(IGameRules rules)
+        public IB_Move_BV GetMoveBV(IB_Field_BV field)
         {
-            throw new NotImplementedException();
-        }
+            bool _MoveLeft = false;
+            bool _MoveRight = false;
+            bool _Jump = false;
+            // Simple AI: Move towards the ball horizontally
+            if (field.Ball.Pos_x > Pos_x + 10)
+            {
+                _MoveRight = true; // Move right
+            }
+            else if (field.Ball.Pos_x < Pos_x - 10)
+            {
+                _MoveLeft = true; // Move left
+            }
 
-        public IGamePlayer Clone()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetPlayerNumber(int playerNumber)
-        {
-            throw new NotImplementedException();
+            if (field.Ball.Pos_y < field.Height * 0.8)
+            {
+                _Jump = true;
+            }
+            return new B_Move_BV(this.PlayerNumber, _MoveLeft, _MoveRight, _Jump);
         }
     }
 }
