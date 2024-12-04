@@ -110,6 +110,12 @@ namespace OOPGames
                 {
                     ((IGameRules2)_CurrentRules).TickGameCall();
                 }
+
+                if (_CurrentRules is IGameRules3 &&
+                                ((IGameRules3)_CurrentRules).StatusBar() != null)
+                {
+                    Status.Text = ((IGameRules3)_CurrentRules).StatusBar();
+                }
             }
         }
 
@@ -144,12 +150,21 @@ namespace OOPGames
                 ((IGameRules2)_CurrentRules).StartedGameCall();
             }
 
-            if (_CurrentPainter != null && 
+            if (_CurrentPainter != null &&
                 _CurrentRules != null && _CurrentRules.CurrentField.CanBePaintedBy(_CurrentPainter))
             {
                 _CurrentPlayer = _CurrentPlayer1;
-                Status.Text = "Game startet!";
-                Status.Text = "Player " + _CurrentPlayer.PlayerNumber + "'s turn!";
+                if (_CurrentRules is IGameRules3 &&
+                                ((IGameRules3)_CurrentRules).StatusBar() != null)
+                {
+                    Status.Text = ((IGameRules3)_CurrentRules).StatusBar();
+                }
+                else
+                {
+                    Status.Text = "Game startet!";
+                    Status.Text = "Player " + _CurrentPlayer.PlayerNumber + "'s turn!";
+                }
+
                 _CurrentRules.ClearField();
                 _CurrentPainter.PaintGameField(PaintCanvas, _CurrentRules.CurrentField);
                 DoComputerMoves();
@@ -159,11 +174,17 @@ namespace OOPGames
         private void DoComputerMoves()
         {
             int winner = _CurrentRules.CheckIfPLayerWon();
-            if (winner > 0)
+            if (_CurrentRules is IGameRules3 &&
+                ((IGameRules3)_CurrentRules).StatusBar() != null)
             {
-                Status.Text = "Player " + winner + " Won!";
+                Status.Text = ((IGameRules3)_CurrentRules).StatusBar();
             }
-            else
+            else if (winner > 0)
+            {
+                Status.Text = "Player" + winner + " Won!";
+            }
+
+            if (winner <= 0)
             {
                 while (_CurrentRules.MovesPossible &&
                        winner <= 0 &&
@@ -175,13 +196,30 @@ namespace OOPGames
                         _CurrentRules.DoMove(pm);
                         _CurrentPainter.PaintGameField(PaintCanvas, _CurrentRules.CurrentField);
                         _CurrentPlayer = _CurrentPlayer == _CurrentPlayer1 ? _CurrentPlayer2 : _CurrentPlayer1;
-                        Status.Text = "Player " + _CurrentPlayer.PlayerNumber + "'s turn!";
+
+                        if (_CurrentRules is IGameRules3 &&
+                                ((IGameRules3)_CurrentRules).StatusBar() != null)
+                        {
+                            Status.Text = ((IGameRules3)_CurrentRules).StatusBar();
+                        }
+                        else
+                        {
+                            Status.Text = "Player " + _CurrentPlayer.PlayerNumber + "'s turn!";
+                        }
                     }
 
                     winner = _CurrentRules.CheckIfPLayerWon();
                     if (winner > 0)
                     {
-                        Status.Text = "Player " + winner + " Won!";
+                        if (_CurrentRules is IGameRules3 &&
+                                ((IGameRules3)_CurrentRules).StatusBar() != null)
+                        {
+                            Status.Text = ((IGameRules3)_CurrentRules).StatusBar();
+                        }
+                        else
+                        {
+                            Status.Text = "Player " + winner + " Won!";
+                        }
                     }
                 }
             }
@@ -190,23 +228,38 @@ namespace OOPGames
         private void PaintCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             int winner = _CurrentRules.CheckIfPLayerWon();
-            if (winner > 0)
+            if (_CurrentRules is IGameRules3 &&
+                ((IGameRules3)_CurrentRules).StatusBar() != null)
             {
-                Status.Text = "Player " + winner + " Won!";
+                Status.Text = ((IGameRules3)_CurrentRules).StatusBar();
             }
-            else
+            else if (winner > 0)
+            {
+                Status.Text = "Player" + winner + " Won!";
+            }
+
+            if (winner <= 0)
             {
                 if (_CurrentRules.MovesPossible &&
                     _CurrentPlayer is IHumanGamePlayer)
                 {
-                    IPlayMove pm = ((IHumanGamePlayer)_CurrentPlayer).GetMove(new ClickSelection((int)e.GetPosition(PaintCanvas).X, 
+                    IPlayMove pm = ((IHumanGamePlayer)_CurrentPlayer).GetMove(new ClickSelection((int)e.GetPosition(PaintCanvas).X,
                         (int)e.GetPosition(PaintCanvas).Y, (int)e.ChangedButton), _CurrentRules.CurrentField);
                     if (pm != null)
                     {
                         _CurrentRules.DoMove(pm);
                         _CurrentPainter.PaintGameField(PaintCanvas, _CurrentRules.CurrentField);
                         _CurrentPlayer = _CurrentPlayer == _CurrentPlayer1 ? _CurrentPlayer2 : _CurrentPlayer1;
-                        Status.Text = "Player " + _CurrentPlayer.PlayerNumber + "'s turn!";
+
+                        if (_CurrentRules is IGameRules3 &&
+                                ((IGameRules3)_CurrentRules).StatusBar() != null)
+                        {
+                            Status.Text = ((IGameRules3)_CurrentRules).StatusBar();
+                        }
+                        else
+                        {
+                            Status.Text = "Player " + _CurrentPlayer.PlayerNumber + "'s turn!";
+                        }
                     }
 
                     DoComputerMoves();
@@ -225,11 +278,17 @@ namespace OOPGames
         {
             if (_CurrentRules == null) return;
             int winner = _CurrentRules.CheckIfPLayerWon();
-            if (winner > 0)
+            if (_CurrentRules is IGameRules3 &&
+                ((IGameRules3)_CurrentRules).StatusBar() != null)
+            {
+                Status.Text = ((IGameRules3)_CurrentRules).StatusBar();
+            }
+            else if (winner > 0)
             {
                 Status.Text = "Player" + winner + " Won!";
             }
-            else
+
+            if (winner <= 0)
             {
                 if (_CurrentRules.MovesPossible &&
                     _CurrentPlayer is IHumanGamePlayer)
@@ -239,7 +298,16 @@ namespace OOPGames
                     {
                         _CurrentRules.DoMove(pm);
                         _CurrentPlayer = _CurrentPlayer == _CurrentPlayer1 ? _CurrentPlayer2 : _CurrentPlayer1;
-                        Status.Text = "Player " + _CurrentPlayer.PlayerNumber + "'s turn!";
+
+                        if (_CurrentRules is IGameRules3 &&
+                                ((IGameRules3)_CurrentRules).StatusBar() != null)
+                        {
+                            Status.Text = ((IGameRules3)_CurrentRules).StatusBar();
+                        }
+                        else
+                        {
+                            Status.Text = "Player " + _CurrentPlayer.PlayerNumber + "'s turn!";
+                        }
                     }
 
                     DoComputerMoves();
