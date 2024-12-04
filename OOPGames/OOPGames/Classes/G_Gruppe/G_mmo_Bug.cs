@@ -186,9 +186,15 @@ namespace OOPGames
 
         public IPlayMove GetMove(IGameField field)
         {
-            throw new NotImplementedException();
-            //Generieren der Apfel position - mind. +-2 felder von der momentanen bug Positon
-            //Zugriff via G_Move -- Übergibt Bug Position
+            Random random = new Random();
+            int xPosApple = random.Next(0, 9); // Liefert einen Wert zwischen 0 und 8
+            Random random1 = new Random();
+            int yPosApple = random1.Next(0, 9); // Liefert einen Wert zwischen 0 und 8
+
+            // Generieren der Apfelposition - mind. +-2 Felder von der momentanen Bug-Position
+            // Zugriff via G_Move -- Übergibt Bug-Position
+
+            return new G_Move() { xApplePosValChange = xPosApple, yApplePosValChange = yPosApple };
         }
 
         public void SetPlayerNumber(int playerNumber)
@@ -214,6 +220,17 @@ namespace OOPGames
         {
             get { return yBugPosValChange; }
             set { yBugPosValChange = value; }
+        }
+
+        public int xApplePosValChange //Werteänderung je nach Tasten Druck wird in GetMove
+        {
+            get { return xApplePosValChange; }
+            set { xApplePosValChange = value; }
+        }
+        public int yApplePosValChange
+        {
+            get { return yApplePosValChange; }
+            set { yApplePosValChange = value; }
         }
 
         //public int xBug { get { return _xBug; } } Verwendung ?
