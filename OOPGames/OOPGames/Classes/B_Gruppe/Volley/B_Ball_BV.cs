@@ -36,7 +36,7 @@ namespace OOPGames
             //Decrease Velo_y for Gravity
             if (GravityOn)
             {
-                Velo_y += 0.01 * field.Height;
+                Velo_y += 0; //0.01 * field.Height;
             }
 
 
@@ -45,14 +45,22 @@ namespace OOPGames
             Pos_y += Velo_y;
 
             // Simple collision with boundaries
-            if (Pos_x < Ballsize / 2 || Pos_x > field.Width - Ballsize / 2)
+            if (Pos_x - Ballsize / 2 > field.Width - Ballsize / 2)
             {
-                Velo_x *= -1; // Assuming 1000 as canvas width
+                Velo_x *= -1;
             }
-            if (Pos_y < Ballsize / 2)
+            if (Pos_x - Ballsize / 2 < 0 - Ballsize / 2)
+            {
+                Velo_x *= -1;
+            }
+
+
+            if (0 - Ballsize / 2 < Ballsize / 2)
             {
                 Velo_y *= -1; // Ceiling collision
             }
+
+            
         }
 
         public int B_On_Ground(IB_Field_BV field)
@@ -90,5 +98,7 @@ namespace OOPGames
                 Pos_y += Velo_y;
             }
         }
+
+        
     }
 }

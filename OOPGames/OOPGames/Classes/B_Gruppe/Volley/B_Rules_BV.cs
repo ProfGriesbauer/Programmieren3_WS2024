@@ -151,6 +151,7 @@ namespace OOPGames
 
             //Moves Ball and Players
             Field_BV.Ball.B_Move_Ball(Field_BV);
+            
             Field_BV.Player[0].B_Move_Player(Field_BV);
             Field_BV.Player[1].B_Move_Player(Field_BV);
 
@@ -162,7 +163,7 @@ namespace OOPGames
         public void ScoredReset(int scorer)
         {
             //Reset Ball
-            Field_BV.Ball.GravityOn = false;
+            Field_BV.Ball.GravityOn = true;
             if (scorer == 0)
             {
                 Field_BV.Ball.Pos_x = Field_BV.Width / 4;
