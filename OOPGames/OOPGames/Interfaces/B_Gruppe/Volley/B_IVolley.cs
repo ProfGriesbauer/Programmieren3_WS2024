@@ -18,13 +18,16 @@ namespace OOPGames
         double Height { get; set; }
         double Width { get; set; }
 
-        //Margin for the Playfield
-        double MarginPercentage { get; }
+        //objects for the net and ground
+        IB_Ground_BV Ground { get; set; }
+        IB_Net_BV Net { get; set; }
+
+
 
         //objects for the player and ball states
         IB_Ball_BV Ball { get; set; }
-        IB_Player_BV Player1 { get; set; }
-        IB_Player_BV Player2 { get; set; }
+        IB_Player_BV[] Player { get; set; }
+
 
 
         IB_Rules_BV Rules_BV { get; }
@@ -32,12 +35,16 @@ namespace OOPGames
 
     public interface IB_Rules_BV : IGameRules2
     {
+        //Points Player 1 Points[0]
+        //Points Player 2 Points[1]
+        int[] Points { get; set; }
 
-        int[,] Points { get; set; }
+        //Returns the number of a player who scored the current Ball
+        //RETURN -1 IF NO PLAYER SCORED (Ball is still in the air)
+        void CheckIfPLayerScored();
 
-        //Returns the number of a player who won if he has reached 10 points
-        //RETURN -1 IF NO PLAYER WON
-        int CheckIfPLayerWon_Volley(int[,] points);
+        //Resets the Game Field after a player scored
+        void ScoredReset(int scorer);
 
         //Gets the current state of the game field; the class implementing
         //this interface should hold a game field corresponding to the rules it implements
@@ -46,6 +53,9 @@ namespace OOPGames
 
     public interface IB_Move_BV : IPlayMove
     {
+        bool MoveLeft { get; }
+        bool MoveRight { get; }
+        bool Jump { get; }
 
     }
 
@@ -63,19 +73,29 @@ namespace OOPGames
         Canvas B_Paint_Player(Canvas canvas);
 
         //
-        void B_Move_Player();
+        void B_Move_Player(IB_Field_BV field);
     }
 
-    public interface IB_HumanPlayer_BV : IB_Player_BV
+    public interface IB_HumanPlayer_BV : IB_Player_BV, IHumanGamePlayer
     {
-
+        IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key);
     }
 
-    public interface IB_ComputerPlayer_BV : IB_Player_BV
+    public interface IB_ComputerPlayer_BV : IB_Player_BV, IComputerGamePlayer
     {
-
+        IB_Move_BV GetMoveBV(IB_Field_BV field);
     }
-
+    public interface IB_Ground_BV
+    {
+        double Height { get; set; }
+        void B_Paint_Ground(Canvas canvas);
+    }
+    public interface IB_Net_BV
+    {
+        double Height { get; set; }
+        double Width { get; set; }
+        void B_Paint_Net(Canvas canvas, IB_Ground_BV ground);
+    }
     public interface IB_Ball_BV
     {
         bool GravityOn { get; set; }
@@ -88,9 +108,13 @@ namespace OOPGames
         double Ballsize { get; set; }
 
         //Paints the Player on the PlayField
-        Canvas B_Paint_Ball(Canvas canvas);
+        void B_Paint_Ball(Canvas canvas);
 
-        //
-        void B_Move_Ball();
+        //Check if the Ball is on the ground and returns the playernumber who scored (Left = 0; Right = 1)
+        //returns -1 if the ball is still in the air
+        int B_On_Ground(IB_Field_BV field);
+
+        //Moved
+        void B_Move_Ball(IB_Field_BV field);
     }
 }

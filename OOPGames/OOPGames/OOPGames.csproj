@@ -83,10 +83,15 @@
     <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Move.cs" />
     <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Painter.cs" />
     <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Rules.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Ball_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_ComputerPlayer_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Field_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Ground_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_HumanPlayer_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Move_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Net_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Painter_BV.cs" />
+    <Compile Include="Classes\B_Gruppe\Volley\B_Player_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Rules_BV.cs" />
     <Compile Include="Classes\C_Gruppe\MemoryV3.cs" />
     <Compile Include="Classes\C_Gruppe\Rabea.cs" />
