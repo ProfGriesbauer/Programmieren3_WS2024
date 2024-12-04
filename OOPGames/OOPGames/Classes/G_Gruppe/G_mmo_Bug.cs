@@ -13,18 +13,23 @@ namespace OOPGames
 
         public string Name
         {
-            get { return "Human Player Gruppe A"; }
+            get { return "Bug Rules Gruppe G"; }
         }
 
         private int _appleCounter;
 
-        private Canvas canvas = new Canvas();//Funktioniert ?
+        private Canvas canvas = new Canvas();
+
+        private int _tickCounter = 0;
 
 
-        public IGameField CurrentField => throw new NotImplementedException();
-        //Wird nicht benötigt ?
+        public IGameField CurrentField
+        {
+            get { return _field; }
+        }
 
-        public bool MovesPossible //Wenn keine Kollision mit der Wand stattgefunden hat
+
+        public bool MovesPossible 
         {
             get { return !CollisionWithWall(); }
         }
@@ -39,6 +44,7 @@ namespace OOPGames
         public void ClearField()
         {
             _appleCounter = 0;
+            _tickCounter = 0;
 
         }
 
@@ -47,7 +53,7 @@ namespace OOPGames
             if (move is G_Move)
             {
                 G_Move move2 = (G_Move)move;
-                //_field.xBugVel = _field.xBugVel + move2.xBugPosValChange;
+                
                 if (move2.xBugPosValChange != 0)
                 {
                     _field.xBugVel = move2.xBugPosValChange;
@@ -57,35 +63,40 @@ namespace OOPGames
                     _field.yBugVel = move2.yBugPosValChange;
                 }
             }
-            //Neue Bug Position beschreiben Setter 
+            
+            //Wäre für dauerhafte Geschwindigkeitserhöhung solange die Taste gedrückt ist
+            //_field.xBugVel = _field.xBugVel + move2.xBugPosValChange;
         }
 
         public void StartedGameCall()
         {
+
+            _field.xBugPos = canvas.ActualWidth / 2;
+            _field.yBugPos = canvas.ActualHeight / 2;
             
-            //Bug Position Canvas middle (x, y)
-            //Set apple count a=0
-
             _appleCounter = 0;
-
-            //Über das Canvas Objekt in der Klassen Variable Sinnvoll oder direkt in der Methode erstellen ?
-            //Soll ein neues Objekt von G_Move in der Methode erstellt werden oder soll das ganze über eine statische Klasse funktionieren ?
-
+            _tickCounter = 0;
 
         }
 
         public void TickGameCall()
         {
-            _field.xBugPos = _field.xBugPos + _field.xBugVel; //Geschwindigkeitserhöhung
-            //Neue Position des Bugs berechnen 
-            //Zähler implementieren 
-            //Je nach Richtung 
+            
+            if (_tickCounter ==3)
+            {
+                _field.xBugPos = _field.xBugPos + _field.xBugVel;
+                _field.yBugPos = _field.yBugPos + _field.yBugVel;
+
+                _tickCounter = 0;
+                
+            }
+
+            _tickCounter++;
+            
         }
 
         public bool CollisionWithApple(int xPosApple, int yPosApple)
         {
-            //Schauen ob Apfel und Käfer sich treffen
-            //Zugriff via G_Move -- Übergibt Bug Position
 
             if (xPosApple == _field.xBugPos && yPosApple == _field.yBugPos)//Bestimmter Bereich muss noch festgelegt werden
             {
@@ -97,9 +108,6 @@ namespace OOPGames
 
         public bool CollisionWithWall()
         {
-
-            //Schauen ob sich Käfer und Wand treffen
-            //Zugriff via G_Move -- Übergibt Bug Position
 
             int _xMiddlePoint = (int)canvas.ActualWidth / 2;
             int _yMiddlePoint = (int)canvas.ActualHeight / 2;
@@ -134,7 +142,7 @@ namespace OOPGames
         }
     }
 
-    //Field Klasse erstellen und Bug Position erstellen
+    
 
     public class G_Field : IGameField
     {
@@ -205,7 +213,7 @@ namespace OOPGames
         
         public int  PlayerNumber => throw new NotImplementedException();//Wird nicht verwendet
 
-        public int xBugPosValChange //Werteänderung je nach Tasten Druck wird in GetMove
+        public int xBugPosValChange //Werteänderung je nach Tasten Druck wird in GetMove umgesetzt
         {
             get { return xBugPosValChange; }
             set { xBugPosValChange = value; }
@@ -269,7 +277,10 @@ namespace OOPGames
 
     public class G_Painter : IPaintGame
     {
-        public string Name => throw new NotImplementedException();
+        public string Name
+        {
+            get { return "Bug Painter Gruppe G"; }
+        }
 
         public void PaintGameField(Canvas canvas, IGameField currentField)
         {
