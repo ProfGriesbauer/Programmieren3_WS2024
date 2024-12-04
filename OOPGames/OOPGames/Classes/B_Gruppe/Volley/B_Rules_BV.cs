@@ -121,7 +121,7 @@ namespace OOPGames
                 //Check if Player is on Ground or slightly above
                 if (Field_BV.Player[move.PlayerNumber - 1].Pos_y + Field_BV.Player[move.PlayerNumber - 1].Playersize / 2 >= Field_BV.Height - Field_BV.Ground.Height - 10)
                 {
-                    Field_BV.Player[move.PlayerNumber - 1].Velo_y = -50;
+                    Field_BV.Player[move.PlayerNumber - 1].Velo_y = -60;
                 }
             }
 
@@ -171,7 +171,7 @@ namespace OOPGames
             {
                 Field_BV.Ball.Pos_x = (Field_BV.Width / 4) * 3;
             }
-            Field_BV.Ball.Pos_y = Field_BV.Height * 0.3;
+            Field_BV.Ball.Pos_y = Field_BV.Height * 0.55;
             Field_BV.Ball.Velo_x = 0;
             Field_BV.Ball.Velo_y = 0;
 

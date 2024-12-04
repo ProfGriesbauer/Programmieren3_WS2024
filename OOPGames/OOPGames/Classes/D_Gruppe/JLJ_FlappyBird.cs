@@ -28,9 +28,9 @@ namespace OOPGames
             //Spielfeld der Canvas anpassen
             field.AdoptCanvas(canvas);
 
-            canvas.Children.Clear();
+            canvas.Children.Clear(); // Canvas leeren 
 
-
+            //Hintergrundbild setzten 
             var backgroundImage = new Image
             {
                 Width = canvas.ActualWidth,
@@ -176,12 +176,30 @@ namespace OOPGames
                 FontFamily = new FontFamily("Comic Sans MS"), // Comicartige Schriftart
             };
 
-            //Game Over Pop up
+            //Highscore zeichnen 
+            var hisghscoreText = new TextBlock
+            {
+                Text = $"Highscore : {field.highscore}",
+                FontSize = 40,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.Black,
+                Background = Brushes.Red,
+                TextAlignment = TextAlignment.Center,
+                Width = 400, // Breite des Textblocks
+                Height = 90, // Höhe des Textblocks
+                FontFamily = new FontFamily("Comic Sans MS"), // Comicartige Schriftart
+            };
+
+            //Game Over & Highscore Pop up
             if (field.gameover)
             {
                 Canvas.SetTop(gameoverText, (canvas.ActualHeight - gameoverText.Height) / 2); // 10 Pixel vom oberen Rand
                 Canvas.SetLeft(gameoverText, (canvas.ActualWidth - gameoverText.Width) / 2); // Zentriert
                 canvas.Children.Add(gameoverText);
+
+                Canvas.SetTop(hisghscoreText, (canvas.ActualHeight - hisghscoreText.Height) / 2+90); // 10 Pixel vom oberen Rand
+                Canvas.SetLeft(hisghscoreText, (canvas.ActualWidth - hisghscoreText.Width) / 2); // Zentriert
+                canvas.Children.Add(hisghscoreText);
             }
 
         }
@@ -202,6 +220,8 @@ namespace OOPGames
 
 
         public int score = 0;
+
+        public int highscore;
 
         public bool gameover = false;
 
@@ -362,10 +382,16 @@ namespace OOPGames
             {
                 // Ende des Spiels Highscore speichern 
                 field.gameover = true;
+                if (field.score > field.highscore)
+                {
+                    field.highscore = field.score;
+                }
                 // Keine Moves mehr 
                 // Neustart Knopf
             }
         }
+
+
 
         public void updateScore(FlappyField field)
         {

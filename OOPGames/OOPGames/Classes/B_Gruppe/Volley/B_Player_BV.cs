@@ -23,7 +23,7 @@ namespace OOPGames
         public double Pos_y { get; set; }
         public double Velo_x { get; set; }
         public double Velo_y { get; set; }
-        public double Playersize { get; set; } = 50;
+        public double Playersize { get; set; } = 75;
 
         public abstract string Name
         {
@@ -34,7 +34,7 @@ namespace OOPGames
         {
             double _groundLevel = field.Height - field.Ground.Height;
             //Decrease Velo_y for Gravity
-            Velo_y += 0.01 * field.Height;
+            Velo_y += 0.007 * field.Height;
 
             // Update player position based on velocity
             Pos_x += Velo_x;

@@ -18,7 +18,7 @@ namespace OOPGames
         public void B_Paint_Net(Canvas canvas, IB_Ground_BV ground)
         {
             Width = canvas.ActualWidth * 0.025;
-            Height = canvas.ActualHeight * 0.6;
+            Height = canvas.ActualHeight * 0.35;
             Rectangle net = new Rectangle
             {
                 Width = Width,
