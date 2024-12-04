@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
+using System.Windows.Media.Effects;
 
 namespace OOPGames
 {
@@ -58,12 +59,12 @@ namespace OOPGames
             // Vogel zeichnen als Bild
             var birdImage = new Image
             {
-                Width = (field.Bird.Radius * 2.7),
-                Height = (field.Bird.Radius * 2.7),
+                Width = (field.Bird.Radius * 4),
+                Height = (field.Bird.Radius * 4),
                 Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/bird.png", UriKind.Relative))
             };
-            Canvas.SetTop(birdImage, (field.Bird.Y - field.Bird.Radius)-4);
-            Canvas.SetLeft(birdImage, (field.Bird.X - field.Bird.Radius)-4);
+            Canvas.SetTop(birdImage, (field.Bird.Y - field.Bird.Radius)-15);
+            Canvas.SetLeft(birdImage, (field.Bird.X - field.Bird.Radius)-17);
             canvas.Children.Add(birdImage);
 
             // Hindernisse zeichnen
@@ -122,8 +123,8 @@ namespace OOPGames
             {
                 var bodenImage = new Image
                 {
-                    Width = boden.Width,
-                    Height = boden.Height,
+                    Width = boden.Width+4,
+                    Height = boden.Height+2,
                     Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/ground.png", UriKind.Relative)),
                     Stretch = Stretch.Fill
                 };
@@ -131,18 +132,28 @@ namespace OOPGames
                 Canvas.SetLeft(bodenImage, boden.X);
                 canvas.Children.Add(bodenImage);
             }
-   
+
             //Score zeichnen 
             var scoreText = new TextBlock
             {
-                Text = $"Score: {field.score}",
-                FontSize = 30,
+                Text = $"{field.score}",
+                FontSize = 70,
                 FontWeight = FontWeights.Bold,
-                Foreground = Brushes.Black,
+                Foreground = Brushes.White,
                 Background = Brushes.Transparent,
                 TextAlignment = TextAlignment.Center,
-                Width = 200, // Breite des Textblocks
-                Height = 40, // Höhe des Textblock
+                Width = 100, // Breite des Textblocks
+                Height = 300, // Höhe des Textblock
+                FontFamily = new FontFamily("Comic Sans MS"), // Comicartige Schriftart
+            };
+
+            // DropShadowEffect hinzufügen
+            scoreText.Effect = new DropShadowEffect
+            {
+                Color = Colors.Black, // Farbe des Rands
+                BlurRadius = 7,       // Kein Weichzeichner, scharfe Kanten
+                ShadowDepth = 0,      // Rand gleichmäßig um den Text
+                Opacity = 1
             };
 
 
@@ -161,7 +172,8 @@ namespace OOPGames
                 Background = Brushes.Red,
                 TextAlignment = TextAlignment.Center,
                 Width = 400, // Breite des Textblocks
-                Height = 100 // Höhe des Textblocks
+                Height = 90, // Höhe des Textblocks
+                FontFamily = new FontFamily("Comic Sans MS"), // Comicartige Schriftart
             };
 
             //Game Over Pop up
@@ -207,15 +219,6 @@ namespace OOPGames
                     //Problem das die Höhe und breite nicht an die Canvas angepasst ist daopt canvas wird erst später aufgerufen
                 }
             }
-            // Passe die Größe der Boden-Segmente an, nachdem die Canvas-Dimensionen bekannt sind
-            int segmentWidth = Width / 50;
-            for (int i = 0; i < Boden.Count; i++)
-            {
-                Boden[i].Width = segmentWidth;
-                Boden[i].Height = 75;
-                Boden[i].Y = Height - 75; // Setze die Bodenhöhe korrekt
-            }
-
         }
 
         public FlappyField(int width, int height)
