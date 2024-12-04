@@ -37,7 +37,7 @@ namespace OOPGames
             //Decrease Velo_y for Gravity
             if (GravityOn)
             {
-                Velo_y += 0.01 * field.Height;
+                Velo_y += 0.007 * field.Height;
             }
 
 
@@ -50,11 +50,13 @@ namespace OOPGames
             if (Pos_x - Ballsize / 2 < 0)
             {
                 Velo_x *= -1;
+                Pos_x = Ballsize / 2 + 1;
             }
             //Right side
             if (Pos_x + Ballsize / 2 > field.Width)
             {
                 Velo_x *= -1;
+                Pos_x = field.Width - Ballsize / 2 - 1;
             }
 
             // Collision Ball with Net
@@ -110,13 +112,23 @@ namespace OOPGames
             // Check collision
             if (distance <= Ballsize / 2 + player.Playersize / 2)
             {
+                GravityOn = true;
+                // Normalize the direction vector
+                double nx = dx / distance;
+                double ny = dy / distance;
+
                 // Reflect the ball's velocity based on collision
-                Velo_x = dx > 0 ? Math.Abs(Velo_x) : -Math.Abs(Velo_x);
-                Velo_y = dy > 0 ? Math.Abs(Velo_y) : -Math.Abs(Velo_y);
+                double dotProduct = 0.8 * Velo_x * nx + 0.8 * Velo_y * ny - (player.Velo_x * nx + player.Velo_y * ny);
+                Velo_x = -dotProduct * nx;
+                Velo_y = -dotProduct * ny;
+
+                // Move the ball away from the player
+                Pos_x = player.Pos_x + nx * (Ballsize / 2 + player.Playersize / 2 + 1);
+                Pos_y = player.Pos_y + ny * (Ballsize / 2 + player.Playersize / 2 + 1);
 
                 // Slightly push the ball away from the player to avoid sticking
-                Pos_x += Velo_x;
-                Pos_y += Velo_y;
+                //Pos_x += Velo_x;
+                //Pos_y += Velo_y;
             }
         }
     }
