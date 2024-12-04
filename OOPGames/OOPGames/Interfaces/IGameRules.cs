@@ -46,7 +46,7 @@ namespace OOPGames
     }
 
     //Neues Interface für Singleplayer Modus mit erweiterung einer Benutzerdefinierten Textanzeige in der Statusleiste
-
+    
     public interface IGameRules3 : IGameRules2
     {
         String StatusBar();
