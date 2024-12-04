@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace OOPGames
 {
@@ -118,11 +119,14 @@ namespace OOPGames
             if (move.Jump)
             {
                 //Check if Player is on Ground or slightly above
-                if (Field_BV.Player[move.PlayerNumber - 1].Pos_x <= Field_BV.Height - Field_BV.Ground.Height * 1.1)
+                if (Field_BV.Player[move.PlayerNumber - 1].Pos_y + Field_BV.Player[move.PlayerNumber - 1].Playersize / 2 >= Field_BV.Height - Field_BV.Ground.Height - 10)
                 {
-                    Field_BV.Player[move.PlayerNumber - 1].Velo_y = 50;
+                    Field_BV.Player[move.PlayerNumber - 1].Velo_y = -50;
                 }
             }
+
+            //reset move Object
+            move.ResetMove();
         }
 
         public void StartedGameCall()
@@ -150,11 +154,15 @@ namespace OOPGames
             Field_BV.Player[0].B_Move_Player(Field_BV);
             Field_BV.Player[1].B_Move_Player(Field_BV);
 
+            Field_BV.Player[0].Velo_x = 0;
+            Field_BV.Player[1].Velo_x = 0;
+
         }
 
         public void ScoredReset(int scorer)
         {
             //Reset Ball
+            Field_BV.Ball.GravityOn = false;
             if (scorer == 0)
             {
                 Field_BV.Ball.Pos_x = Field_BV.Width / 4;
@@ -163,7 +171,7 @@ namespace OOPGames
             {
                 Field_BV.Ball.Pos_x = (Field_BV.Width / 4) * 3;
             }
-            Field_BV.Ball.Pos_y = Field_BV.Height * 0.7;
+            Field_BV.Ball.Pos_y = Field_BV.Height * 0.3;
             Field_BV.Ball.Velo_x = 0;
             Field_BV.Ball.Velo_y = 0;
 

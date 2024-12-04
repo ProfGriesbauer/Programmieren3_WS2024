@@ -52,6 +52,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -83,7 +84,6 @@
     <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Move.cs" />
     <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Painter.cs" />
     <Compile Include="Classes\A_Gruppe\A_Matthias_Hofmann_Rules.cs" />
-    <Compile Include="Classes\A_Gruppe\Painter_A.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Ball_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_ComputerPlayer_BV.cs" />
     <Compile Include="Classes\B_Gruppe\Volley\B_Field_BV.cs" />
@@ -100,8 +100,6 @@
     <Compile Include="Classes\E_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\F_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\G_Gruppe\Bug.cs" />
-    <Compile Include="Classes\G_Gruppe\G_Matthias_Hofmann_Move.cs" />
-    <Compile Include="Classes\G_Gruppe\G_Matthias_Hofmann_Rules.cs" />
     <Compile Include="Classes\G_Gruppe\OliverMarcus_TicTacToe.cs" />
     <Compile Include="Classes\G_Gruppe\Snake.cs" />
     <Compile Include="Classes\I_Gruppe\Vorname_Nachname_XXX.cs" />
@@ -112,7 +110,6 @@
     <Compile Include="Classes\X_Griesbauer\Josef_Griesbauer_BaseTicTacToe.cs" />
     <Compile Include="Classes\X_Griesbauer\Josef_Griesbauer_TicTacToe.cs" />
     <Compile Include="Interfaces\A_Gruppe\IA_TicTacToeField.cs" />
-    <Compile Include="Interfaces\A_Gruppe\Matthias_Hofmann_IPainter.cs" />
     <Compile Include="Interfaces\B_Gruppe\Volley\B_IVolley.cs" />
     <Compile Include="Interfaces\D_Gruppe\JLJ_IFlappyBird.cs" />
     <Compile Include="Interfaces\G_Gruppe\InterfaceBug.cs" />
@@ -154,6 +151,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Classes\D_Gruppe\Grafiken\flappy-bird.ttf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -176,6 +174,18 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Classes\D_Gruppe\Grafiken\Pipe_unten.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Classes\D_Gruppe\Grafiken\Pipe_oben.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Classes\D_Gruppe\Grafiken\background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Classes\D_Gruppe\Grafiken\ground.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OOPGames
+namespace OOPGames.Interfaces.G_Gruppe
 {
-   
+    internal class G_Bug_Painter
+    {
+    }
 }

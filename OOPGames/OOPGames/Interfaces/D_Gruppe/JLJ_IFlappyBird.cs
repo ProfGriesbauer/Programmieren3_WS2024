@@ -17,7 +17,7 @@ namespace OOPGames
 
     }
 
-    public interface ID_FB_Rules : IGameRules3
+    public interface ID_FB_Rules : IGameRules2
     { 
     
     }

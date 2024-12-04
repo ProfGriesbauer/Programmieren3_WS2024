@@ -42,39 +42,43 @@ namespace OOPGames
             bool _MoveLeft = false;
             bool _MoveRight = false;
             bool _Jump = false;
+            int pn = -1;
 
-            if (this.PlayerNumber == 1)
+
+            switch (key.Key)
             {
-                switch (key.Key)
-                {
-                    case Key.A:
-                        _MoveLeft = true; // Move left
-                        break;
-                    case Key.D:
-                        _MoveRight = true; // Move right
-                        break;
-                    case Key.W:
-                        _Jump = true; // Jump up
-                        break;
-                }
-            }
-            else if (this.PlayerNumber == 2)
-            {
-                switch (key.Key)
-                {
-                    case Key.J:
-                        _MoveLeft = true; // Move left
-                        break;
-                    case Key.L:
-                        _MoveRight = true; // Move right
-                        break;
-                    case Key.I:
-                        _Jump = true; // Jump up
-                        break;
-                }
+                case Key.A:
+                    pn = 1;
+                    _MoveLeft = true; // Move left
+                    break;
+                case Key.D:
+                    pn = 1;
+                    _MoveRight = true; // Move right
+                    break;
+                case Key.W:
+                    pn = 1;
+                    _Jump = true; // Jump up
+                    break;
             }
 
-            return new B_Move_BV(this.PlayerNumber, _MoveLeft, _MoveRight, _Jump);
+            switch (key.Key)
+            {
+                case Key.J:
+                    pn = 2;
+                    _MoveLeft = true; // Move left
+                    break;
+                case Key.L:
+                    pn = 2;
+                    _MoveRight = true; // Move right
+                    break;
+                case Key.I:
+                    pn = 2;
+                    _Jump = true; // Jump up
+                    break;
+            }
+
+
+            return pn != -1 ? new B_Move_BV(pn, _MoveLeft, _MoveRight, _Jump) : null;
         }
 
     }

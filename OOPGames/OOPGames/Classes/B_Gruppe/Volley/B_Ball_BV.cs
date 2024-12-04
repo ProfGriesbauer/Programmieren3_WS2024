@@ -11,6 +11,7 @@ namespace OOPGames
 {
     public class B_Ball_BV : IB_Ball_BV
     {
+        public bool GravityOn { get; set; }
         public double Pos_x { get; set; }
         public double Pos_y { get; set; }
         public double Velo_x { get; set; }
@@ -33,7 +34,11 @@ namespace OOPGames
         public void B_Move_Ball(IB_Field_BV field)
         {
             //Decrease Velo_y for Gravity
-            Velo_y += 0.01 * field.Height;
+            if (GravityOn)
+            {
+                Velo_y += 0.01 * field.Height;
+            }
+
 
             // Update ball position based on velocity
             Pos_x += Velo_x;
