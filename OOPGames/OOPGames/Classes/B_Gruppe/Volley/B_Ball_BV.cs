@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace OOPGames
             //Decrease Velo_y for Gravity
             if (GravityOn)
             {
-                Velo_y += 0; //0.01 * field.Height;
+                Velo_y += 0.01 * field.Height;
             }
 
 
@@ -44,23 +45,43 @@ namespace OOPGames
             Pos_x += Velo_x;
             Pos_y += Velo_y;
 
-            // Simple collision with boundaries
-            if (Pos_x - Ballsize / 2 > field.Width - Ballsize / 2)
+            // Keep Ball within boundaries
+            // Left side
+            if (Pos_x - Ballsize / 2 < 0)
             {
                 Velo_x *= -1;
             }
-            if (Pos_x - Ballsize / 2 < 0 - Ballsize / 2)
+            //Right side
+            if (Pos_x + Ballsize / 2 > field.Width)
             {
                 Velo_x *= -1;
             }
 
+            // Collision Ball with Net
+            double netLeft = field.Width / 2 - field.Net.Width / 2;
+            double netRight = field.Width / 2 + field.Net.Width / 2;
+            double netTop = field.Height - field.Net.Height;
 
-            if (0 - Ballsize / 2 < Ballsize / 2)
+            // Check if ball is colliding with the net
+            if (Pos_x + Ballsize / 2 > netLeft && Pos_x - Ballsize / 2 < netRight && Pos_y + Ballsize / 2 > netTop)
             {
-                Velo_y *= -1; // Ceiling collision
+                // Reflect the ball's velocity based on collision
+                if (Pos_x < field.Width / 2)
+                {
+                    Velo_x = -Math.Abs(Velo_x); // Ball is on the left side of the net
+                }
+                else
+                {
+                    Velo_x = Math.Abs(Velo_x); // Ball is on the right side of the net
+                }
+                Velo_y *= -1; // Reflect the vertical velocity
             }
 
-            
+            // Check if ball is colliding with the players
+            foreach (var player in field.Player)
+            {
+                HandlePlayerCollision(player);
+            }
         }
 
         public int B_On_Ground(IB_Field_BV field)
