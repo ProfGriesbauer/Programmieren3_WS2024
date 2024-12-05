@@ -61,29 +61,42 @@ namespace OOPGames
             Canvas.SetLeft(backgroundImage, 0);
             canvas.Children.Add(backgroundImage);
         }
+        public static double Clamp(double value, double min, double max)
+        {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
+        }
 
         private void DrawBird(Canvas canvas, FlappyField field)
         {
+            // Erstellen des Bilds
             var birdImage = new Image
             {
                 Width = field.Bird.Radius * 4,
                 Height = field.Bird.Radius * 4,
                 Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/bird.png", UriKind.Relative))
             };
+
+            // Mittelpunkt für die Rotation setzen
+            double centerX = birdImage.Width / 2;
+            double centerY = birdImage.Height / 2;
+
+            // Berechnung des Rotationswinkels basierend auf Geschwindigkeit
+            double rotationAngle = Clamp(field.Bird.Velocity * 3, -45, 45); // Beschränkung auf -45° bis 45°
+
+            // Transformation anwenden
+            var rotateTransform = new RotateTransform(rotationAngle, centerX, centerY);
+            birdImage.RenderTransform = rotateTransform;
+
+            // Positionierung des Bilds
             Canvas.SetTop(birdImage, field.Bird.Y - field.Bird.Radius - 15);
             Canvas.SetLeft(birdImage, field.Bird.X - field.Bird.Radius - 17);
+
+            // Bild zur Zeichenfläche hinzufügen
             canvas.Children.Add(birdImage);
-            //// Vogel zeichnen
-            //var bird = new Ellipse
-            //{
-            //    Width = field.Bird.Radius * 2,
-            //    Height = field.Bird.Radius * 2,
-            //    Fill = Brushes.Yellow
-            //};
-            //Canvas.SetTop(bird, field.Bird.Y - field.Bird.Radius);
-            //Canvas.SetLeft(bird, field.Bird.X - field.Bird.Radius);
-            //canvas.Children.Add(bird);
         }
+
 
         private void DrawObstacles(Canvas canvas, FlappyField field)
         {
@@ -234,23 +247,25 @@ namespace OOPGames
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public FlappyField(int width, int height)
-        {
-            Width = width;
-            Height = height;
-            Bird = new D_Bird(200, (height) / 2, 15, 1, 0); // Initialisierung des Vogels
-            Obstacles = new List<D_Tubes>();
-            Boden = null;// new List<D_Boden>()
-            LoadHighscore();
-        }
-
         public int score = 0;
 
         public int highscore;
 
         public bool gameover = false;
+
         private string _dirpath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Flappybird");
-        private string _highscorefile ;
+
+        private string _highscorefile;
+
+        public FlappyField(int width, int height)
+        {
+            Width = width;
+            Height = height;
+            Bird = new D_Bird(200, (height) / 2, 15, 3, 0); // Initialisierung des Vogels
+            Obstacles = new List<D_Tubes>();
+            Boden = null;// new List<D_Boden>()
+            LoadHighscore();
+        }
 
         public void LoadHighscore()
         {
@@ -297,8 +312,6 @@ namespace OOPGames
             }
         }
 
-     
-
         public bool CanBePaintedBy(IPaintGame painter) => painter is ID_FB_Painter;
     }
 
@@ -307,9 +320,11 @@ namespace OOPGames
         public string Name => "FlappyBirdRules";
         public IGameField CurrentField { get; private set; }
 
-        private int speedOuG = 5; // Standard 5 wie schnell sich Hinderniss und Boden Bewegen
+        private int speedOuG = 7; // Standard 5 wie schnell sich Hinderniss und Boden Bewegen
 
         private int PlayerWon = -1;
+
+        private int birdjump = -22;
 
         public bool MovesPossible // Solange der Spieler nicht verloren hat.
         {
@@ -326,7 +341,6 @@ namespace OOPGames
 
         public FlappyRules()
         {
-            
             CurrentField = new FlappyField(800, 600);
         }
 
@@ -335,7 +349,7 @@ namespace OOPGames
             if (move is FlappyMove)
             {
                 var bird = ((FlappyField)CurrentField).Bird;
-                bird.moveUp(-13); // Vogel springt nach oben
+                bird.moveUp(birdjump); // Vogel springt nach oben
             }
         }
 
@@ -404,7 +418,6 @@ namespace OOPGames
                 }
                 // Entferne Hindernisse, die aus dem Bildschirmbereich sind
                 field.Obstacles.RemoveAll(tube => tube.IsOutOfScreen());
-
 
                 // Füge neue Hindernisse hinzu
                 // Maximaler Abstand zwischen den Gaps
@@ -604,7 +617,11 @@ namespace OOPGames
         // Nach jedem Tick wird die Posotion des Vogels erneuert und die Beschleunigung auf die Geschwindigkeit addiert
         public void UpdatePosition()
         {
-            Velocity += Acceleration;
+            if (Velocity < 22)
+            {
+                Velocity += Acceleration;
+            }
+
             Y += Velocity;
         }
     }
