@@ -47,7 +47,7 @@ namespace OOPGames
             {
                 _MoveLeft = true;
             }
-            else if (field.Ball.Pos_x >= Pos_x -10) // Ball rechts vom Spieler
+            else if (field.Ball.Pos_x >= Pos_x) // Ball rechts vom Spieler
             {
                 _MoveRight = true;
             }
