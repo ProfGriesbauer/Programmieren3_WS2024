@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace OOPGames
@@ -21,15 +22,47 @@ namespace OOPGames
 
         public void B_Paint_Ball(Canvas canvas)
         {
+            //Ball as Ellipse
+            /*
             Ellipse ball = new Ellipse
             {
                 Width = Ballsize,
                 Height = Ballsize,
                 Fill = Brushes.Red
             };
+            */
+
+            //Ball as Image
+            var ball = new Image
+            {
+                Width = Ballsize,
+                Height = Ballsize,
+                Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Volleyball.PNG", UriKind.Relative))
+            };
             Canvas.SetLeft(ball, Pos_x - Ballsize / 2);
             Canvas.SetTop(ball, Pos_y - Ballsize / 2);
             canvas.Children.Add(ball);
+
+            // Draw arrow if ball is above the visible area
+            if (Pos_y < 0 - Ballsize / 2)
+            {
+                double arrowSize = 20;
+                double arrowPosX = Pos_x - arrowSize / 2;
+                double arrowPosY = 0;
+
+                Polygon arrow = new Polygon
+                {
+                    Points = new PointCollection
+                         {
+                         new System.Windows.Point(arrowPosX, arrowPosY + arrowSize),
+                         new System.Windows.Point(arrowPosX + arrowSize, arrowPosY + arrowSize),
+                         new System.Windows.Point(arrowPosX + arrowSize / 2, arrowPosY)
+                         },
+                    Fill = Brushes.Red
+                };
+
+                canvas.Children.Add(arrow);
+            }
         }
 
         public void B_Move_Ball(IB_Field_BV field)

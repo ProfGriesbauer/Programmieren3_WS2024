@@ -188,5 +188,12 @@
   <ItemGroup>
     <Resource Include="Classes\D_Gruppe\Grafiken\ground.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Background.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Net.PNG" />
+    <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Volleyball.PNG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

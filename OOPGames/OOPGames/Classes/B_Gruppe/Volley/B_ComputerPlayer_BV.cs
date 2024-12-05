@@ -41,13 +41,14 @@ namespace OOPGames
             bool _MoveRight = false;
             bool _Jump = false;
             // Simple AI: Move towards the ball horizontally
-            if (field.Ball.Pos_x > Pos_x + 10)
-            {
-                _MoveRight = true; // Move right
-            }
-            else if (field.Ball.Pos_x < Pos_x - 10)
+            if (field.Ball.Pos_x > Pos_x)
             {
                 _MoveLeft = true; // Move left
+            }
+            else if (field.Ball.Pos_x < Pos_x)
+            {
+
+                _MoveRight = true; // Move right
             }
 
             if (field.Ball.Pos_y < field.Height * 0.8)
