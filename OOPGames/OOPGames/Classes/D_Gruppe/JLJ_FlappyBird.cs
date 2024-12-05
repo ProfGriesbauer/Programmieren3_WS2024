@@ -74,7 +74,7 @@ namespace OOPGames
             var birdImage = new Image
             {
                 Width = field.Bird.Radius * 4,
-                Height = field.Bird.Radius * 4,
+                Height = field.Bird.Radius * 4.2,
                 Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/bird.png", UriKind.Relative))
             };
 
@@ -82,19 +82,30 @@ namespace OOPGames
             double centerX = birdImage.Width / 2;
             double centerY = birdImage.Height / 2;
 
-            // Berechnung des Rotationswinkels basierend auf Geschwindigkeit
-            double rotationAngle = Clamp(field.Bird.Velocity * 3, -45, 45); // Beschränkung auf -45° bis 45°
+            // Berechnung des Rotationswinkels basierend auf Geschwindigkeit (Richtung umkehren)
+            double rotationAngle = Clamp(field.Bird.Velocity * 3, -45, 45); // Positiv = nach unten, Negativ = nach oben
 
             // Transformation anwenden
             var rotateTransform = new RotateTransform(rotationAngle, centerX, centerY);
             birdImage.RenderTransform = rotateTransform;
 
             // Positionierung des Bilds
-            Canvas.SetTop(birdImage, field.Bird.Y - field.Bird.Radius - 15);
+            Canvas.SetTop(birdImage, field.Bird.Y - field.Bird.Radius - 14);
             Canvas.SetLeft(birdImage, field.Bird.X - field.Bird.Radius - 17);
 
             // Bild zur Zeichenfläche hinzufügen
             canvas.Children.Add(birdImage);
+
+            //// Vogel zeichnen
+            //var bird = new Ellipse
+            //{
+            //    Width = field.Bird.Radius * 2,
+            //    Height = field.Bird.Radius * 2,
+            //    Fill = Brushes.Yellow
+            //};
+            //Canvas.SetTop(bird, field.Bird.Y - field.Bird.Radius);
+            //Canvas.SetLeft(bird, field.Bird.X - field.Bird.Radius);
+            //canvas.Children.Add(bird);
         }
 
 
@@ -102,17 +113,6 @@ namespace OOPGames
         {
             foreach (var tube in field.Obstacles)
             {
-                var topPipeImage = new Image
-                {
-                    Width = tube.Width,
-                    Height = tube.TopHeight,
-                    Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/Pipe_oben.png", UriKind.Relative)),
-                    Stretch = Stretch.Fill
-                };
-                Canvas.SetTop(topPipeImage, 0);
-                Canvas.SetLeft(topPipeImage, tube.X);
-                canvas.Children.Add(topPipeImage);
-
                 //// Oberer Pfeiler
                 //var topPillar = new Rectangle
                 //{
@@ -124,16 +124,16 @@ namespace OOPGames
                 //Canvas.SetLeft(topPillar, tube.X);
                 //canvas.Children.Add(topPillar);
 
-                var bottomPipeImage = new Image
+                var topPipeImage = new Image
                 {
                     Width = tube.Width,
-                    Height = field.Height - (tube.TopHeight + tube.GapSize),
-                    Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/Pipe_unten.png", UriKind.Relative)),
+                    Height = tube.TopHeight,
+                    Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/Pipe_oben.png", UriKind.Relative)),
                     Stretch = Stretch.Fill
                 };
-                Canvas.SetTop(bottomPipeImage, tube.TopHeight + tube.GapSize);
-                Canvas.SetLeft(bottomPipeImage, tube.X);
-                canvas.Children.Add(bottomPipeImage);
+                Canvas.SetTop(topPipeImage, 0);
+                Canvas.SetLeft(topPipeImage, tube.X);
+                canvas.Children.Add(topPipeImage);
 
                 //// Unterer Pfeiler
                 //var bottomPillar = new Rectangle
@@ -145,6 +145,17 @@ namespace OOPGames
                 //Canvas.SetTop(bottomPillar, tube.TopHeight + tube.GapSize);
                 //Canvas.SetLeft(bottomPillar, tube.X);
                 //canvas.Children.Add(bottomPillar);
+
+                var bottomPipeImage = new Image
+                {
+                    Width = tube.Width,
+                    Height = field.Height - (tube.TopHeight + tube.GapSize),
+                    Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/Pipe_unten.png", UriKind.Relative)),
+                    Stretch = Stretch.Fill
+                };
+                Canvas.SetTop(bottomPipeImage, tube.TopHeight + tube.GapSize);
+                Canvas.SetLeft(bottomPipeImage, tube.X);
+                canvas.Children.Add(bottomPipeImage);
             }
         }
 
@@ -438,7 +449,7 @@ namespace OOPGames
                     int gapY = rnd.Next(minGapY, maxGapY + 1);
 
                     // Neues Hindernis erstellen
-                    field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 150, 40, field.Height));
+                    field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 140, 50, field.Height));
                 }
 
                 // Bewege die Bodenstücke
