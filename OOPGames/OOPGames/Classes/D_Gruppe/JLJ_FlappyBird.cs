@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
 using System.Windows.Media.Effects;
+using static System.Net.WebRequestMethods;
+using Microsoft.Win32;
 
 namespace OOPGames
 {
@@ -232,12 +234,52 @@ namespace OOPGames
         public int Width { get; private set; }
         public int Height { get; private set; }
 
+        public FlappyField(int width, int height)
+        {
+            Width = width;
+            Height = height;
+            Bird = new D_Bird(200, (height) / 2, 15, 1, 0); // Initialisierung des Vogels
+            Obstacles = new List<D_Tubes>();
+            Boden = null;// new List<D_Boden>()
+            LoadHighscore();
+        }
 
         public int score = 0;
 
         public int highscore;
 
         public bool gameover = false;
+        private string _dirpath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Flappybird");
+        private string _highscorefile ;
+
+        public void LoadHighscore()
+        {
+            _highscorefile = System.IO.Path.Combine(_dirpath, "highscore.txt");
+
+            if (!System.IO.Directory.Exists(_dirpath))
+            {
+               System.IO.Directory.CreateDirectory(_dirpath);
+            }
+           if (System.IO.File.Exists(_highscorefile))
+            {
+               int.TryParse(System.IO.File.ReadAllText(_highscorefile),out highscore);
+            }
+           else
+            {
+                System.IO.File.WriteAllText(_highscorefile, highscore.ToString());
+                
+            }
+        }
+
+        public void SaveHighscore(int sHighscore)
+        {
+            _highscorefile = System.IO.Path.Combine(_dirpath, "highscore.txt");
+            if (System.IO.File.Exists(_highscorefile))
+            {
+                System.IO.File.WriteAllText(_highscorefile, sHighscore.ToString());
+            }
+            
+        }
 
         public void AdoptCanvas (Canvas canvas)
         {
@@ -255,14 +297,7 @@ namespace OOPGames
             }
         }
 
-        public FlappyField(int width, int height)
-        {
-            Width = width;
-            Height = height;
-            Bird = new D_Bird(200, (height) / 2, 15, 1, 0); // Initialisierung des Vogels
-            Obstacles = new List<D_Tubes>();
-            Boden = null;// new List<D_Boden>();
-        }
+     
 
         public bool CanBePaintedBy(IPaintGame painter) => painter is ID_FB_Painter;
     }
@@ -307,6 +342,7 @@ namespace OOPGames
         public void ClearField()
         {
             CurrentField = new FlappyField(800, 600);
+          
             PlayerWon = -1;
         }
 
@@ -318,6 +354,7 @@ namespace OOPGames
             var field = (FlappyField)CurrentField;
             field.score = 0;
             field.gameover = false;
+            field.LoadHighscore();
 
         }
 
@@ -404,6 +441,7 @@ namespace OOPGames
                 if (field.score > field.highscore)
                 {
                     field.highscore = field.score;
+                    field.SaveHighscore(field.highscore);
                 }
                 // Keine Moves mehr 
                 // Neustart Knopf
