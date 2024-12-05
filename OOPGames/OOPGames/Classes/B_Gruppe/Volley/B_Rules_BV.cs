@@ -139,25 +139,38 @@ namespace OOPGames
 
         public void TickGameCall()
         {
-            //Sets the Ball and Playerpositions at first Start
+            // Sets the Ball and Player positions at first Start
             if (_firstStart)
             {
                 ScoredReset(new Random().Next(0, 2));
                 _firstStart = false;
             }
 
-            //Checks if Ball is on Ground an resets Game if so
+            // Checks if Ball is on Ground and resets Game if so
             CheckIfPLayerScored();
 
-            //Moves Ball and Players
+            // Process moves for all players
+            for (int i = 0; i < Field_BV.Player.Length; i++)
+            {
+                // Check if player is a computer
+                if (Field_BV.Player[i] is IB_ComputerPlayer_BV computerPlayer)
+                {
+                    // Get the computer's move
+                    IB_Move_BV computerMove = computerPlayer.GetMoveBV(Field_BV);
+                    DoMoveBV(computerMove);
+                }
+            }
+
+            // Moves Ball and Players
             Field_BV.Ball.B_Move_Ball(Field_BV);
             Field_BV.Player[0].B_Move_Player(Field_BV);
             Field_BV.Player[1].B_Move_Player(Field_BV);
 
+            // Reset player velocities
             Field_BV.Player[0].Velo_x = 0;
             Field_BV.Player[1].Velo_x = 0;
-
         }
+
 
         public void ScoredReset(int scorer)
         {

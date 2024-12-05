@@ -155,10 +155,17 @@ namespace OOPGames
             double dy = Pos_y - player.Pos_y;
             double distance = Math.Sqrt(dx * dx + dy * dy);
 
-            // Check collision
-            if (distance <= Ballsize / 2 + player.Playersize / 2)
+            // Check collision using a sweep test for high-speed motion
+            double futurePosX = Pos_x + Velo_x;
+            double futurePosY = Pos_y + Velo_y;
+            double futureDx = futurePosX - player.Pos_x;
+            double futureDy = futurePosY - player.Pos_y;
+            double futureDistance = Math.Sqrt(futureDx * futureDx + futureDy * futureDy);
+
+            if (distance <= Ballsize / 2 + player.Playersize / 2 || futureDistance <= Ballsize / 2 + player.Playersize / 2)
             {
                 GravityOn = true;
+
                 // Normalize the direction vector
                 double nx = dx / distance;
                 double ny = dy / distance;
@@ -171,11 +178,8 @@ namespace OOPGames
                 // Move the ball away from the player
                 Pos_x = player.Pos_x + nx * (Ballsize / 2 + player.Playersize / 2 + 1);
                 Pos_y = player.Pos_y + ny * (Ballsize / 2 + player.Playersize / 2 + 1);
-
-                // Slightly push the ball away from the player to avoid sticking
-                //Pos_x += Velo_x;
-                //Pos_y += Velo_y;
             }
         }
+
     }
 }
