@@ -20,6 +20,9 @@ namespace OOPGames
         public double Velo_y { get; set; }
         public double Ballsize { get; set; } = 75; // Default ball size
 
+        double _rotationangle = 0;
+        double _rotationvelo = 1.5;
+
         public void B_Paint_Ball(Canvas canvas)
         {
             //Ball as Ellipse
@@ -39,6 +42,16 @@ namespace OOPGames
                 Height = Ballsize,
                 Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Volleyball.PNG", UriKind.Relative))
             };
+            // Calculate the rotation angle based on the velocity
+            _rotationangle += Math.Sqrt(Velo_x * Velo_x + Velo_y * Velo_y) * _rotationvelo;
+            if (_rotationangle > 360)
+            {
+                _rotationangle -= 360;
+            }
+
+            // Apply the rotation transform
+            ball.RenderTransform = new RotateTransform(_rotationangle, Ballsize / 2, Ballsize / 2);
+
             Canvas.SetLeft(ball, Pos_x - Ballsize / 2);
             Canvas.SetTop(ball, Pos_y - Ballsize / 2);
             canvas.Children.Add(ball);
