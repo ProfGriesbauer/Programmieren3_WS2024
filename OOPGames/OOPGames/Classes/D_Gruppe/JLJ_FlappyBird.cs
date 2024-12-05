@@ -260,11 +260,11 @@ namespace OOPGames
             {
                System.IO.Directory.CreateDirectory(_dirpath);
             }
-           if (System.IO.File.Exists(_highscorefile))
+            if (System.IO.File.Exists(_highscorefile))
             {
                int.TryParse(System.IO.File.ReadAllText(_highscorefile),out highscore);
             }
-           else
+            else
             {
                 System.IO.File.WriteAllText(_highscorefile, highscore.ToString());
                 
@@ -342,7 +342,6 @@ namespace OOPGames
         public void ClearField()
         {
             CurrentField = new FlappyField(800, 600);
-          
             PlayerWon = -1;
         }
 
@@ -406,11 +405,26 @@ namespace OOPGames
                 // Entferne Hindernisse, die aus dem Bildschirmbereich sind
                 field.Obstacles.RemoveAll(tube => tube.IsOutOfScreen());
 
+
                 // Füge neue Hindernisse hinzu
+                // Maximaler Abstand zwischen den Gaps
+                int MaxGapOffset = 325; // Kann einfach angepasst werden
+
                 if (field.Obstacles.Count == 0 || field.Obstacles.Last().X < field.Width - 250)
                 {
                     Random rnd = new Random();
-                    int gapY = rnd.Next(50, field.Height - 250);
+
+                    int previousGapY = field.Obstacles.Count > 0
+                        ? field.Obstacles.Last().TopHeight
+                        : field.Height / 2; // Standardhöhe, falls keine Pfeiler vorhanden sind
+
+                    // Begrenze den neuen Gap innerhalb von MaxGapOffset
+                    int minGapY = Math.Max(50, previousGapY - MaxGapOffset); // Lücke nicht oberhalb 50
+                    int maxGapY = Math.Min(field.Height - 250, previousGapY + MaxGapOffset); // Lücke nicht unterhalb der unteren Grenze
+
+                    int gapY = rnd.Next(minGapY, maxGapY + 1);
+
+                    // Neues Hindernis erstellen
                     field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 150, 40, field.Height));
                 }
 
