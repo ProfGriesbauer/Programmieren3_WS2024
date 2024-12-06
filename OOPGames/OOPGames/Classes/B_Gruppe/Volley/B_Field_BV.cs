@@ -30,7 +30,7 @@ namespace OOPGames
 
             _player[0] = new B_HumanPlayer_BV();
             _player[0].SetPlayerNumber(1);
-            _player[1] = new B_HumanPlayer_BV();
+            _player[1] = new B_ComputerPlayer_BV();
             _player[1].SetPlayerNumber(2);
 
             _rules = rules;

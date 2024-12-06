@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 
 namespace OOPGames
@@ -20,9 +23,20 @@ namespace OOPGames
 
             canvas.Children.Clear();
 
+            //Hinetrgrund zeichnen
+            var background = new Image
+            {
+                Width = field.Width,
+                Height = field.Height,
+                Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Background.PNG", UriKind.Relative)),
+                Stretch = Stretch.Fill
+            };
+            Canvas.SetLeft(background, 0);
+            Canvas.SetTop(background, 0);
+            canvas.Children.Add(background);
 
-            // Spielfeld zeichnen
-            field.Ground.B_Paint_Ground(canvas);
+            // Boden zeichnen
+            //field.Ground.B_Paint_Ground(canvas);
 
             // Netz zeichnen
             field.Net.B_Paint_Net(canvas, field.Ground);

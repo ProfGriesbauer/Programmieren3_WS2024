@@ -56,6 +56,7 @@ namespace OOPGames
         bool MoveLeft { get; }
         bool MoveRight { get; }
         bool Jump { get; }
+        void ResetMove();
 
     }
 
@@ -74,6 +75,7 @@ namespace OOPGames
 
         //
         void B_Move_Player(IB_Field_BV field);
+
     }
 
     public interface IB_HumanPlayer_BV : IB_Player_BV, IHumanGamePlayer
