@@ -24,29 +24,47 @@ namespace OOPGames
             canvas.Children.Clear();
 
             //Hinetrgrund zeichnen
-            var background = new Image
+            switch (field.FieldStyle)
             {
-                Width = field.Width,
-                Height = field.Height,
-                Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Background.PNG", UriKind.Relative)),
-                Stretch = Stretch.Fill
-            };
-            Canvas.SetLeft(background, 0);
-            Canvas.SetTop(background, 0);
-            canvas.Children.Add(background);
+                case 0:
+                    field.Ground.B_Paint_Ground(canvas);
+                    break;
+                case 1:
+                    var background = new Image
+                    {
+                        Width = field.Width,
+                        Height = field.Height,
+                        Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Background.PNG", UriKind.Relative)),
+                        Stretch = Stretch.Fill
+                    };
+                    Canvas.SetLeft(background, 0);
+                    Canvas.SetTop(background, 0);
+                    canvas.Children.Add(background);
+                    break;
+                case 2:
+                    var background_drw = new Image
+                    {
+                        Width = field.Width,
+                        Height = field.Height,
+                        Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Background_Drawing.PNG", UriKind.Relative)),
+                        Stretch = Stretch.Fill
+                    };
+                    Canvas.SetLeft(background_drw, -field.Width * 0.01);
+                    Canvas.SetTop(background_drw, 0);
+                    canvas.Children.Add(background_drw);
+                    break;
+            }
 
-            // Boden zeichnen
-            //field.Ground.B_Paint_Ground(canvas);
 
             // Netz zeichnen
-            field.Net.B_Paint_Net(canvas, field.Ground);
+            field.Net.B_Paint_Net(canvas, field.FieldStyle);
 
             // Spieler zeichnen
-            field.Player[0].B_Paint_Player(canvas);
-            field.Player[1].B_Paint_Player(canvas);
+            field.Player[0].B_Paint_Player(canvas, field.FieldStyle);
+            field.Player[1].B_Paint_Player(canvas, field.FieldStyle);
 
             // Ball zeichnen
-            field.Ball.B_Paint_Ball(canvas);
+            field.Ball.B_Paint_Ball(canvas, field.FieldStyle);
 
             // Score zeichnen
             TextBlock scorePlayer1 = new TextBlock

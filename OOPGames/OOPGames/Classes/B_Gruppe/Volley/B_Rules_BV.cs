@@ -119,7 +119,7 @@ namespace OOPGames
             if (move.Jump)
             {
                 //Check if Player is on Ground or slightly above
-                if (Field_BV.Player[move.PlayerNumber - 1].Pos_y + Field_BV.Player[move.PlayerNumber - 1].Playersize / 2 >= Field_BV.Height - Field_BV.Ground.Height - 10)
+                if (Field_BV.Player[move.PlayerNumber - 1].IsOnGround)
                 {
                     Field_BV.Player[move.PlayerNumber - 1].Velo_y = -60;
                 }
@@ -153,12 +153,14 @@ namespace OOPGames
             for (int i = 0; i < Field_BV.Player.Length; i++)
             {
                 // Check if player is a computer
+
                 if (Field_BV.Player[i] is IB_ComputerPlayer_BV computerPlayer)
                 {
                     // Get the computer's move
                     IB_Move_BV computerMove = computerPlayer.GetMoveBV(Field_BV);
                     DoMoveBV(computerMove);
                 }
+
             }
 
             // Moves Ball and Players

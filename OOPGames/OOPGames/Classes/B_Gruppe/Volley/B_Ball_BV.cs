@@ -18,43 +18,69 @@ namespace OOPGames
         public double Pos_y { get; set; }
         public double Velo_x { get; set; }
         public double Velo_y { get; set; }
-        public double Ballsize { get; set; } = 75; // Default ball size
+        public double Ballsize { get; set; } = 85; // Default ball size
 
         double _rotationangle = 0;
         double _rotationvelo = 1.5;
 
-        public void B_Paint_Ball(Canvas canvas)
+        public void B_Paint_Ball(Canvas canvas, int fieldStyle)
         {
-            //Ball as Ellipse
-            /*
-            Ellipse ball = new Ellipse
+            switch (fieldStyle)
             {
-                Width = Ballsize,
-                Height = Ballsize,
-                Fill = Brushes.Red
-            };
-            */
+                case 0:
+                    Ellipse ball = new Ellipse
+                    {
+                        Width = Ballsize,
+                        Height = Ballsize,
+                        Fill = Brushes.Red
+                    };
+                    Canvas.SetLeft(ball, Pos_x - Ballsize / 2);
+                    Canvas.SetTop(ball, Pos_y - Ballsize / 2);
+                    canvas.Children.Add(ball);
+                    break;
+                case 1:
+                    var ball_img = new Image
+                    {
+                        Width = Ballsize,
+                        Height = Ballsize,
+                        Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Volleyball.PNG", UriKind.Relative))
+                    };
+                    // Calculate the rotation angle based on the velocity
+                    _rotationangle += Math.Sqrt(Velo_x * Velo_x + Velo_y * Velo_y) * _rotationvelo;
+                    if (_rotationangle > 360)
+                    {
+                        _rotationangle -= 360;
+                    }
 
-            //Ball as Image
-            var ball = new Image
-            {
-                Width = Ballsize,
-                Height = Ballsize,
-                Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Volleyball.PNG", UriKind.Relative))
-            };
-            // Calculate the rotation angle based on the velocity
-            _rotationangle += Math.Sqrt(Velo_x * Velo_x + Velo_y * Velo_y) * _rotationvelo;
-            if (_rotationangle > 360)
-            {
-                _rotationangle -= 360;
+                    // Apply the rotation transform
+                    ball_img.RenderTransform = new RotateTransform(_rotationangle, Ballsize / 2, Ballsize / 2);
+
+                    Canvas.SetLeft(ball_img, Pos_x - Ballsize / 2);
+                    Canvas.SetTop(ball_img, Pos_y - Ballsize / 2);
+                    canvas.Children.Add(ball_img);
+                    break;
+                case 2:
+                    var ball_drw = new Image
+                    {
+                        Width = Ballsize,
+                        Height = Ballsize,
+                        Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Volleyball_Drawing.PNG", UriKind.Relative))
+                    };
+                    // Calculate the rotation angle based on the velocity
+                    _rotationangle += Math.Sqrt(Velo_x * Velo_x + Velo_y * Velo_y) * _rotationvelo;
+                    if (_rotationangle > 360)
+                    {
+                        _rotationangle -= 360;
+                    }
+
+                    // Apply the rotation transform
+                    ball_drw.RenderTransform = new RotateTransform(_rotationangle, Ballsize / 2, Ballsize / 2);
+
+                    Canvas.SetLeft(ball_drw, Pos_x - Ballsize / 2);
+                    Canvas.SetTop(ball_drw, Pos_y - Ballsize / 2);
+                    canvas.Children.Add(ball_drw);
+                    break;
             }
-
-            // Apply the rotation transform
-            ball.RenderTransform = new RotateTransform(_rotationangle, Ballsize / 2, Ballsize / 2);
-
-            Canvas.SetLeft(ball, Pos_x - Ballsize / 2);
-            Canvas.SetTop(ball, Pos_y - Ballsize / 2);
-            canvas.Children.Add(ball);
 
             // Draw arrow if ball is above the visible area
             if (Pos_y < 0 - Ballsize / 2)

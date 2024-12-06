@@ -195,5 +195,12 @@
     <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Net.PNG" />
     <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Volleyball.PNG" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Background_Drawing.PNG" />
+    <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Net_Drawing.PNG" />
+    <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Player_Blue.PNG" />
+    <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Player_Red.PNG" />
+    <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Volleyball_Drawing.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
