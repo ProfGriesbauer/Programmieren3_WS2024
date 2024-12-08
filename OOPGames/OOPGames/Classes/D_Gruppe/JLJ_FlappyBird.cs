@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
 using System.Windows.Media.Effects;
+using static System.Net.WebRequestMethods;
+using Microsoft.Win32;
 
 namespace OOPGames
 {
@@ -28,22 +30,71 @@ namespace OOPGames
             //Spielfeld der Canvas anpassen
             field.AdoptCanvas(canvas);
 
-            canvas.Children.Clear();
+            canvas.Children.Clear(); // Canvas leeren 
 
+            // Aufrufe der individuellen Zeichnungs-Methoden
+            DrawBackground(canvas, field);
+            DrawBird(canvas, field);
+            DrawObstacles(canvas, field);
+            DrawGround(canvas, field);
+            DrawScore(canvas, field);
 
+            if (field.gameover)
+            {
+                DrawGameOver(canvas, field);
+                DrawHighScore(canvas, field);
+            }
+        }
+
+        private void DrawBackground(Canvas canvas, FlappyField field)
+        {
             var backgroundImage = new Image
             {
                 Width = canvas.ActualWidth,
                 Height = canvas.ActualHeight,
                 Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/background.png", UriKind.Relative)),
-                Stretch = Stretch.Fill, // Das Bild wird gestreckt, um den Canvas-Bereich zu füllen
-                Opacity = 0.6 // Transparenz des Bildes, 0.0 = vollständig transparent, 1.0 = vollständig sichtbar
+                Stretch = Stretch.Fill,
+                Opacity = 0.6
             };
 
-            Canvas.SetTop(backgroundImage, 0); // Setze die obere Kante des Bildes auf 0
-            Canvas.SetLeft(backgroundImage, 0); // Setze die linke Kante des Bildes auf 0
+            Canvas.SetTop(backgroundImage, 0);
+            Canvas.SetLeft(backgroundImage, 0);
             canvas.Children.Add(backgroundImage);
+        }
+        public static double Clamp(double value, double min, double max)
+        {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
+        }
 
+        private void DrawBird(Canvas canvas, FlappyField field)
+        {
+            // Erstellen des Bilds
+            var birdImage = new Image
+            {
+                Width = field.Bird.Radius * 4,
+                Height = field.Bird.Radius * 4.2,
+                Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/bird.png", UriKind.Relative))
+            };
+
+            // Mittelpunkt für die Rotation setzen
+            double centerX = birdImage.Width / 2;
+            double centerY = birdImage.Height / 2;
+
+            // Berechnung des Rotationswinkels basierend auf Geschwindigkeit (Richtung umkehren)
+            double rotationAngle = Clamp(field.Bird.Velocity * 3, -45, 45); // Positiv = nach unten, Negativ = nach oben
+
+            // Transformation anwenden
+            var rotateTransform = new RotateTransform(rotationAngle, centerX, centerY);
+            birdImage.RenderTransform = rotateTransform;
+
+            // Positionierung des Bilds
+            Canvas.SetTop(birdImage, field.Bird.Y - field.Bird.Radius - 14);
+            Canvas.SetLeft(birdImage, field.Bird.X - field.Bird.Radius - 17);
+
+            // Bild zur Zeichenfläche hinzufügen
+            canvas.Children.Add(birdImage);
 
             //// Vogel zeichnen
             //var bird = new Ellipse
@@ -55,19 +106,11 @@ namespace OOPGames
             //Canvas.SetTop(bird, field.Bird.Y - field.Bird.Radius);
             //Canvas.SetLeft(bird, field.Bird.X - field.Bird.Radius);
             //canvas.Children.Add(bird);
+        }
 
-            // Vogel zeichnen als Bild
-            var birdImage = new Image
-            {
-                Width = (field.Bird.Radius * 4),
-                Height = (field.Bird.Radius * 4),
-                Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/bird.png", UriKind.Relative))
-            };
-            Canvas.SetTop(birdImage, (field.Bird.Y - field.Bird.Radius)-15);
-            Canvas.SetLeft(birdImage, (field.Bird.X - field.Bird.Radius)-17);
-            canvas.Children.Add(birdImage);
 
-            // Hindernisse zeichnen
+        private void DrawObstacles(Canvas canvas, FlappyField field)
+        {
             foreach (var tube in field.Obstacles)
             {
                 //// Oberer Pfeiler
@@ -81,15 +124,14 @@ namespace OOPGames
                 //Canvas.SetLeft(topPillar, tube.X);
                 //canvas.Children.Add(topPillar);
 
-                // Oberer Pfeiler als Bild
                 var topPipeImage = new Image
                 {
                     Width = tube.Width,
                     Height = tube.TopHeight,
                     Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/Pipe_oben.png", UriKind.Relative)),
-                    Stretch = Stretch.Fill // Sicherstellen, dass das Bild in das Rechteck passt
+                    Stretch = Stretch.Fill
                 };
-                Canvas.SetTop(topPipeImage, 0); // Oberer Pfeiler beginnt oben am Spielfeld
+                Canvas.SetTop(topPipeImage, 0);
                 Canvas.SetLeft(topPipeImage, tube.X);
                 canvas.Children.Add(topPipeImage);
 
@@ -104,36 +146,39 @@ namespace OOPGames
                 //Canvas.SetLeft(bottomPillar, tube.X);
                 //canvas.Children.Add(bottomPillar);
 
-                // Unterer Pfeiler als Bild
                 var bottomPipeImage = new Image
                 {
                     Width = tube.Width,
                     Height = field.Height - (tube.TopHeight + tube.GapSize),
                     Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/Pipe_unten.png", UriKind.Relative)),
-                    Stretch = Stretch.Fill // Sicherstellen, dass das Bild in das Rechteck passt
+                    Stretch = Stretch.Fill
                 };
-                Canvas.SetTop(bottomPipeImage, tube.TopHeight + tube.GapSize); // Unterer Pfeiler unterhalb der Lücke
+                Canvas.SetTop(bottomPipeImage, tube.TopHeight + tube.GapSize);
                 Canvas.SetLeft(bottomPipeImage, tube.X);
                 canvas.Children.Add(bottomPipeImage);
             }
+        }
 
-
-            // Boden zeichnen
+        private void DrawGround(Canvas canvas, FlappyField field)
+        {
             foreach (var boden in field.Boden)
             {
-                var bodenImage = new Image
+                var groundImage = new Image
                 {
-                    Width = boden.Width+4,
-                    Height = boden.Height+2,
+                    Width = boden.Width + 4,
+                    Height = boden.Height + 2,
                     Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/ground.png", UriKind.Relative)),
                     Stretch = Stretch.Fill
                 };
-                Canvas.SetTop(bodenImage, boden.Y);
-                Canvas.SetLeft(bodenImage, boden.X);
-                canvas.Children.Add(bodenImage);
-            }
 
-            //Score zeichnen 
+                Canvas.SetTop(groundImage, boden.Y);
+                Canvas.SetLeft(groundImage, boden.X);
+                canvas.Children.Add(groundImage);
+            }
+        }
+
+        private void DrawScore(Canvas canvas, FlappyField field)
+        {
             var scoreText = new TextBlock
             {
                 Text = $"{field.score}",
@@ -142,28 +187,26 @@ namespace OOPGames
                 Foreground = Brushes.White,
                 Background = Brushes.Transparent,
                 TextAlignment = TextAlignment.Center,
-                Width = 100, // Breite des Textblocks
-                Height = 300, // Höhe des Textblock
-                FontFamily = new FontFamily("Comic Sans MS"), // Comicartige Schriftart
+                Width = 100,
+                Height = 300,
+                FontFamily = new FontFamily("Comic Sans MS"),
+                Effect = new DropShadowEffect
+                {
+                    Color = Colors.Black,
+                    BlurRadius = 7,
+                    ShadowDepth = 0,
+                    Opacity = 1
+                }
             };
 
-            // DropShadowEffect hinzufügen
-            scoreText.Effect = new DropShadowEffect
-            {
-                Color = Colors.Black, // Farbe des Rands
-                BlurRadius = 7,       // Kein Weichzeichner, scharfe Kanten
-                ShadowDepth = 0,      // Rand gleichmäßig um den Text
-                Opacity = 1
-            };
-
-
-            // Positioniere das TextBlock oben mittig auf der Canvas
-            Canvas.SetTop(scoreText, 10); // 10 Pixel vom oberen Rand
-            Canvas.SetLeft(scoreText, (canvas.ActualWidth - scoreText.Width) / 2); // Zentriert
+            Canvas.SetTop(scoreText, 10);
+            Canvas.SetLeft(scoreText, (canvas.ActualWidth - scoreText.Width) / 2);
             canvas.Children.Add(scoreText);
+        }
 
-            //Game Over zeichnen 
-            var gameoverText = new TextBlock
+        private void DrawGameOver(Canvas canvas, FlappyField field)
+        {
+            var gameOverText = new TextBlock
             {
                 Text = $"Game Over!",
                 FontSize = 60,
@@ -171,19 +214,34 @@ namespace OOPGames
                 Foreground = Brushes.Black,
                 Background = Brushes.Red,
                 TextAlignment = TextAlignment.Center,
-                Width = 400, // Breite des Textblocks
-                Height = 90, // Höhe des Textblocks
-                FontFamily = new FontFamily("Comic Sans MS"), // Comicartige Schriftart
+                Width = 400,
+                Height = 90,
+                FontFamily = new FontFamily("Comic Sans MS")
             };
 
-            //Game Over Pop up
-            if (field.gameover)
-            {
-                Canvas.SetTop(gameoverText, (canvas.ActualHeight - gameoverText.Height) / 2); // 10 Pixel vom oberen Rand
-                Canvas.SetLeft(gameoverText, (canvas.ActualWidth - gameoverText.Width) / 2); // Zentriert
-                canvas.Children.Add(gameoverText);
-            }
+            Canvas.SetTop(gameOverText, (canvas.ActualHeight - gameOverText.Height) / 2);
+            Canvas.SetLeft(gameOverText, (canvas.ActualWidth - gameOverText.Width) / 2);
+            canvas.Children.Add(gameOverText);
+        }
 
+        private void DrawHighScore(Canvas canvas, FlappyField field)
+        {
+            var highScoreText = new TextBlock
+            {
+                Text = $"Highscore : {field.highscore}",
+                FontSize = 40,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.Black,
+                Background = Brushes.Red,
+                TextAlignment = TextAlignment.Center,
+                Width = 400,
+                Height = 90,
+                FontFamily = new FontFamily("Comic Sans MS")
+            };
+
+            Canvas.SetTop(highScoreText, (canvas.ActualHeight - highScoreText.Height) / 2 + 90);
+            Canvas.SetLeft(highScoreText, (canvas.ActualWidth - highScoreText.Width) / 2);
+            canvas.Children.Add(highScoreText);
         }
 
         public void TickPaintGameField(Canvas canvas, IGameField currentField)
@@ -200,10 +258,54 @@ namespace OOPGames
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-
         public int score = 0;
 
+        public int highscore;
+
         public bool gameover = false;
+
+        private string _dirpath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Flappybird");
+
+        private string _highscorefile;
+
+        public FlappyField(int width, int height)
+        {
+            Width = width;
+            Height = height;
+            Bird = new D_Bird(200, (height) / 2, 15, 3, 0); // Initialisierung des Vogels
+            Obstacles = new List<D_Tubes>();
+            Boden = null;// new List<D_Boden>()
+            LoadHighscore();
+        }
+
+        public void LoadHighscore()
+        {
+            _highscorefile = System.IO.Path.Combine(_dirpath, "highscore.txt");
+
+            if (!System.IO.Directory.Exists(_dirpath))
+            {
+               System.IO.Directory.CreateDirectory(_dirpath);
+            }
+            if (System.IO.File.Exists(_highscorefile))
+            {
+               int.TryParse(System.IO.File.ReadAllText(_highscorefile),out highscore);
+            }
+            else
+            {
+                System.IO.File.WriteAllText(_highscorefile, highscore.ToString());
+                
+            }
+        }
+
+        public void SaveHighscore(int sHighscore)
+        {
+            _highscorefile = System.IO.Path.Combine(_dirpath, "highscore.txt");
+            if (System.IO.File.Exists(_highscorefile))
+            {
+                System.IO.File.WriteAllText(_highscorefile, sHighscore.ToString());
+            }
+            
+        }
 
         public void AdoptCanvas (Canvas canvas)
         {
@@ -221,15 +323,6 @@ namespace OOPGames
             }
         }
 
-        public FlappyField(int width, int height)
-        {
-            Width = width;
-            Height = height;
-            Bird = new D_Bird(200, (height) / 2, 15, 1, 0); // Initialisierung des Vogels
-            Obstacles = new List<D_Tubes>();
-            Boden = null;// new List<D_Boden>();
-        }
-
         public bool CanBePaintedBy(IPaintGame painter) => painter is ID_FB_Painter;
     }
 
@@ -237,6 +330,13 @@ namespace OOPGames
     {
         public string Name => "FlappyBirdRules";
         public IGameField CurrentField { get; private set; }
+
+        private int speedOuG = 7; // Standard 5 wie schnell sich Hinderniss und Boden Bewegen
+
+        private int PlayerWon = -1;
+
+        private int birdjump = -22;
+
         public bool MovesPossible // Solange der Spieler nicht verloren hat.
         {
             get
@@ -249,11 +349,9 @@ namespace OOPGames
                 return true;
             }
         }
-        private int PlayerWon = -1;
 
         public FlappyRules()
         {
-            
             CurrentField = new FlappyField(800, 600);
         }
 
@@ -262,7 +360,7 @@ namespace OOPGames
             if (move is FlappyMove)
             {
                 var bird = ((FlappyField)CurrentField).Bird;
-                bird.moveUp(-13); // Vogel springt nach oben
+                bird.moveUp(birdjump); // Vogel springt nach oben
             }
         }
 
@@ -280,6 +378,7 @@ namespace OOPGames
             var field = (FlappyField)CurrentField;
             field.score = 0;
             field.gameover = false;
+            field.LoadHighscore();
 
         }
 
@@ -319,29 +418,44 @@ namespace OOPGames
 
             if (!CheckifCollision(field))
             {
+
                 // Aktualisiere die Position des Vogels
                 field.Bird.UpdatePosition();
 
                 // Bewege die Hindernisse
                 foreach (var tube in field.Obstacles)
                 {
-                    tube.MoveLeft(5); // Bewege jedes Hindernis nach links
+                    tube.MoveLeft(speedOuG); // Bewege jedes Hindernis nach links
                 }
                 // Entferne Hindernisse, die aus dem Bildschirmbereich sind
                 field.Obstacles.RemoveAll(tube => tube.IsOutOfScreen());
 
                 // Füge neue Hindernisse hinzu
+                // Maximaler Abstand zwischen den Gaps
+                int MaxGapOffset = 325; // Kann einfach angepasst werden
+
                 if (field.Obstacles.Count == 0 || field.Obstacles.Last().X < field.Width - 250)
                 {
                     Random rnd = new Random();
-                    int gapY = rnd.Next(50, field.Height - 250);
-                    field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 150, 40, field.Height));
+
+                    int previousGapY = field.Obstacles.Count > 0
+                        ? field.Obstacles.Last().TopHeight
+                        : field.Height / 2; // Standardhöhe, falls keine Pfeiler vorhanden sind
+
+                    // Begrenze den neuen Gap innerhalb von MaxGapOffset
+                    int minGapY = Math.Max(50, previousGapY - MaxGapOffset); // Lücke nicht oberhalb 50
+                    int maxGapY = Math.Min(field.Height - 250, previousGapY + MaxGapOffset); // Lücke nicht unterhalb der unteren Grenze
+
+                    int gapY = rnd.Next(minGapY, maxGapY + 1);
+
+                    // Neues Hindernis erstellen
+                    field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 140, 50, field.Height));
                 }
 
                 // Bewege die Bodenstücke
                 foreach (var boden in field.Boden)
                 {
-                    boden.MoveLeft(5);
+                    boden.MoveLeft(speedOuG);
                 }
 
                 // Entferne Bodenstücke, die aus dem Bildschirmbereich sind
@@ -362,6 +476,11 @@ namespace OOPGames
             {
                 // Ende des Spiels Highscore speichern 
                 field.gameover = true;
+                if (field.score > field.highscore)
+                {
+                    field.highscore = field.score;
+                    field.SaveHighscore(field.highscore);
+                }
                 // Keine Moves mehr 
                 // Neustart Knopf
             }
@@ -371,7 +490,7 @@ namespace OOPGames
         {
             foreach (var tube in field.Obstacles)
             {
-                if (((tube.X + tube.Width) < field.Bird.X) && (tube.X + tube.Width) > ((field.Bird.X) - 5))
+                if (((tube.X + tube.Width) < field.Bird.X) && (tube.X + tube.Width) > ((field.Bird.X) - speedOuG))
                 {
                     field.score++;
                 }
@@ -386,7 +505,7 @@ namespace OOPGames
             }
             else
             {
-                return "Game Over!";
+                return "Game Over! Restart with Space";
             }
         }
     }
@@ -509,7 +628,11 @@ namespace OOPGames
         // Nach jedem Tick wird die Posotion des Vogels erneuert und die Beschleunigung auf die Geschwindigkeit addiert
         public void UpdatePosition()
         {
-            Velocity += Acceleration;
+            if (Velocity < 22)
+            {
+                Velocity += Acceleration;
+            }
+
             Y += Velocity;
         }
     }
