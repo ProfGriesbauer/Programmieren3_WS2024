@@ -331,6 +331,7 @@ namespace OOPGames
         public string Name => "FlappyBirdRules";
         public IGameField CurrentField { get; private set; }
 
+
         private int speedOuG = 7; // Standard 5 wie schnell sich Hinderniss und Boden Bewegen
 
         private int PlayerWon = -1;
@@ -390,25 +391,17 @@ namespace OOPGames
             {
                 return true;
             }
-            // Vogel kollidiert mit Hindernissen
-            foreach (var tube in field.Obstacles)
+            // Prüfe Kollision mit allen ID_GameObjekten (Hindernisse und Boden)
+            foreach (var obj in (field.Obstacles ?? Enumerable.Empty<ID_GameObject>())
+                         .Concat(field.Boden ?? Enumerable.Empty<ID_GameObject>()))
             {
-                if (tube.CheckCollision(field.Bird))
+                if (obj.CheckCollision(field.Bird))
                 {
                     return true;
                 }
             }
-            //checkt ob er mit einem Boden objekt kollidiert
-            if(field.Boden != null)
-            {
-                foreach (var boden in field.Boden)
-                {
-                    if (boden.CheckCollision(field.Bird))
-                    {
-                        return true;
-                    }
-                }
-            }
+
+
             return false;
         }
 
@@ -422,52 +415,23 @@ namespace OOPGames
                 // Aktualisiere die Position des Vogels
                 field.Bird.UpdatePosition();
 
-                // Bewege die Hindernisse
-                foreach (var tube in field.Obstacles)
+                // Bewege und aktualisiere alle ID_GameObjekte
+                foreach (var obj in (field.Obstacles ?? Enumerable.Empty<ID_GameObject>())
+                             .Concat(field.Boden ?? Enumerable.Empty<ID_GameObject>()))
                 {
-                    tube.MoveLeft(speedOuG); // Bewege jedes Hindernis nach links
+                    obj.MoveLeft(speedOuG);
                 }
-                // Entferne Hindernisse, die aus dem Bildschirmbereich sind
-                field.Obstacles.RemoveAll(tube => tube.IsOutOfScreen());
+
+                // Entferne ID_GameObjekte, die aus dem Bildschirmbereich sind
+                field.Obstacles?.RemoveAll(obj => obj.IsOutOfScreen());
+                field.Boden?.RemoveAll(obj => obj.IsOutOfScreen());
+
 
                 // Füge neue Hindernisse hinzu
-                // Maximaler Abstand zwischen den Gaps
-                int MaxGapOffset = 325; // Kann einfach angepasst werden
+                AddNewObstacles(field);
 
-                if (field.Obstacles.Count == 0 || field.Obstacles.Last().X < field.Width - 250)
-                {
-                    Random rnd = new Random();
-
-                    int previousGapY = field.Obstacles.Count > 0
-                        ? field.Obstacles.Last().TopHeight
-                        : field.Height / 2; // Standardhöhe, falls keine Pfeiler vorhanden sind
-
-                    // Begrenze den neuen Gap innerhalb von MaxGapOffset
-                    int minGapY = Math.Max(50, previousGapY - MaxGapOffset); // Lücke nicht oberhalb 50
-                    int maxGapY = Math.Min(field.Height - 250, previousGapY + MaxGapOffset); // Lücke nicht unterhalb der unteren Grenze
-
-                    int gapY = rnd.Next(minGapY, maxGapY + 1);
-
-                    // Neues Hindernis erstellen
-                    field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 140, 50, field.Height));
-                }
-
-                // Bewege die Bodenstücke
-                foreach (var boden in field.Boden)
-                {
-                    boden.MoveLeft(speedOuG);
-                }
-
-                // Entferne Bodenstücke, die aus dem Bildschirmbereich sind
-                field.Boden.RemoveAll(boden => boden.IsOutOfScreen());
-
-                // Füge neue Bodenstücke hinzu, um den Bildschirm zu füllen
-                if (field.Boden.Count == 0 || field.Boden.Last().X + field.Boden.Last().Width < field.Width)
-                {
-                    var lastBoden = field.Boden.LastOrDefault();
-                    int newX = lastBoden != null ? lastBoden.X + lastBoden.Width : 0;
-                    field.Boden.Add(new D_Boden(newX, field.Height - 75, field.Width / 50, 75));
-                }
+                // Füge neue Bodenstücke hinzu
+                AddNewGround(field);
 
                 //Score updaten
                 updateScore(field);
@@ -483,6 +447,39 @@ namespace OOPGames
                 }
                 // Keine Moves mehr 
                 // Neustart Knopf
+            }
+        }
+
+        private void AddNewObstacles(FlappyField field)
+        {
+            int MaxGapOffset = 325; // Maximaler Abstand zwischen den Gaps
+
+            if (field.Obstacles.Count == 0 || field.Obstacles.Last().X < field.Width - 250)
+            {
+                Random rnd = new Random();
+
+                int previousGapY = field.Obstacles.Count > 0
+                    ? ((D_Tubes)field.Obstacles.Last()).TopHeight
+                    : field.Height / 2; // Standardhöhe, falls keine Pfeiler vorhanden sind
+
+                // Begrenze den neuen Gap innerhalb von MaxGapOffset
+                int minGapY = Math.Max(50, previousGapY - MaxGapOffset); // Lücke nicht oberhalb 50
+                int maxGapY = Math.Min(field.Height - 250, previousGapY + MaxGapOffset); // Lücke nicht unterhalb der unteren Grenze
+
+                int gapY = rnd.Next(minGapY, maxGapY + 1);
+
+                // Neues Hindernis erstellen
+                field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 140, 50, field.Height));
+            }
+        }
+
+        private void AddNewGround(FlappyField field)
+        {
+            if (field.Boden.Count == 0 || field.Boden.Last().X + field.Boden.Last().Width < field.Width)
+            {
+                var lastBoden = field.Boden.LastOrDefault();
+                int newX = lastBoden != null ? lastBoden.X + lastBoden.Width : 0;
+                field.Boden.Add(new D_Boden(newX, field.Height - 75, field.Width / 50, 75));
             }
         }
 
@@ -550,15 +547,55 @@ namespace OOPGames
         }
     }
 
+    public class D_Bird
+    {
+        public int X { get; private set; } // Die x-Position des Vogels
+        public int Y { get; private set; } // Die y-Position des Vogels
+        public int Radius{ get; private set; } // Der Radius des Vogels für die Hitbox
+        public int Acceleration { get; private set; } // Die Beschleunigunf des Vogels nach unten 
+        public int Velocity { get; private set; } // Die Geschwindigkeit mit der sich der Vogel in Y richtung bewegt
 
-    public class D_Tubes
+
+        // Konstruktor
+        public D_Bird(int x, int y, int radius, int acceleration, int velocity)
+        {
+            X = x;
+            Y = y;
+            Radius = radius;
+            Acceleration = acceleration;
+            Velocity = velocity;
+        }
+
+        // Aktion wenn Taste gedrückt wird
+        public void moveUp(int speed)
+        {
+            Velocity = speed;
+        }
+
+        // Nach jedem Tick wird die Posotion des Vogels erneuert und die Beschleunigung auf die Geschwindigkeit addiert
+        public void UpdatePosition()
+        {
+            if (Velocity < 22)
+            {
+                Velocity += Acceleration;
+            }
+
+            Y += Velocity;
+        }
+    }
+
+    public class D_Tubes : ID_GameObject
     {
         public int X { get; private set; } // Die x-Position der Hindernisse
-        public int TopHeight { get; private set; } // Höhe des oberen Pfeilers
-        public int GapSize { get; private set; } // Größe der Lücke zwischen den Pfeilern
+        public int Y => 0; // Y ist nicht relevant, wird als 0 gesetzt
         public int Width { get; private set; } // Breite der Pfeiler
+        public int Height => TopHeight + GapSize; // Gesamthöhe
+
 
         private int ScreenHeight; // Die Höhe des Spielfeldes
+        public int TopHeight { get; private set; } // Höhe des oberen Pfeilers
+        public int GapSize { get; private set; } // Größe der Lücke zwischen den Pfeilern
+
 
         // Konstruktor
         public D_Tubes(int x, int topHeight, int gapSize, int width, int screenHeight)
@@ -599,44 +636,7 @@ namespace OOPGames
         }
     }
 
-
-    public class D_Bird
-    {
-        public int X { get; private set; } // Die x-Position des Vogels
-        public int Y { get; private set; } // Die y-Position des Vogels
-        public int Radius{ get; private set; } // Der Radius des Vogels für die Hitbox
-        public int Acceleration { get; private set; } // Die Beschleunigunf des Vogels nach unten 
-        public int Velocity { get; private set; } // Die Geschwindigkeit mit der sich der Vogel in Y richtung bewegt
-
-
-        // Konstruktor
-        public D_Bird(int x, int y, int radius, int acceleration, int velocity)
-        {
-            X = x;
-            Y = y;
-            Radius = radius;
-            Acceleration = acceleration;
-            Velocity = velocity;
-        }
-
-        // Aktion wenn Taste gedrückt wird
-        public void moveUp(int speed)
-        {
-            Velocity = speed;
-        }
-
-        // Nach jedem Tick wird die Posotion des Vogels erneuert und die Beschleunigung auf die Geschwindigkeit addiert
-        public void UpdatePosition()
-        {
-            if (Velocity < 22)
-            {
-                Velocity += Acceleration;
-            }
-
-            Y += Velocity;
-        }
-    }
-    public class D_Boden
+    public class D_Boden : ID_GameObject
     {
         public int X { get; set; } // x-Position des Bodens
         public int Y { get; set; } // y-Position des Bodens

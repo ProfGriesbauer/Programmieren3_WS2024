@@ -21,6 +21,13 @@ namespace OOPGames
         IB_Rules_BV _rules;
 
 
+        // Paint Style of the Field
+        //  0 = Test Style (Rectangle and Ellipse Objects)
+        //  1 = AI Grafik Style
+        //  2 = Hand Drawn Comic Style
+        readonly int _fieldStyle = 2;
+
+
         public B_Field_BV(IB_Rules_BV rules)
         {
             _ground = new B_Ground_BV();
@@ -38,6 +45,13 @@ namespace OOPGames
         public double Height { get; set; }
         public double Width { get; set; }
 
+        public int FieldStyle
+        {
+            get
+            {
+                return _fieldStyle;
+            }
+        }
         public IB_Ground_BV Ground
         {
             get
