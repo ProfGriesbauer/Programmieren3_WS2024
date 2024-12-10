@@ -203,5 +203,9 @@
     <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Player_Red.PNG" />
     <Resource Include="Classes\B_Gruppe\Volley\Grafiken\Volleyball_Drawing.png" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Classes\G_Gruppe\Bilder\Bug.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace OOPGames
@@ -346,8 +347,9 @@ namespace OOPGames
             get { return "Bug Painter Gruppe G"; }
         }
 
-        public void PaintGameField(Canvas canvas, IGameField currentField)
+        public void PaintGameField(Canvas canvas, IG_GameField_Bug currentField)
         {
+            var field = (IG_GameField_Bug)currentField;
 
             if (currentField is IG_GameField_Bug)
             {
@@ -387,12 +389,38 @@ namespace OOPGames
                 // Zelle zum Canvas hinzufügen
                 canvas.Children.Add(bug);
 
+                DrawBug(canvas, field);
+
             }
         }
 
-        public void TickPaintGameField(Canvas canvas, IGameField currentField)
+        public void TickPaintGameField(Canvas canvas, IG_GameField_Bug currentField)
         {
             PaintGameField(canvas, currentField);
+        }
+
+
+        private void DrawBug(Canvas canvas, IG_GameField_Bug field)
+        {
+            // Erstellen des Bilds
+            var bugImage = new Image
+            {
+                Width = field.Bug.Radius * 4,
+                Height = field.Bug.Radius * 4.2,
+                Source = new BitmapImage(new Uri("/Classes/G_Gruppe/Bilder/Bug.png", UriKind.Relative))
+            };
+
+            // Mittelpunkt von Bild
+            double centerX = bugImage.Width / 2;
+            double centerY = bugImage.Height / 2;
+
+            // Positionierung des Bilds
+            Canvas.SetTop(bugImage, field.Bug.Y - field.Bug.Radius - 14);
+            Canvas.SetLeft(bugImage, field.Bug.X - field.Bug.Radius - 17);
+
+            // Bild zur Zeichenfläche hinzufügen
+            canvas.Children.Add(bugImage);
+
         }
     }
 
