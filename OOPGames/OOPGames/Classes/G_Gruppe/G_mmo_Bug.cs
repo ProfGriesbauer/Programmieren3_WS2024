@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace OOPGames
@@ -24,8 +23,6 @@ namespace OOPGames
         private int _appleCounter;
 
         private int _step;
-
-        private Canvas canvas = new Canvas();
 
         private int _tickCounter = 0;
 
@@ -79,6 +76,7 @@ namespace OOPGames
 
         public void StartedGameCall()
         {
+            
 
             _field.xBugPos = 250;
             _field.yBugPos = 250;
@@ -124,10 +122,17 @@ namespace OOPGames
 
         }
 
+        public void GenerateApple()
+        {
+            Random random = new Random();
+            int randomXPos = random.Next(40, (int)_field.canvasWidth);
+            int randomYPos = random.Next(40, (int)_field.canvasHeight);
+            _field.xApplePos = randomXPos;
+            _field.yApplePos = randomYPos;
+        }
+
         public bool CollisionWithApple(int xPosApple, int yPosApple)
         {
-            //Schauen ob Apfel und Käfer sich treffen
-            //Zugriff via G_Move -- Übergibt Bug Position
 
             if (xPosApple == _field.xBugPos && yPosApple == _field.yBugPos)//Bestimmter Bereich muss noch festgelegt werden
             {
@@ -140,41 +145,23 @@ namespace OOPGames
         public bool CollisionWithWall()
         {
 
-            /*int _xMiddlePoint = (int)canvas.ActualWidth / 2;
-            int _yMiddlePoint = (int)canvas.ActualHeight / 2;
-
-            int _xBoundryRight = _xMiddlePoint + (int)(canvas.ActualWidth / 2) - 10;//Wert noch nicht getestet
-            int _xBoundryLeft = _xMiddlePoint - (int)(canvas.ActualWidth / 2) + 10;// Wert noch nicht getestet;
-
-            int _yBoundryTop = _yMiddlePoint + (int)(canvas.ActualHeight / 2) - 10;//Wert noch nicht getestet;
-            int _yBoundryBottom = _yMiddlePoint - (int)(canvas.ActualHeight / 2) + +10;//Wert noch nicht getestet*/
-
-
 
             if (_field.xBugPos < 20)
             {
                 return true;
             }
 
-            if (_field.xBugPos > (canvas.ActualWidth - 20) && canvas.ActualWidth != 0)
+            if (_field.xBugPos > (_field.canvasWidth - 20 - 40) && _field.canvasWidth != 0)
             {
                 return true;
             }
 
-            if (_field.xBugPos > (518 - 20 - 40))
+
+            if (_field.yBugPos > (_field.canvasHeight-20-20) && _field.canvasHeight != 0)
             {
                 return true;
             }
 
-            if (_field.yBugPos > (canvas.ActualHeight - 20) && canvas.ActualHeight != 0)
-            {
-                return true;
-            }
-
-            if (_field.yBugPos > (527 - 20 - 20))
-            {
-                return true;
-            }
 
             if (_field.yBugPos < 20)
             {
@@ -186,7 +173,6 @@ namespace OOPGames
     }
 
 
-    //Nur getter als static ausführen ?
 
     public class G_Field : IG_GameField_Bug
     {
@@ -196,14 +182,19 @@ namespace OOPGames
         double _yApplePos;
         double _xBugVel;
         double _yBugVel;
+
+        double _canvasWidth;
+        double _canvasHeight;
+        double _rasterXY;
+        double _gridHeight;
+        double _rasterWidth;
+        double _rasterHeight;
+        double _rasterMiddleX;
+        double _rasterMiddleY;
+
         public bool CanBePaintedBy(IPaintGame painter)
         {
-            return painter is G_Painter;
-        }
-
-        bool IGameField.CanBePaintedBy(IPaintGame painter)
-        {
-            throw new NotImplementedException();
+            return painter is G_Painter;//omm_BugPaint;//G_Painter;
         }
 
         public double xBugPos
@@ -240,13 +231,47 @@ namespace OOPGames
             set { _yBugVel = value; }
         }
 
-        double IG_GameField_Bug.xBugPos { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        double IG_GameField_Bug.yBugPos { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        double IG_GameField_Bug.xApplePos { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        double IG_GameField_Bug.yApplePos { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        double IG_GameField_Bug.xBugVel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        double IG_GameField_Bug.yBugVel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public D_Bug Bug { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double canvasWidth
+        {
+            get { return _canvasWidth; }
+            set { _canvasWidth = value; }
+        } 
+        public double canvasHeight
+        {
+            get { return _canvasHeight; }
+            set { _canvasHeight = value; }
+        }
+
+        public double rasterXY 
+        { 
+            get { return _rasterXY; } 
+            set { _rasterXY = value; } 
+        }
+        public double gridHeight 
+        { 
+            get { return _gridHeight; } 
+            set { _gridHeight = value; } 
+        }
+        public double rasterWidth 
+        { 
+            get { return _rasterWidth; } 
+            set { _rasterWidth = value; } 
+        }
+        public double rasterHeight 
+        { 
+            get { return _rasterHeight; } 
+            set {  _rasterHeight = value; } 
+        }
+        public double rasterMiddleX 
+        { 
+            get { return _rasterMiddleX; }
+            set { _rasterMiddleX = value; }
+        }
+        public double rasterMiddleY 
+        { 
+            get { return _rasterMiddleY; } 
+            set { _rasterMiddleY = value; }
+        }
     }
 
     public class G_Apple : IComputerGamePlayer
@@ -275,15 +300,22 @@ namespace OOPGames
 
         public IPlayMove GetMove(IGameField field)
         {
-            Random random = new Random();
-            int xPosApple = random.Next(0, 9); // Liefert einen Wert zwischen 0 und 8
-            Random random1 = new Random();
-            int yPosApple = random1.Next(0, 9); // Liefert einen Wert zwischen 0 und 8
+            //Generieren der Apfel position - mind. +-2 felder von der momentanen bug Positon
+            //Zugriff via G_Move -- Übergibt Bug Position
 
-            // Generieren der Apfelposition - mind. +-2 Felder von der momentanen Bug-Position
-            // Zugriff via G_Move -- Übergibt Bug-Position
+            if (field is IG_GameField_Bug)
+            {
+                IG_GameField_Bug myField = (IG_GameField_Bug)field;
 
-            return new G_Move() { xApplePosValChange = xPosApple, yApplePosValChange = yPosApple };
+                Random random = new Random();
+                int randomXPos = random.Next(40, (int)myField.canvasWidth);
+                int randomYPos = random.Next(40, (int)myField.canvasHeight);
+                myField.xApplePos = randomXPos;
+                myField.yApplePos = randomYPos;
+
+                return null;
+            }
+            return null;
         }
 
         public void SetPlayerNumber(int playerNumber)
@@ -313,20 +345,6 @@ namespace OOPGames
             set { _yBugPosValChange = value; }
         }
 
-        public int xApplePosValChange //Werteänderung je nach Tasten Druck wird in GetMove
-        {
-            get { return xApplePosValChange; }
-            set { xApplePosValChange = value; }
-        }
-        public int yApplePosValChange
-        {
-            get { return yApplePosValChange; }
-            set { yApplePosValChange = value; }
-        }
-
-        //public int xBug { get { return _xBug; } } Verwendung ?
-
-        //public int yBug { get { return _yBug; } } Verwendung ?
     }
 
     public class G_Bug : IHumanGamePlayer
@@ -405,7 +423,8 @@ namespace OOPGames
              if (currentField is IG_GameField_Bug)
              {
                  IG_GameField_Bug myCurrentField = (IG_GameField_Bug)currentField;
-
+                 myCurrentField.canvasHeight = canvas.ActualHeight;
+                 myCurrentField.canvasWidth = canvas.ActualWidth;
 
 
                  canvas.Children.Clear();
@@ -414,13 +433,13 @@ namespace OOPGames
                  Color _lineColor = Color.FromRgb(255, 0, 0);
                  Brush _lineStroke = new SolidColorBrush(_lineColor);
 
-                 Line line1 = new Line() { X1 = 20, Y1 = 20, X2 = (canvas.ActualWidth - 20), Y2 = 20, Stroke = _lineStroke, StrokeThickness = 3.0 };
+                 Line line1 = new Line() { X1 = 20, Y1 = 20, X2 = (myCurrentField.canvasWidth - 20), Y2 = 20, Stroke = _lineStroke, StrokeThickness = 3.0 };
                  canvas.Children.Add(line1);
-                 Line line2 = new Line() { X1 = 20, Y1 = 20, X2 = 20, Y2 = (canvas.ActualHeight - 20), Stroke = _lineStroke, StrokeThickness = 3.0 };
+                 Line line2 = new Line() { X1 = 20, Y1 = 20, X2 = 20, Y2 = (myCurrentField.canvasHeight - 20), Stroke = _lineStroke, StrokeThickness = 3.0 };
                  canvas.Children.Add(line2);
-                 Line line3 = new Line() { X1 = 20, Y1 = (canvas.ActualHeight - 20), X2 = (canvas.ActualWidth - 20), Y2 = (canvas.ActualHeight - 20), Stroke = _lineStroke, StrokeThickness = 3.0 };
+                 Line line3 = new Line() { X1 = 20, Y1 = (myCurrentField.canvasHeight - 20), X2 = (myCurrentField.canvasWidth - 20), Y2 = (myCurrentField.canvasHeight - 20), Stroke = _lineStroke, StrokeThickness = 3.0 };
                  canvas.Children.Add(line3);
-                 Line line4 = new Line() { X1 = (canvas.ActualWidth - 20), Y1 = (canvas.ActualHeight - 20), X2 = (canvas.ActualWidth - 20), Y2 = 20, Stroke = _lineStroke, StrokeThickness = 3.0 };
+                 Line line4 = new Line() { X1 = (myCurrentField.canvasWidth - 20), Y1 = (myCurrentField.canvasHeight - 20), X2 = (myCurrentField.canvasWidth - 20), Y2 = 20, Stroke = _lineStroke, StrokeThickness = 3.0 };
                  canvas.Children.Add(line4);
 
                  //Bug zeichnen
@@ -450,10 +469,10 @@ namespace OOPGames
      }
  }
 
-    public class omm_BugPaint : OMM_BugGamePaint
-    {
+    public class omm_BugPaint : IPaintGame2
+{
         public string Name { get { return "OMM_Bug_Paint"; } }
-        public void PaintBugField(Canvas canvas, OMM_BugField currentField)
+        public void PaintBugField(Canvas canvas, IG_GameField_Bug currentField)
         {
             PaintGameField(canvas, currentField);
         }
@@ -461,12 +480,12 @@ namespace OOPGames
 
         public void PaintGameField(Canvas canvas, IGameField currentField)
         {
-            if (!(currentField is OMM_BugField))
+            if (!(currentField is IG_GameField_Bug))
             {
                 return;
             }
 
-            OMM_BugField myField = (OMM_BugField)currentField;
+            IG_GameField_Bug myField = (IG_GameField_Bug)currentField;
 
             canvas.Children.Clear();
             Color bgColor = Color.FromRgb(0, 0, 0);
@@ -478,58 +497,38 @@ namespace OOPGames
             Color AppleColor = Color.FromRgb(0, 0, 255);
             Brush AppleStroke = new SolidColorBrush(AppleColor);
             double thickness = 2.0;
-            double CanvasWidth = canvas.ActualWidth; //Coordinate Maximum --> Recieve from Canvas (iPaintGame)
-            double CanvasHeight = canvas.ActualHeight; //Coordinate Maximum --> Recieve from Canvas (iPaintGame)
-            double RasterXY = 13; //Raster defines Grid size Bsp. RasterXY = 14 --> 14 Columns
-            double GridHeight = CanvasHeight - (2 * (CanvasHeight / RasterXY));
-            double RasterWidth = (CanvasWidth / RasterXY);
-            double RasterHeight = (GridHeight / RasterXY);
-            double RasterMiddleX = RasterWidth/2;
-            double RasterMiddleY = RasterHeight/2;
+            //double CanvasWidth = canvas.ActualWidth; //Coordinate Maximum --> Recieve from Canvas (iPaintGame)
+            //double CanvasHeight = canvas.ActualHeight; //Coordinate Maximum --> Recieve from Canvas (iPaintGame)
+            //double RasterXY = 13; //Raster defines Grid size Bsp. RasterXY = 14 --> 14 Columns
+            //double GridHeight = CanvasHeight - (2 * (CanvasHeight / RasterXY));
+            //double RasterWidth = (CanvasWidth / RasterXY);
+            //double RasterHeight = (GridHeight / RasterXY);
+            //double RasterMiddleX = RasterWidth/2;
+            //double RasterMiddleY = RasterHeight/2;
+            myField.canvasWidth = canvas.ActualWidth;
+            myField.canvasHeight = canvas.ActualHeight;
+            myField.rasterXY = 0;
+            myField.gridHeight = myField.canvasHeight - (2* (myField.canvasHeight / myField.rasterXY));
+            myField.rasterWidth = myField.canvasWidth / myField.rasterXY;
+            myField.rasterHeight =myField.gridHeight / myField.rasterXY;
+            myField.rasterMiddleX = myField.rasterWidth / 2;
+            myField.rasterMiddleY = myField.rasterHeight / 2;
 
-            for (double x = 0; x <= CanvasWidth; x += (CanvasWidth / RasterXY))
+            for (double x = 0; x <= myField.canvasWidth; x += (myField.canvasWidth / myField.rasterXY))
             {
-                for (double y = 0; y <= GridHeight; y += (CanvasHeight / RasterXY))
+                for (double y = 0; y <= myField.gridHeight; y += (myField.canvasHeight / myField.rasterXY))
                 {
-                    Line LinesVertical = new Line() { X1 = x, Y1 = 0, X2 = x, Y2 = (GridHeight - thickness), Stroke = lineStroke, StrokeThickness = thickness };
+                    Line LinesVertical = new Line() { X1 = x, Y1 = 0, X2 = x, Y2 = (myField.gridHeight - thickness), Stroke = lineStroke, StrokeThickness = thickness };
                     canvas.Children.Add(LinesVertical);
-                    Line LinesHorizontal = new Line() { X1 = 0, Y1 = y, X2 = (CanvasWidth - thickness), Y2 = y, Stroke = lineStroke, StrokeThickness = thickness };
+                    Line LinesHorizontal = new Line() { X1 = 0, Y1 = y, X2 = (myField.canvasWidth - thickness), Y2 = y, Stroke = lineStroke, StrokeThickness = thickness };
                     canvas.Children.Add(LinesHorizontal);
                 }
             }
         }
 
-        public void TickPaintGameField(Canvas canvas, IG_GameField_Bug currentField)
+        public void TickPaintGameField(Canvas canvas, IGameField currentField)
         {
             throw new NotImplementedException();
-        }
-
-    public void TickPaintGameField(Canvas canvas, IGameField currentField)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void DrawBug(Canvas canvas, IG_GameField_Bug field)
-        {
-            // Erstellen des Bilds
-            var bugImage = new Image
-            {
-                Width = field.Bug.Radius * 4,
-                Height = field.Bug.Radius * 4.2,
-                Source = new BitmapImage(new Uri("/Classes/G_Gruppe/Bilder/Bug.png", UriKind.Relative))
-            };
-
-            // Mittelpunkt von Bild
-            double centerX = bugImage.Width / 2;
-            double centerY = bugImage.Height / 2;
-
-            // Positionierung des Bilds
-            Canvas.SetTop(bugImage, field.Bug.Y - field.Bug.Radius - 14);
-            Canvas.SetLeft(bugImage, field.Bug.X - field.Bug.Radius - 17);
-
-            // Bild zur Zeichenfläche hinzufügen
-            canvas.Children.Add(bugImage);
-
         }
     }
 
@@ -569,7 +568,3 @@ int AppleSpawnPosY = (AppleSpawnGridY * (GridHeight / RasterXY)) + ((GridHeight 
 Ellipse Apple = new Ellipse() { Margin = new Thickness(AppleSpawnPosX, AppleSpawnPosY, 0, 0), Width = RasterWidth, Height = RasterHeight, Stroke = AppleStroke, StrokeThickness = 5.0 }; //Paint Apple
 canvas.Children.Add(Apple);
 */
-
-
-
-
