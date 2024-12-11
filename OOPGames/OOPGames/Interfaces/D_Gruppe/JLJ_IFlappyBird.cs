@@ -31,4 +31,15 @@ namespace OOPGames
     {
 
     }
+    public interface ID_GameObject
+    {
+        int X { get; }
+        int Y { get; }
+        int Width { get; }
+        int Height { get; }
+
+        void MoveLeft(int speed);
+        bool CheckCollision(D_Bird bird);
+        bool IsOutOfScreen();
+    }
 }
