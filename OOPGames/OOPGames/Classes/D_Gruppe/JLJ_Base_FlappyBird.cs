@@ -44,4 +44,66 @@ namespace OOPGames.Classes.D_Gruppe
             return painter is ID_FB_Painter;
         }
     }
+
+    public abstract class D_FB_Base_FlappyRules : ID_FB_Rules
+    {
+        public abstract ID_FB_GameField FlappyField { get; }
+
+        public abstract bool MovesPossible { get; }
+
+        public abstract string Name { get; }
+
+        public abstract int CheckIfPLayerWon();
+
+        public abstract void ClearField();
+
+        public abstract void DoFlappyMove(ID_FB_Move move);
+
+        public IGameField CurrentField { get { return FlappyField; } }
+
+        public void DoMove(IPlayMove move)
+        {
+            if (move is ID_FB_Move)
+            {
+                DoFlappyMove((ID_FB_Move)move);
+            }
+        }
+
+        public abstract string StatusBar();
+
+        public abstract void StartedGameCall();
+     
+        public abstract void TickGameCall();
+    }
+
+    public abstract class D_FB_Base_HumanFlappyPlayer : ID_FB_HumanPlayer
+    {
+        public abstract string Name { get; }
+
+        public abstract int PlayerNumber { get; }
+
+        public abstract ID_FB_Move GetMove(IMoveSelection selection, ID_FB_GameField field);
+
+        public abstract void SetPlayerNumber(int playerNumber);
+
+        public abstract IGamePlayer Clone();
+
+        public bool CanBeRuledBy(IGameRules rules)
+        {
+            return rules is ID_FB_Rules;
+        }
+
+        public IPlayMove GetMove(IMoveSelection selection, IGameField field)
+        {
+            if (field is ID_FB_GameField)
+            {
+                return GetMove(selection, (ID_FB_GameField)field);
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
 }

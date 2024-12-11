@@ -25,8 +25,10 @@ namespace OOPGames
     }
 
     public interface ID_FB_Rules : IGameRules3
-    { 
-        
+    {
+        ID_FB_GameField FlappyField { get; }
+
+        void DoFlappyMove(ID_FB_Move move);
     }
 
     public interface ID_FB_Move : IPlayMove
@@ -36,7 +38,7 @@ namespace OOPGames
 
     public interface ID_FB_HumanPlayer : IHumanGamePlayer
     {
-
+        ID_FB_Move GetMove(IMoveSelection selection, ID_FB_GameField field);
     }
     public interface ID_GameObject
     {

@@ -375,10 +375,13 @@ namespace OOPGames
         }
     }
 
-    public class FlappyRules : ID_FB_Rules
+    public class FlappyRules : D_FB_Base_FlappyRules
     {
-        public string Name => "FlappyBirdRules";
-        public IGameField CurrentField { get; private set; }
+        public override string Name => "FlappyBirdRules";
+
+        public new FlappyField CurrentField { get; set; }
+
+        public override ID_FB_GameField FlappyField { get { return CurrentField; } }
 
 
         private int speedOuG = 7; // Standard 5 wie schnell sich Hinderniss und Boden Bewegen
@@ -392,7 +395,7 @@ namespace OOPGames
             CurrentField = new FlappyField(800, 600);
         }
 
-        public bool MovesPossible // Solange der Spieler nicht verloren hat.
+        public override bool MovesPossible // Solange der Spieler nicht verloren hat.
         {
             get
             {
@@ -405,7 +408,7 @@ namespace OOPGames
             }
         }
 
-        public void DoMove(IPlayMove move)
+        public override void DoFlappyMove(ID_FB_Move move)
         {
             if (move is FlappyMove)
             {
@@ -414,15 +417,15 @@ namespace OOPGames
             }
         }
 
-        public void ClearField()
+        public override void ClearField()
         {
             CurrentField = new FlappyField(800, 600);
             PlayerWon = -1;
         }
 
-        public int CheckIfPLayerWon() => PlayerWon;
+        public override int CheckIfPLayerWon() => PlayerWon;
 
-        public void StartedGameCall()
+        public override void StartedGameCall()
         {
             // Initialisierung vom Score
             var field = (FlappyField)CurrentField;
@@ -454,7 +457,7 @@ namespace OOPGames
             return false;
         }
 
-        public void TickGameCall()
+        public override void TickGameCall()
         {
             var field = (FlappyField)CurrentField;
 
@@ -540,7 +543,7 @@ namespace OOPGames
             }
         }
 
-        public string StatusBar()
+        public override string StatusBar()
         {
             if (!CheckifCollision((FlappyField)CurrentField))
             {
@@ -562,18 +565,16 @@ namespace OOPGames
         }
     }
 
-    public class FlappyPlayer : ID_FB_HumanPlayer
+    public class FlappyPlayer : D_FB_Base_HumanFlappyPlayer
     {
-        public string Name => "FlappyBirdPlayer";
+        public override string Name => "FlappyBirdPlayer";
         int _playerNumber = 0;
 
-        public int PlayerNumber => _playerNumber;
+        public override int PlayerNumber => _playerNumber;
 
-        public void SetPlayerNumber(int playerNumber) => _playerNumber = playerNumber;
+        public override void SetPlayerNumber(int playerNumber) => _playerNumber = playerNumber;
 
-        public bool CanBeRuledBy(IGameRules rules) => rules is FlappyRules;
-
-        public IPlayMove GetMove(IMoveSelection selection, IGameField field)
+        public override ID_FB_Move GetMove(IMoveSelection selection, ID_FB_GameField field)
         {
             if (selection is IKeySelection keySelection)
             {
@@ -585,8 +586,8 @@ namespace OOPGames
             return null;
         }
 
-        IGamePlayer IGamePlayer.Clone()
-        {
+        public override IGamePlayer Clone()
+        { 
             FlappyPlayer fbhumanplayer = new FlappyPlayer();
             fbhumanplayer.SetPlayerNumber(_playerNumber);
             return fbhumanplayer;
