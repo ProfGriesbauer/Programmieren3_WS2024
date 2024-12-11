@@ -392,6 +392,9 @@ namespace OOPGames
 
         public override ID_FB_GameField FlappyField { get { return CurrentField; } }
 
+        private int gapSize = 140;
+
+        private int tubeDistance = 250;
 
         private int speedOuG = 7; // Standard 5 wie schnell sich Hinderniss und Boden Bewegen
 
@@ -408,7 +411,7 @@ namespace OOPGames
         {
             get
             {
-                if (CheckifCollision((FlappyField)CurrentField))
+                if (CheckifCollision(CurrentField))
                 {
                     return false;
                 }
@@ -420,7 +423,7 @@ namespace OOPGames
         {
             if (move is FlappyMove)
             {
-                var bird = ((FlappyField)CurrentField).Bird;
+                var bird = (CurrentField).Bird;
                 bird.moveUp(birdjump); // Vogel springt nach oben
             }
         }
@@ -436,7 +439,7 @@ namespace OOPGames
         public override void StartedGameCall()
         {
             // Initialisierung vom Score
-            var field = (FlappyField)CurrentField;
+            var field = CurrentField;
             field.score = 0;
             field.gameover = false;
             field.LoadHighscore();
@@ -467,10 +470,12 @@ namespace OOPGames
 
         public override void TickGameCall()
         {
-            var field = (FlappyField)CurrentField;
+            var field = CurrentField;
 
             if (!CheckifCollision(field))
             {
+                // LevelUp -> schnellere Obstacles, kleinere Gapsize, größerer Abstand der Tubes
+                levelup(field);
 
                 // Aktualisiere die Position des Vogels
                 field.Bird.UpdatePosition();
@@ -511,7 +516,7 @@ namespace OOPGames
         {
             int MaxGapOffset = 325; // Maximaler Abstand zwischen den Gaps
 
-            if (field.Obstacles.Count == 0 || field.Obstacles.Last().X < field.Width - 250)
+            if (field.Obstacles.Count == 0 || field.Obstacles.Last().X < field.Width - tubeDistance)
             {
                 Random rnd = new Random();
 
@@ -526,7 +531,7 @@ namespace OOPGames
                 int gapY = rnd.Next(minGapY, maxGapY + 1);
 
                 // Neues Hindernis erstellen
-                field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, 140, 50, field.Height));
+                field.Obstacles.Add(new D_Tubes(field.Width - 30, gapY, gapSize, 50, field.Height));
             }
         }
 
@@ -553,7 +558,7 @@ namespace OOPGames
 
         public override string StatusBar()
         {
-            if (!CheckifCollision((FlappyField)CurrentField))
+            if (!CheckifCollision(CurrentField))
             {
                 return "Jump with Key U!";
             }
@@ -561,6 +566,35 @@ namespace OOPGames
             {
                 return "Game Over! Restart with Space";
             }
+        }
+
+        public void levelup(FlappyField field)
+        {
+            if(field.score <= 10 )
+            {
+                tubeDistance = 200;
+                gapSize = 180;
+                speedOuG = 5;
+            }
+            if (field.score <= 20 && field.score > 10)
+            {
+                tubeDistance = 220;
+                gapSize = 170;
+                speedOuG = 6;
+            }
+            if (field.score <= 30 && field.score > 20)
+            {
+                tubeDistance = 250;
+                gapSize = 160;
+                speedOuG = 7;
+            }
+            if (field.score <= 40 && field.score > 30)
+            {
+                tubeDistance = 250;
+                gapSize = 140;
+                speedOuG = 8;
+            }
+
         }
     }
 
