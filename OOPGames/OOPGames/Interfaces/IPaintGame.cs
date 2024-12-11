@@ -33,7 +33,7 @@ namespace OOPGames
     }
 
     //Type of available move inputs
-    public enum MoveType { click, key};
+    public enum MoveType { click, key };
 
     //Any game requesting a move selection gets the corresponding object
     //for clicks or keys (see below) via this interface
@@ -46,7 +46,7 @@ namespace OOPGames
     //Any game requesting mouse click positions from the canvas get the latter
     //via this interface
     //DIESES INTERFACE NICHT ÄNDERN!
-    public interface IClickSelection : IMoveSelection 
+    public interface IClickSelection : IMoveSelection
     {
         //X position of the mouse click
         int XClickPos { get; }
@@ -55,7 +55,7 @@ namespace OOPGames
         int YClickPos { get; }
 
         //Pressed/Changed Mouse Button
-        int ChangedButton { get; }  
+        int ChangedButton { get; }
     }
 
     //Any game requesting pressed keys from the canvas get the latter
@@ -65,5 +65,14 @@ namespace OOPGames
     {
         //Pressed Key on Keyboard
         Key Key { get; }
+    }
+
+    //Any game requesting pressed keys from the canvas get the latter
+    //via this interface
+    //DIESES INTERFACE NICHT ÄNDERN!
+    public interface IDictKeySelection : IMoveSelection
+    {
+        //Pressed Key on Keyboard
+        IDictionary<Key, bool> PressedKeys { get; }
     }
 }

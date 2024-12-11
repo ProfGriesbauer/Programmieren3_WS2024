@@ -149,6 +149,7 @@ namespace OOPGames
             // Checks if Ball is on Ground and resets Game if so
             CheckIfPLayerScored();
 
+
             // Process moves for all players
             for (int i = 0; i < Field_BV.Player.Length; i++)
             {
@@ -162,6 +163,7 @@ namespace OOPGames
                 }
 
             }
+
 
             // Moves Ball and Players
             Field_BV.Ball.B_Move_Ball(Field_BV);
