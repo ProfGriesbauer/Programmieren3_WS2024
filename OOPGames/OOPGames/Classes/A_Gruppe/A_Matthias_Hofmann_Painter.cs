@@ -14,25 +14,7 @@ using System.Windows.Shapes;
 
 namespace OOPGames
 {
-   /* public static class A_Cell
-    {
-        public static int _rows = 3;
-       
-        public static int _columns = 3;
-
-        public static double Cell_Width(Canvas canvas)
-        {
-            return canvas.ActualWidth / _columns;
-        }
-
-        public static double Cell_Height(Canvas canvas)
-        {
-            return canvas.ActualHeight / _rows;
-        }
-
-    }*/
-
-
+   
     public class A_Painter : IPaintGame
     {
         public string Name 
@@ -41,8 +23,8 @@ namespace OOPGames
         
         }
 
-        A_X_Shape _xShape = new A_X_Shape(); //Static oder nicht vor und nachteil ?
-        A_Circle_Shape _circleShape = new A_Circle_Shape(); //Jedesmal ein neues Objekt erstellen carbage collector ?
+        A_X_Shape _xShape = new A_X_Shape(); 
+        A_Circle_Shape _circleShape = new A_Circle_Shape(); 
 
         public void PaintGameField(Canvas canvas, IGameField currentField)
         {
@@ -51,15 +33,15 @@ namespace OOPGames
                 IA_TicTacToeField myCurrentField = (IA_TicTacToeField)currentField;
                 myCurrentField.AdoptCanvas(canvas);
             
-                // Canvas leeren, um ein erneutes Zeichnen zu vermeiden
+                
                 canvas.Children.Clear();
 
-                // Durchlaufen der Spielfelder, um jede Zelle zu zeichnen
+                
                 for (int row = 0; row <= myCurrentField.rows-1; row++)
                 {
                     for (int col = 0; col <= myCurrentField.columns-1; col++)
                     {
-                        // Rechteck für jede Zelle erstellen
+                        
                         Rectangle cell = new Rectangle
                         {
                             Width = myCurrentField.cellWidth,
@@ -69,11 +51,11 @@ namespace OOPGames
                             StrokeThickness = 1
                         };
 
-                        // Position der Zelle auf der Canvas setzen
+                        
                         Canvas.SetLeft(cell, col * myCurrentField.cellWidth);
                         Canvas.SetTop(cell, row * myCurrentField.cellHeight);
 
-                        // Zelle zum Canvas hinzufügen
+                        
                         canvas.Children.Add(cell);
 
                    
@@ -174,7 +156,7 @@ namespace OOPGames
 
 
     
-    //Beim erstellen des Objektes iterriert der Konstruktor über jedes Feld und schreibt eine null rein
+    
     public class A_Field : IA_TicTacToeField
     {
         int[,] _field;
