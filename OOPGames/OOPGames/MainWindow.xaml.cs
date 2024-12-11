@@ -46,7 +46,6 @@ namespace OOPGames
             OOPGamesManager.Singleton.RegisterPainter(new omm_BugPaint());
             OOPGamesManager.Singleton.RegisterPainter(new A_Painter());
             OOPGamesManager.Singleton.RegisterPainter(new G_Painter());
-            OOPGamesManager.Singleton.RegisterPainter(new omm_BugPaint());
             //Rules
             OOPGamesManager.Singleton.RegisterRules(new X_TicTacToeRules());
             OOPGamesManager.Singleton.RegisterRules(new D_RulesTikTokToo());
