@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
+using System.Windows.Media;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using System.Windows.Media.Media3D;
+using System.Windows.Media.Effects;
+using static System.Net.WebRequestMethods;
+using Microsoft.Win32;
 
 namespace OOPGames
 {
@@ -29,17 +37,12 @@ namespace OOPGames
             DrawBird(canvas, field);
             DrawObstacles(canvas, field);
             DrawGround(canvas, field);
+            DrawScore(canvas, field);
 
             if (field.gameover)
             {
-                DrawGameOverPicture(canvas, field);
                 DrawGameOver(canvas, field);
                 DrawHighScore(canvas, field);
-                DrawScore2(canvas, field);
-            }
-            else
-            {
-                DrawScore(canvas, field);
             }
         }
 
@@ -143,23 +146,16 @@ namespace OOPGames
                 //Canvas.SetLeft(bottomPillar, tube.X);
                 //canvas.Children.Add(bottomPillar);
 
-                var calculatedHeight = field.Height - (tube.TopHeight + tube.GapSize);
                 var bottomPipeImage = new Image
                 {
                     Width = tube.Width,
-                    Height = Math.Max(0, calculatedHeight), // Mindesthöhe von 0
+                    Height = field.Height - (tube.TopHeight + tube.GapSize),
                     Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/Pipe_unten.png", UriKind.Relative)),
                     Stretch = Stretch.Fill
                 };
-                // Sicherstellen, dass Canvas.SetTop nur bei positiver Höhe sinnvoll ist
-                Canvas.SetTop(bottomPipeImage, Math.Max(tube.TopHeight + tube.GapSize, 0));
+                Canvas.SetTop(bottomPipeImage, tube.TopHeight + tube.GapSize);
                 Canvas.SetLeft(bottomPipeImage, tube.X);
-
-                // Bild nur hinzufügen, wenn es sichtbar ist (Höhe > 0)
-                if (bottomPipeImage.Height > 0)
-                {
-                    canvas.Children.Add(bottomPipeImage);
-                }
+                canvas.Children.Add(bottomPipeImage);
             }
         }
 
@@ -212,42 +208,20 @@ namespace OOPGames
         {
             var gameOverText = new TextBlock
             {
-                Text = "Game Over!",
+                Text = $"Game Over!",
                 FontSize = 60,
                 FontWeight = FontWeights.Bold,
                 Foreground = Brushes.Black,
-                Background = Brushes.Transparent,
+                Background = Brushes.Red,
                 TextAlignment = TextAlignment.Center,
+                Width = 400,
+                Height = 90,
                 FontFamily = new FontFamily("Comic Sans MS")
             };
 
-            gameOverText.Measure(new Size(canvas.ActualWidth, canvas.ActualHeight));
-            double textTop = (canvas.ActualHeight - gameOverText.DesiredSize.Height) / 2 - 50;
-            double textLeft = (canvas.ActualWidth - gameOverText.DesiredSize.Width) / 2;
-
-            Canvas.SetTop(gameOverText, textTop);
-            Canvas.SetLeft(gameOverText, textLeft);
+            Canvas.SetTop(gameOverText, (canvas.ActualHeight - gameOverText.Height) / 2);
+            Canvas.SetLeft(gameOverText, (canvas.ActualWidth - gameOverText.Width) / 2);
             canvas.Children.Add(gameOverText);
-        }
-
-        public void DrawGameOverPicture(Canvas canvas, FlappyField field)
-        {
-            // Berechne die Größe und Position des Bildes basierend auf der Canvas-Größe und dem gewünschten Abstand
-            double margin = 70;
-            double imageWidth = canvas.ActualWidth - 2 * margin;
-            double imageHeight = canvas.ActualHeight - 2 * margin;
-
-            var GameOverImage = new Image
-            {
-                Width = imageWidth,
-                Height = imageHeight,
-                Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/Highscore.png", UriKind.Relative)),
-                Stretch = Stretch.Fill
-            };
-
-            Canvas.SetTop(GameOverImage,margin);
-            Canvas.SetLeft(GameOverImage, margin);
-            canvas.Children.Add(GameOverImage);
         }
 
         private void DrawHighScore(Canvas canvas, FlappyField field)
@@ -258,40 +232,16 @@ namespace OOPGames
                 FontSize = 40,
                 FontWeight = FontWeights.Bold,
                 Foreground = Brushes.Black,
-                Background = Brushes.Transparent,
+                Background = Brushes.Red,
                 TextAlignment = TextAlignment.Center,
+                Width = 400,
+                Height = 90,
                 FontFamily = new FontFamily("Comic Sans MS")
             };
 
-            highScoreText.Measure(new Size(canvas.ActualWidth, canvas.ActualHeight));
-            double textTop = (canvas.ActualHeight - highScoreText.DesiredSize.Height) / 2 + 30;
-            double textLeft = (canvas.ActualWidth - highScoreText.DesiredSize.Width) / 2;
-          
-            Canvas.SetTop(highScoreText, textTop);
-            Canvas.SetLeft(highScoreText, textLeft);
+            Canvas.SetTop(highScoreText, (canvas.ActualHeight - highScoreText.Height) / 2 + 90);
+            Canvas.SetLeft(highScoreText, (canvas.ActualWidth - highScoreText.Width) / 2);
             canvas.Children.Add(highScoreText);
-        }
-
-        public void DrawScore2(Canvas canvas, FlappyField field)
-        {
-            var scoreText = new TextBlock
-            {
-                Text = $"Score: {field.score}",
-                FontSize = 40,
-                FontWeight = FontWeights.Bold,
-                Foreground = Brushes.Black,
-                Background = Brushes.Transparent,
-                TextAlignment = TextAlignment.Center,
-                FontFamily = new FontFamily("Comic Sans MS")
-            };
-
-            scoreText.Measure(new Size(canvas.ActualWidth, canvas.ActualHeight));
-            double textTop = (canvas.ActualHeight - scoreText.DesiredSize.Height) / 2 + 80;
-            double textLeft = (canvas.ActualWidth - scoreText.DesiredSize.Width) / 2;
-
-            Canvas.SetTop(scoreText, textTop);
-            Canvas.SetLeft(scoreText, textLeft);
-            canvas.Children.Add(scoreText);
         }
 
         public void TickPaintGameField(Canvas canvas, IGameField currentField)
@@ -388,11 +338,6 @@ namespace OOPGames
 
         private int birdjump = -22;
 
-        public FlappyRules()
-        {
-            CurrentField = new FlappyField(800, 600);
-        }
-
         public bool MovesPossible // Solange der Spieler nicht verloren hat.
         {
             get
@@ -404,6 +349,11 @@ namespace OOPGames
 
                 return true;
             }
+        }
+
+        public FlappyRules()
+        {
+            CurrentField = new FlappyField(800, 600);
         }
 
         public void DoMove(IPlayMove move)

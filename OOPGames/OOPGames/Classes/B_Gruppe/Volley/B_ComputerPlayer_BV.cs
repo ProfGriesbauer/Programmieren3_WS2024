@@ -59,7 +59,7 @@ namespace OOPGames
             }
 
             // Ziel: Folge dem Ball
-            if (field.Ball.Pos_x < Pos_x - 10) // Ball links vom Spieler
+            if (field.Ball.Pos_x < Pos_x -10) // Ball links vom Spieler
             {
                 _MoveLeft = true;
             }
