@@ -41,8 +41,8 @@ namespace OOPGames
             OOPGamesManager.Singleton.RegisterPainter(new C_Painter());
             OOPGamesManager.Singleton.RegisterPainter(new C_MemoryGamePainter());
             OOPGamesManager.Singleton.RegisterPainter(new FlappyPainter());
-            OOPGamesManager.Singleton.RegisterPainter(new oX_TicTacToePaint()); 
-            OOPGamesManager.Singleton.RegisterPainter(new omSnakePaint()); 
+            OOPGamesManager.Singleton.RegisterPainter(new oX_TicTacToePaint());
+            OOPGamesManager.Singleton.RegisterPainter(new omSnakePaint());
             OOPGamesManager.Singleton.RegisterPainter(new omm_BugPaint());
             OOPGamesManager.Singleton.RegisterPainter(new A_Painter());
             OOPGamesManager.Singleton.RegisterPainter(new G_Painter());
@@ -74,7 +74,7 @@ namespace OOPGames
             OOPGamesManager.Singleton.RegisterPlayer(new C_ComputerMemoryPlayer());
             OOPGamesManager.Singleton.RegisterPlayer(new FlappyPlayer());
             OOPGamesManager.Singleton.RegisterPlayer(new oX_TicTacToeHumanPlayer());
-            OOPGamesManager.Singleton.RegisterPlayer(new oX_TicTacToeComputerPlayer()); 
+            OOPGamesManager.Singleton.RegisterPlayer(new oX_TicTacToeComputerPlayer());
             OOPGamesManager.Singleton.RegisterPlayer(new omSnakeHumanPlayer());
             OOPGamesManager.Singleton.RegisterPlayer(new A_Human_Player());
             OOPGamesManager.Singleton.RegisterPlayer(new A_Computer_Player());
@@ -99,11 +99,42 @@ namespace OOPGames
             if (_CurrentPainter != null &&
                 _CurrentRules != null)
             {
-                if (_CurrentPainter is IPaintGame2 &&
-                    _CurrentRules.CurrentField != null &&
-                    _CurrentRules.CurrentField.CanBePaintedBy(_CurrentPainter))
+                if (_CurrentPlayer1 is IHumanGamePlayer2)
                 {
-                    ((IPaintGame2)_CurrentPainter).TickPaintGameField(PaintCanvas, _CurrentRules.CurrentField);
+                    IPlayMove pm = ((IHumanGamePlayer2)_CurrentPlayer1).GetKeyTickMove(new DictKeySelection(_PressedKeys), _CurrentRules.CurrentField);
+                    if (pm != null)
+                    {
+                        _CurrentRules.DoMove(pm);
+
+                    }
+                }
+                if (_CurrentPlayer2 is IHumanGamePlayer2)
+                {
+                    IPlayMove pm = ((IHumanGamePlayer2)_CurrentPlayer2).GetKeyTickMove(new DictKeySelection(_PressedKeys), _CurrentRules.CurrentField);
+                    if (pm != null)
+                    {
+                        _CurrentRules.DoMove(pm);
+
+                    }
+                }
+
+                if (_CurrentPlayer1 is IComputerGamePlayer2)
+                {
+
+                    IPlayMove pm = ((IComputerGamePlayer2)_CurrentPlayer1).GetTickMove(_CurrentRules.CurrentField);
+                    if (pm != null)
+                    {
+                        _CurrentRules.DoMove(pm);
+                    }
+                }
+                if (_CurrentPlayer2 is IComputerGamePlayer2)
+                {
+
+                    IPlayMove pm = ((IComputerGamePlayer2)_CurrentPlayer2).GetTickMove(_CurrentRules.CurrentField);
+                    if (pm != null)
+                    {
+                        _CurrentRules.DoMove(pm);
+                    }
                 }
 
                 if (_CurrentRules is IGameRules2)
@@ -111,11 +142,19 @@ namespace OOPGames
                     ((IGameRules2)_CurrentRules).TickGameCall();
                 }
 
+                if (_CurrentPainter is IPaintGame2 &&
+                    _CurrentRules.CurrentField != null &&
+                    _CurrentRules.CurrentField.CanBePaintedBy(_CurrentPainter))
+                {
+                    ((IPaintGame2)_CurrentPainter).TickPaintGameField(PaintCanvas, _CurrentRules.CurrentField);
+                }
+
                 if (_CurrentRules is IGameRules3 &&
                                 ((IGameRules3)_CurrentRules).StatusBar() != null)
                 {
                     Status.Text = ((IGameRules3)_CurrentRules).StatusBar();
                 }
+
             }
         }
 

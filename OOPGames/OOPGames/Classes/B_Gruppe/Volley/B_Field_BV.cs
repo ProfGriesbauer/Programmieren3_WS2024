@@ -25,7 +25,7 @@ namespace OOPGames
         //  0 = Test Style (Rectangle and Ellipse Objects)
         //  1 = AI Grafik Style
         //  2 = Hand Drawn Comic Style
-        readonly int _fieldStyle = 2;
+        readonly int _fieldStyle = 0;
 
 
         public B_Field_BV(IB_Rules_BV rules)

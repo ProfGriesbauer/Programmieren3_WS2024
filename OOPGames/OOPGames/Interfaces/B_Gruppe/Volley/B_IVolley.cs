@@ -85,13 +85,15 @@ namespace OOPGames
 
     }
 
-    public interface IB_HumanPlayer_BV : IB_Player_BV, IHumanGamePlayer
+    public interface IB_HumanPlayer_BV : IB_Player_BV, IHumanGamePlayer2
     {
+        IB_Move_BV GetKeyTickMoveBV(IB_Field_BV field, IDictKeySelection key);
         IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key);
     }
 
     public interface IB_ComputerPlayer_BV : IB_Player_BV, IComputerGamePlayer
     {
+        //IB_Move_BV GetTickMoveBV(IB_Field_BV field);
         IB_Move_BV GetMoveBV(IB_Field_BV field);
     }
     public interface IB_Ground_BV

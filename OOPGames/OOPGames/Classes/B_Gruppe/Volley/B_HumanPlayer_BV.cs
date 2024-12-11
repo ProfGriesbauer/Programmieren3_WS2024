@@ -36,49 +36,59 @@ namespace OOPGames
                 return null;
             }
         }
-
-        public IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key)
+        public IPlayMove GetKeyTickMove(IDictKeySelection selection, IGameField field)
+        {
+            if (field is IB_Field_BV)
+            {
+                return GetKeyTickMoveBV((IB_Field_BV)field, selection);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key) { return null; }
+        public IB_Move_BV GetKeyTickMoveBV(IB_Field_BV field, IDictKeySelection keySelection)
         {
             bool _MoveLeft = false;
             bool _MoveRight = false;
             bool _Jump = false;
             int pn = -1;
 
-
-            switch (key.Key)
+            if (keySelection.PressedKeys.TryGetValue(Key.W, out bool isWPressed) && isWPressed)
             {
-                case Key.A:
-                    pn = 1;
-                    _MoveLeft = true; // Move left
-                    break;
-                case Key.D:
-                    pn = 1;
-                    _MoveRight = true; // Move right
-                    break;
-                case Key.W:
-                    pn = 1;
-                    _Jump = true; // Jump up
-                    break;
+                pn = 1;
+                _Jump = true; // Jump up
+            }
+            if (keySelection.PressedKeys.TryGetValue(Key.A, out bool isAPressed) && isAPressed)
+            {
+                pn = 1;
+                _MoveLeft = true; // Move left
+            }
+            if (keySelection.PressedKeys.TryGetValue(Key.D, out bool isDPressed) && isDPressed)
+            {
+                pn = 1;
+                _MoveRight = true; // Move right
             }
 
-            switch (key.Key)
+            if (keySelection.PressedKeys.TryGetValue(Key.J, out bool isJPressed) && isJPressed)
             {
-                case Key.J:
-                    pn = 2;
-                    _MoveLeft = true; // Move left
-                    break;
-                case Key.L:
-                    pn = 2;
-                    _MoveRight = true; // Move right
-                    break;
-                case Key.I:
-                    pn = 2;
-                    _Jump = true; // Jump up
-                    break;
+                pn = 2;
+                _MoveLeft = true; // Move left
             }
-
+            if (keySelection.PressedKeys.TryGetValue(Key.L, out bool isLPressed) && isLPressed)
+            {
+                pn = 2;
+                _MoveRight = true; // Move right
+            }
+            if (keySelection.PressedKeys.TryGetValue(Key.I, out bool isIPressed) && isIPressed)
+            {
+                pn = 2;
+                _Jump = true; // Jump up
+            }
 
             return pn != -1 ? new B_Move_BV(pn, _MoveLeft, _MoveRight, _Jump) : null;
         }
+
     }
 }

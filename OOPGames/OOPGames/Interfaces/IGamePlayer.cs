@@ -46,4 +46,23 @@ namespace OOPGames
         //IF NO VALID MOVE IS POSSIBLE, NULL HAS TO BE RETURNED.
         IPlayMove GetMove(IGameField field);
     }
+
+
+    //New Player Interfaces for continous moves every Tick (40ms)
+    public interface IHumanGamePlayer2 : IHumanGamePlayer
+    {
+        //Returns a valid move if possible for the given selection and 
+        //the given state of the play field.
+        //IF THE GIVEN SELECTION IS NO VALID MOVE, NULL HAS TO BE RETURNED.
+        IPlayMove GetKeyTickMove(IDictKeySelection selection, IGameField field);
+    }
+
+    //A computer player: when asked for a move, a valid move is produced by a computer
+    //DIESES INTERFACE NICHT ÄNDERN!
+    public interface IComputerGamePlayer2 : IComputerGamePlayer
+    {
+        //Returns a valid move for the given state of the play field.
+        //IF NO VALID MOVE IS POSSIBLE, NULL HAS TO BE RETURNED.
+        IPlayMove GetTickMove(IGameField field);
+    }
 }
