@@ -146,16 +146,23 @@ namespace OOPGames
                 //Canvas.SetLeft(bottomPillar, tube.X);
                 //canvas.Children.Add(bottomPillar);
 
+                var calculatedHeight = field.Height - (tube.TopHeight + tube.GapSize);
                 var bottomPipeImage = new Image
                 {
                     Width = tube.Width,
-                    Height = field.Height - (tube.TopHeight + tube.GapSize),
+                    Height = Math.Max(0, calculatedHeight), // Mindesthöhe von 0
                     Source = new BitmapImage(new Uri("/Classes/D_Gruppe/Grafiken/Pipe_unten.png", UriKind.Relative)),
                     Stretch = Stretch.Fill
                 };
-                Canvas.SetTop(bottomPipeImage, tube.TopHeight + tube.GapSize);
+                // Sicherstellen, dass Canvas.SetTop nur bei positiver Höhe sinnvoll ist
+                Canvas.SetTop(bottomPipeImage, Math.Max(tube.TopHeight + tube.GapSize, 0));
                 Canvas.SetLeft(bottomPipeImage, tube.X);
-                canvas.Children.Add(bottomPipeImage);
+
+                // Bild nur hinzufügen, wenn es sichtbar ist (Höhe > 0)
+                if (bottomPipeImage.Height > 0)
+                {
+                    canvas.Children.Add(bottomPipeImage);
+                }
             }
         }
 
