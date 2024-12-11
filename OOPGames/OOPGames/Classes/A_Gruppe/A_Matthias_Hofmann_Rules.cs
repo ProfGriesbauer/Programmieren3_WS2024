@@ -8,7 +8,7 @@ namespace OOPGames
 {
     public class A_Rules : IGameRules
     {
-        //Erzeugen eines Feld Objektes
+        
         A_Field _field = new A_Field(3, 3);
 
 
@@ -17,8 +17,8 @@ namespace OOPGames
             get { return "Rules Gruppe A"; }
         }
 
-        //Iterriert über jedes Feld im Array 
-        //Steht eine 0 als Wert im Array ist das Feld noch frei und kann beschrieben werden
+         
+        
         public bool MovesPossible
         {
             get
@@ -87,9 +87,9 @@ namespace OOPGames
         {
             if (move is A_Move)
             {
-                //Cast durchführen um zu zeigen das move von A_Move ist, somit kann auf Row und Column zugegriffen werden
+                
                 A_Move mymove = (A_Move) move;
-                //Überprüfen ob der eingegebe Wert zulässig ist if()
+                
                 _field[mymove.Row, mymove.Column] = mymove.PlayerNumber;
             }
         }
