@@ -10,6 +10,7 @@ namespace OOPGames
     public class B_Rules_BV : IB_Rules_BV
     {
         bool _firstStart = true;
+        bool _gameOver = false;
         public string Name => "Blobby Volley Rules";
 
         private B_Field_BV _Field;
@@ -21,6 +22,18 @@ namespace OOPGames
             _Points[0] = 0;
             _Points[1] = 0;
         }
+        public bool GameOver
+        {
+            get
+            {
+                return _gameOver;
+            }
+            set
+            {
+                _gameOver = value;
+            }
+        }
+
         public IB_Field_BV Field_BV
         {
             get
@@ -55,10 +68,10 @@ namespace OOPGames
         {
             get
             {
-                if (CheckIfPLayerWon() < 0)
+                /*if (CheckIfPLayerWon() < 0)
                 {
                     return true;
-                }
+                }*/
                 return false;
             }
         }
@@ -69,7 +82,7 @@ namespace OOPGames
             {
                 if (Points[i] >= 10)
                 {
-                    return i;
+                    return i + 1;
                 }
             }
             return -1;
@@ -131,6 +144,7 @@ namespace OOPGames
 
         public void StartedGameCall()
         {
+            GameOver = false;
             _firstStart = true;
             Points[0] = 0;
             Points[1] = 0;
@@ -150,24 +164,14 @@ namespace OOPGames
             CheckIfPLayerScored();
 
 
-            // Process moves for all players
-            for (int i = 0; i < Field_BV.Player.Length; i++)
+
+            if (GameOver)
             {
-                // Check if player is a computer
-
-                if (Field_BV.Player[i] is IB_ComputerPlayer_BV computerPlayer)
-                {
-                    // Get the computer's move
-                    IB_Move_BV computerMove = computerPlayer.GetMoveBV(Field_BV);
-                    DoMoveBV(computerMove);
-                }
-
+                return;
             }
-
-
             // Moves Ball and Players
             Field_BV.Ball.B_Move_Ball(Field_BV);
-            
+
             Field_BV.Player[0].B_Move_Player(Field_BV);
             Field_BV.Player[1].B_Move_Player(Field_BV);
 
@@ -205,6 +209,10 @@ namespace OOPGames
             Field_BV.Player[1].Velo_x = 0;
             Field_BV.Player[1].Velo_y = 0;
 
+            if (CheckIfPLayerWon() != -1)
+            {
+                GameOver = true;
+            }
         }
     }
 }

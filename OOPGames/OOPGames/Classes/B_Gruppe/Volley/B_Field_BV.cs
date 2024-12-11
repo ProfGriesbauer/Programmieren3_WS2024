@@ -16,7 +16,7 @@ namespace OOPGames
 
         IB_Ball_BV _ball;
 
-        IB_Player_BV[] _player = new IB_Player_BV[2];
+        IB_Player_BV[] _player = new IB_Player_BV[2] { null, null };
 
         IB_Rules_BV _rules;
 
@@ -25,7 +25,7 @@ namespace OOPGames
         //  0 = Test Style (Rectangle and Ellipse Objects)
         //  1 = AI Grafik Style
         //  2 = Hand Drawn Comic Style
-        readonly int _fieldStyle = 0;
+        readonly int _fieldStyle = 2;
 
 
         public B_Field_BV(IB_Rules_BV rules)
@@ -34,11 +34,6 @@ namespace OOPGames
             _net = new B_Net_BV();
 
             _ball = new B_Ball_BV();
-
-            _player[0] = new B_HumanPlayer_BV();
-            _player[0].SetPlayerNumber(1);
-            _player[1] = new B_ComputerPlayer_BV();
-            _player[1].SetPlayerNumber(2);
 
             _rules = rules;
         }

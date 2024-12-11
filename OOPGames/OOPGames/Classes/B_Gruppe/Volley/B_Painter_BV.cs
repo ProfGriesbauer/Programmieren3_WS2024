@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
+
 
 namespace OOPGames
 {
@@ -18,6 +21,8 @@ namespace OOPGames
 
         public void PaintBlobbyVolley(Canvas canvas, IB_Field_BV field)
         {
+
+
             field.Height = canvas.ActualHeight;
             field.Width = canvas.ActualWidth;
 
@@ -60,8 +65,13 @@ namespace OOPGames
             field.Net.B_Paint_Net(canvas, field.FieldStyle);
 
             // Spieler zeichnen
-            field.Player[0].B_Paint_Player(canvas, field.FieldStyle);
-            field.Player[1].B_Paint_Player(canvas, field.FieldStyle);
+            if (field.Player[0] != null && field.Player[1] != null)
+            {
+                // Spieler zeichnen
+                field.Player[0].B_Paint_Player(canvas, field.FieldStyle);
+                field.Player[1].B_Paint_Player(canvas, field.FieldStyle);
+            }
+
 
             // Ball zeichnen
             field.Ball.B_Paint_Ball(canvas, field.FieldStyle);
@@ -70,22 +80,73 @@ namespace OOPGames
             TextBlock scorePlayer1 = new TextBlock
             {
                 Text = $"{field.Rules_BV.Points[0]}",
-                FontSize = 24,
-                Foreground = Brushes.Black
+                FontSize = 30,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.BlueViolet,
+                Background = Brushes.Transparent,
+                TextAlignment = TextAlignment.Left,
+                FontFamily = new FontFamily("Comic Sans MS"),
+                Width = field.Width * 0.9,
+                Effect = new DropShadowEffect
+                {
+                    Color = Colors.Black,
+                    BlurRadius = 7,
+                    ShadowDepth = 0,
+                    Opacity = 1
+                }
             };
-            Canvas.SetLeft(scorePlayer1, 10);
+            Canvas.SetLeft(scorePlayer1, field.Width * 0.05);
             Canvas.SetTop(scorePlayer1, 10);
             canvas.Children.Add(scorePlayer1);
 
             TextBlock scorePlayer2 = new TextBlock
             {
                 Text = $"{field.Rules_BV.Points[1]}",
-                FontSize = 24,
-                Foreground = Brushes.Black
+                FontSize = 30,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.BlueViolet,
+                Background = Brushes.Transparent,
+                TextAlignment = TextAlignment.Right,
+                FontFamily = new FontFamily("Comic Sans MS"),
+                Width = field.Width * 0.9,
+                Effect = new DropShadowEffect
+                {
+                    Color = Colors.Black,
+                    BlurRadius = 7,
+                    ShadowDepth = 0,
+                    Opacity = 1
+                }
             };
-            Canvas.SetRight(scorePlayer2, 10);
+            Canvas.SetRight(scorePlayer2, field.Width * 0.05);
             Canvas.SetTop(scorePlayer2, 10);
             canvas.Children.Add(scorePlayer2);
+
+            // Player Won Zeichen
+            if (field.Rules_BV.GameOver)
+            {
+                TextBlock playerWon = new TextBlock
+                {
+                    Text = "Player " + field.Rules_BV.CheckIfPLayerWon() + " Won",
+                    FontSize = 70,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = Brushes.BlueViolet,
+                    Background = Brushes.Transparent,
+                    TextAlignment = TextAlignment.Center,
+                    FontFamily = new FontFamily("Comic Sans MS"),
+                    Width = field.Width,
+                    Effect = new DropShadowEffect
+                    {
+                        Color = Colors.Black,
+                        BlurRadius = 7,
+                        ShadowDepth = 0,
+                        Opacity = 1
+                    }
+                };
+
+                Canvas.SetLeft(playerWon, 0);
+                Canvas.SetTop(playerWon, field.Height * 0.3);
+                canvas.Children.Add(playerWon);
+            }
         }
 
 

@@ -35,12 +35,28 @@ namespace OOPGames
                 return null;
             }
         }
-
-        public IB_Move_BV GetMoveBV(IB_Field_BV field)
+        public IPlayMove GetTickMove(IGameField field)
+        {
+            if (field is IB_Field_BV)
+            {
+                return GetTickMoveBV((IB_Field_BV)field);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public IB_Move_BV GetMoveBV(IB_Field_BV field) { return null; }
+        public IB_Move_BV GetTickMoveBV(IB_Field_BV field)
         {
             bool _MoveLeft = false;
             bool _MoveRight = false;
             bool _Jump = false;
+
+            if (field.Player[this.PlayerNumber - 1] == null)
+            {
+                field.Player[this.PlayerNumber - 1] = this;
+            }
 
             // Ziel: Folge dem Ball
             if (field.Ball.Pos_x < Pos_x - 10) // Ball links vom Spieler

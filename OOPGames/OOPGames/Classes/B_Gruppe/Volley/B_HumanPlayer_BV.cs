@@ -15,7 +15,7 @@ namespace OOPGames
         {
             get
             {
-                return "Gruppe B BV HumanPlayer";
+                return "Blobby Human Player";
             }
         }
         public override IGamePlayer Clone()
@@ -54,6 +54,11 @@ namespace OOPGames
             bool _MoveRight = false;
             bool _Jump = false;
             int pn = -1;
+
+            if (field.Player[this.PlayerNumber - 1] == null)
+            {
+                field.Player[this.PlayerNumber - 1] = this;
+            }
 
             if (keySelection.PressedKeys.TryGetValue(Key.W, out bool isWPressed) && isWPressed)
             {
