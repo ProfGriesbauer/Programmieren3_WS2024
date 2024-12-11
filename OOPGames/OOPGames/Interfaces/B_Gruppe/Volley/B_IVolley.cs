@@ -14,6 +14,12 @@ namespace OOPGames
 
     public interface IB_Field_BV : IGameField
     {
+        // Paint Style of the Field
+        //  0 = Test Style (Rectangle and Ellipse Objects)
+        //  1 = AI Grafik Style
+        //  2 = Hand Drawn Comic Style
+        int FieldStyle { get; }
+
         //Values for the current Heigth and Width of the Canvas setted/updated by the PaintBlobbyVolley function
         double Height { get; set; }
         double Width { get; set; }
@@ -69,9 +75,10 @@ namespace OOPGames
         double Velo_y { get; set; }
 
         double Playersize { get; set; }
+        bool IsOnGround { get; set; }
 
         //Paints the Player on the PlayField
-        Canvas B_Paint_Player(Canvas canvas);
+        void B_Paint_Player(Canvas canvas, int fieldStyle);
 
         //
         void B_Move_Player(IB_Field_BV field);
@@ -96,7 +103,7 @@ namespace OOPGames
     {
         double Height { get; set; }
         double Width { get; set; }
-        void B_Paint_Net(Canvas canvas, IB_Ground_BV ground);
+        void B_Paint_Net(Canvas canvas, int fieldStyle);
     }
     public interface IB_Ball_BV
     {
@@ -110,7 +117,7 @@ namespace OOPGames
         double Ballsize { get; set; }
 
         //Paints the Player on the PlayField
-        void B_Paint_Ball(Canvas canvas);
+        void B_Paint_Ball(Canvas canvas, int fieldStyle);
 
         //Check if the Ball is on the ground and returns the playernumber who scored (Left = 0; Right = 1)
         //returns -1 if the ball is still in the air

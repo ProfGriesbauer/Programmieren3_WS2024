@@ -40,8 +40,7 @@ namespace OOPGames
 
         public int CheckIfPLayerWon()
         {
-            throw new NotImplementedException();
-            //Framework Game Lost ????
+            return 0;
         }
 
         public void ClearField()
@@ -59,11 +58,11 @@ namespace OOPGames
                 
                 if (move2.xBugPosValChange != 0)
                 {
-                    _field.xBugVel = move2.xBugPosValChange;
+                    _field.xBugVel = _field.xBugVel+move2.xBugPosValChange;
                 }
                 else if (move2.yBugPosValChange != 0)
                 {
-                    _field.yBugVel = move2.yBugPosValChange;
+                    _field.yBugVel = _field.yBugVel + move2.yBugPosValChange;
                 }
             }
             
@@ -74,8 +73,8 @@ namespace OOPGames
         public void StartedGameCall()
         {
 
-            _field.xBugPos = canvas.ActualWidth / 2;
-            _field.yBugPos = canvas.ActualHeight / 2;
+            _field.xBugPos = 300;
+            _field.yBugPos = 300;
             
             _appleCounter = 0;
             _tickCounter = 0;
@@ -85,16 +84,16 @@ namespace OOPGames
         public void TickGameCall()
         {
             
-            if (_tickCounter ==30)
-            {
-                _field.xBugPos = _field.xBugPos + _field.xBugVel;
-                _field.yBugPos = _field.yBugPos + _field.yBugVel;
+            //if (_tickCounter ==30)
+            //{
+                _field.xBugPos = _field.xBugPos + 2;
+                _field.yBugPos = _field.yBugPos + 2;
 
-                _tickCounter = 0;
+                //_tickCounter = 0;
                 
-            }
+            //}
 
-            _tickCounter++;
+            //_tickCounter++;
             
         }
 
@@ -149,54 +148,64 @@ namespace OOPGames
 
     public class G_Field : IG_GameField_Bug
     {
+        double _xBugPos;
+        double _yBugPos;
+        double _xApplePos;
+        double _yApplePos;
+        double _xBugVel;
+        double _yBugVel;
         public bool CanBePaintedBy(IPaintGame painter)
         {
-            throw new NotImplementedException();
+            return painter is G_Painter;
         }
 
         public double xBugPos
         {
-            get { return xBugPos; }
-            set { xBugPos = value; }
+            get { return _xBugPos; }
+            set { _xBugPos = value; }
         }
         public double yBugPos
         {
-            get { return yBugPos; }
-            set { yBugPos = value; }
+            get { return _yBugPos; }
+            set { _yBugPos = value; }
         }
 
         public double xApplePos
         {
-            get { return xApplePos; }
-            set { xApplePos = value; }
+            get { return _xApplePos; }
+            set { _xApplePos = value; }
         }
         public double yApplePos
         {
-            get { return yApplePos; }
-            set { yApplePos = value; }
+            get { return _yApplePos; }
+            set { _yApplePos = value; }
         }
 
         public double xBugVel
         {
-            get { return xBugVel; }
-            set { xBugVel = value; }
+            get { return _xBugVel; }
+            set { _xBugVel = value; }
         }
 
         public double yBugVel
         {
-            get { return yBugVel; }
-            set { yBugVel = value; }
+            get { return _yBugVel; }
+            set { _yBugVel = value; }
         }
     }
 
     public class G_Apple : IComputerGamePlayer
     {
+        int _playerNumber = 0;
         public string Name
         {
             get { return "Apple Gruppe G"; }
         }
 
-        public int PlayerNumber => throw new NotImplementedException();
+        public int PlayerNumber
+        {
+            get { return 2; }
+        }
 
         public bool CanBeRuledBy(IGameRules rules)
         {
@@ -218,7 +227,7 @@ namespace OOPGames
 
         public void SetPlayerNumber(int playerNumber)
         {
-            throw new NotImplementedException();
+            _playerNumber = playerNumber;
         }
 
 
@@ -229,28 +238,36 @@ namespace OOPGames
         
         public int  PlayerNumber => throw new NotImplementedException();
 
+        double _xBugPosValChange;
+        double _yBugPosValChange;
+
         public double xBugPosValChange //Werteänderung je nach Tasten Druck wird in GetMove umgesetzt
         {
-            get { return xBugPosValChange; }
-            set { xBugPosValChange = value; }
+            get { return _xBugPosValChange; }
+            set { _xBugPosValChange = value; }
         }
         public double yBugPosValChange
         {
-            get { return yBugPosValChange; }
-            set { yBugPosValChange = value; }
+            get { return _yBugPosValChange; }
+            set { _yBugPosValChange = value; }
         }
 
     }
 
     public class G_Bug : IHumanGamePlayer
     {
+        int _playerNumber = 0;
         public string Name
         {
             get { return "Bug Player Gruppe G"; }
         }
 
-        public int PlayerNumber => throw new NotImplementedException();
-        
+        public int PlayerNumber
+        {
+            get { return 1; }
+        }
+
+
 
         public bool CanBeRuledBy(IGameRules rules)
         {
@@ -259,7 +276,7 @@ namespace OOPGames
 
         public IGamePlayer Clone()
         {
-            A_Human_Player clone = new A_Human_Player();
+            G_Bug clone = new G_Bug();
             return clone;
         }
 
@@ -274,19 +291,19 @@ namespace OOPGames
             if(selection is IKeySelection)
             {
                 IKeySelection keySelection = (IKeySelection)selection;
-                if (keySelection.Key == System.Windows.Input.Key.Left)
+                if (keySelection.Key == System.Windows.Input.Key.A)
                 {
                     return new G_Move() { xBugPosValChange = -1 };
                 }
-                else if (keySelection.Key == System.Windows.Input.Key.Right)
+                else if (keySelection.Key == System.Windows.Input.Key.D)
                 {
                     return new G_Move() { xBugPosValChange = 1 };
                 }
-                else if (keySelection.Key == System.Windows.Input.Key.Up)
+                else if (keySelection.Key == System.Windows.Input.Key.W)
                 {
                     return new G_Move() { yBugPosValChange = -1 };
                 }
-                else if (keySelection.Key == System.Windows.Input.Key.Down)
+                else if (keySelection.Key == System.Windows.Input.Key.S)
                 {
                     return new G_Move() { yBugPosValChange = 1 };
                 }
@@ -296,11 +313,11 @@ namespace OOPGames
 
         public void SetPlayerNumber(int playerNumber)
         {
-            throw new NotImplementedException();
+            _playerNumber = playerNumber; 
         }
     }
 
-    public class G_Painter : IPaintGame
+    public class G_Painter : IPaintGame2
     {
         public string Name
         {
@@ -349,6 +366,11 @@ namespace OOPGames
                 canvas.Children.Add(bug);
 
             }
+        }
+
+        public void TickPaintGameField(Canvas canvas, IGameField currentField)
+        {
+            PaintGameField(canvas, currentField);
         }
     }
 

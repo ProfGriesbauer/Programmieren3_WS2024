@@ -198,7 +198,7 @@ namespace OOPGames
     {
         int _PlayerNumber = 0;
 
-        public string Name { get { return "RJL_HumanPlayer"; } }
+        public string Name { get { return "RJL_HumanPlayer"; { } } }
 
         public int PlayerNumber { get { return _PlayerNumber; } }
 
