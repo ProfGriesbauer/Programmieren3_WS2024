@@ -96,6 +96,7 @@
     <Compile Include="Classes\B_Gruppe\Volley\B_Rules_BV.cs" />
     <Compile Include="Classes\C_Gruppe\MemoryV3.cs" />
     <Compile Include="Classes\C_Gruppe\Rabea.cs" />
+    <Compile Include="Classes\D_Gruppe\JLJ_Base_FlappyBird.cs" />
     <Compile Include="Classes\D_Gruppe\JLJ_FlappyBird.cs" />
     <Compile Include="Classes\E_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\F_Gruppe\Vorname_Nachname_XXX.cs" />
@@ -206,5 +207,6 @@
   <ItemGroup>
     <Resource Include="Classes\D_Gruppe\Grafiken\Highscore.png" />
     <Resource Include="Classes\G_Gruppe\Bilder\Bug.png" />
-  </ItemGroup>  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,14 +7,15 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using OOPGames.Classes.D_Gruppe;
 
 namespace OOPGames
 {
-    public class FlappyPainter : ID_FB_Painter
+    public class FlappyPainter : D_FB_Base_FlappyPainter
     {
-        public string Name => "FlappyBirdPainter";
+        public override string Name => "FlappyBirdPainter";
 
-        public void PaintGameField(Canvas canvas, IGameField currentField)
+        public override void PaintFlappyField(Canvas canvas, ID_FB_GameField currentField)
         {
 
             var field = (FlappyField)currentField;
@@ -41,6 +42,11 @@ namespace OOPGames
             {
                 DrawScore(canvas, field);
             }
+        }
+
+        public override void FlappyTickGameField(Canvas canvas, ID_FB_GameField currentField)
+        {
+            PaintFlappyField(canvas, currentField);
         }
 
         private void DrawBackground(Canvas canvas, FlappyField field)
@@ -293,20 +299,15 @@ namespace OOPGames
             Canvas.SetLeft(scoreText, textLeft);
             canvas.Children.Add(scoreText);
         }
-
-        public void TickPaintGameField(Canvas canvas, IGameField currentField)
-        {
-            PaintGameField(canvas, currentField);
-        }
     }
 
-    public class FlappyField : ID_FB_GameField
+    public class FlappyField : D_FB_Base_FlappyFiedl
     {
-        public D_Bird Bird { get; private set; } // Der Vogel als Objekt
-        public List<D_Tubes> Obstacles { get; set; }
-        public List<D_Boden> Boden { get; set; } // Liste der Bodenteile
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        public override D_Bird Bird { get; set; } // Der Vogel als Objekt
+        public override List<D_Tubes> Obstacles { get; set; }
+        public override List<D_Boden> Boden { get; set; } // Liste der Bodenteile
+        public override int Width { get; set; }
+        public override int Height { get; set; }
 
         public int score = 0;
 
@@ -324,7 +325,7 @@ namespace OOPGames
             Height = height;
             Bird = new D_Bird(200, (height) / 2, 15, 3, 0); // Initialisierung des Vogels
             Obstacles = new List<D_Tubes>();
-            Boden = null;// new List<D_Boden>()
+            Boden = null; // new List<D_Boden>()
             LoadHighscore();
         }
 
@@ -372,8 +373,6 @@ namespace OOPGames
                 }
             }
         }
-
-        public bool CanBePaintedBy(IPaintGame painter) => painter is ID_FB_Painter;
     }
 
     public class FlappyRules : ID_FB_Rules
@@ -476,7 +475,6 @@ namespace OOPGames
                 field.Obstacles?.RemoveAll(obj => obj.IsOutOfScreen());
                 field.Boden?.RemoveAll(obj => obj.IsOutOfScreen());
 
-
                 // Füge neue Hindernisse hinzu
                 AddNewObstacles(field);
 
@@ -495,8 +493,6 @@ namespace OOPGames
                     field.highscore = field.score;
                     field.SaveHighscore(field.highscore);
                 }
-                // Keine Moves mehr 
-                // Neustart Knopf
             }
         }
 
@@ -642,7 +638,6 @@ namespace OOPGames
         public int Height => TopHeight + GapSize; // Gesamthöhe
 
 
-        private int ScreenHeight; // Die Höhe des Spielfeldes
         public int TopHeight { get; private set; } // Höhe des oberen Pfeilers
         public int GapSize { get; private set; } // Größe der Lücke zwischen den Pfeilern
 
@@ -654,7 +649,6 @@ namespace OOPGames
             TopHeight = topHeight;
             GapSize = gapSize;
             Width = width;
-            ScreenHeight = screenHeight;
         }
 
         // Bewegt die Pfeiler nach links
