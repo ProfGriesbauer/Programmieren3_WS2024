@@ -13,14 +13,15 @@ namespace OOPGames
         {
             get
             {
-                return "Gruppe B BV ComputerPlayer";
+                return "Blobby Computer Player";
             }
         }
+
         public override IGamePlayer Clone()
         {
-            B_ComputerPlayer_BV BV_Computer = new B_ComputerPlayer_BV();
-            BV_Computer.SetPlayerNumber(this.PlayerNumber);
-            return BV_Computer;
+            B_ComputerPlayer_BV computerPlayer = new B_ComputerPlayer_BV();
+            computerPlayer.SetPlayerNumber(this.PlayerNumber);
+            return computerPlayer;
         }
 
         public IPlayMove GetMove(IGameField field)
@@ -40,20 +41,24 @@ namespace OOPGames
             bool _MoveLeft = false;
             bool _MoveRight = false;
             bool _Jump = false;
-            // Simple AI: Move towards the ball horizontally
-            if (field.Ball.Pos_x > Pos_x + 10)
+
+            // Ziel: Folge dem Ball
+            if (field.Ball.Pos_x < Pos_x -10) // Ball links vom Spieler
             {
-                _MoveRight = true; // Move right
+                _MoveLeft = true;
             }
-            else if (field.Ball.Pos_x < Pos_x - 10)
+            else if (field.Ball.Pos_x >= Pos_x) // Ball rechts vom Spieler
             {
-                _MoveLeft = true; // Move left
+                _MoveRight = true;
             }
 
-            if (field.Ball.Pos_y < field.Height * 0.8)
+            // Logik für das Springen:
+            // Springe nur, wenn der Ball über dem Spieler ist und er in Reichweite ist
+            if (Math.Abs(field.Ball.Pos_x - Pos_x) < 50 && field.Ball.Pos_y < Pos_y)
             {
                 _Jump = true;
             }
+
             return new B_Move_BV(this.PlayerNumber, _MoveLeft, _MoveRight, _Jump);
         }
     }
