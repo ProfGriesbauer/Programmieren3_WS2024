@@ -167,6 +167,7 @@ namespace OOPGames
 
             // Moves Ball and Players
             Field_BV.Ball.B_Move_Ball(Field_BV);
+            
             Field_BV.Player[0].B_Move_Player(Field_BV);
             Field_BV.Player[1].B_Move_Player(Field_BV);
 
