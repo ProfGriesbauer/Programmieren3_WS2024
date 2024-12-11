@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace OOPGames
@@ -80,6 +81,8 @@ namespace OOPGames
 
             _field.xBugPos = 250;
             _field.yBugPos = 250;
+            _field.xApplePos = 0;
+            _field.yApplePos = 0;
 
             _appleCounter = 0;
             _tickCounter = 0;
@@ -89,6 +92,11 @@ namespace OOPGames
         public void TickGameCall()
         {
             _step = 5;
+
+            if (_field.xApplePos == 0 && _field.yApplePos == 0)
+            {
+                GenerateApple();
+            }
 
             for (int i = 0; i <= _appleCounter; i++)
             {
@@ -118,6 +126,8 @@ namespace OOPGames
                 _field.yBugPos = (_field.yBugPos - _step);
             }
 
+            CollisionWithApple();
+
 
 
         }
@@ -131,12 +141,14 @@ namespace OOPGames
             _field.yApplePos = randomYPos;
         }
 
-        public bool CollisionWithApple(int xPosApple, int yPosApple)
+        public bool CollisionWithApple()
         {
 
-            if (xPosApple == _field.xBugPos && yPosApple == _field.yBugPos)//Bestimmter Bereich muss noch festgelegt werden
+            if ((_field.xApplePos+20) == _field.xBugPos && (_field.yApplePos+20) == _field.yBugPos)//Bestimmter Bereich muss noch festgelegt werden
             {
                 _appleCounter++;
+                _field.xApplePos = 0;
+                _field.yApplePos = 0;
                 return true;
             }
             return false;
@@ -146,24 +158,24 @@ namespace OOPGames
         {
 
 
-            if (_field.xBugPos < 20)
+            if (_field.xBugPos < 65)
             {
                 return true;
             }
 
-            if (_field.xBugPos > (_field.canvasWidth - 20 - 40) && _field.canvasWidth != 0)
-            {
-                return true;
-            }
-
-
-            if (_field.yBugPos > (_field.canvasHeight-20-20) && _field.canvasHeight != 0)
+            if (_field.xBugPos > (_field.canvasWidth -25) && _field.canvasWidth != 0)
             {
                 return true;
             }
 
 
-            if (_field.yBugPos < 20)
+            if (_field.yBugPos > (_field.canvasHeight-25) && _field.canvasHeight != 0)
+            {
+                return true;
+            }
+
+
+            if (_field.yBugPos < 65)
             {
                 return true;
             }
@@ -442,27 +454,83 @@ namespace OOPGames
                  Line line4 = new Line() { X1 = (myCurrentField.canvasWidth - 20), Y1 = (myCurrentField.canvasHeight - 20), X2 = (myCurrentField.canvasWidth - 20), Y2 = 20, Stroke = _lineStroke, StrokeThickness = 3.0 };
                  canvas.Children.Add(line4);
 
-                 //Bug zeichnen
-                 Rectangle bug = new Rectangle
-                 {
-                     Width = 40,
-                     Height = 20,
-                     Fill = Brushes.White,
-                     Stroke = Brushes.Black,
-                     StrokeThickness = 1
-                 };
+                /*//Bug zeichnen
+                Rectangle bug = new Rectangle
+                {
+                    Width = 40,
+                    Height = 20,
+                    Fill = Brushes.White,
+                    Stroke = Brushes.Black,
+                    StrokeThickness = 1
+                };
 
-                 // Position der Zelle auf der Canvas setzen
-                 Canvas.SetLeft(bug, myCurrentField.xBugPos);
-                 Canvas.SetTop(bug, myCurrentField.yBugPos);
+               // Position der Zelle auf der Canvas setzen
+               Canvas.SetLeft(bug, myCurrentField.xBugPos);
+               Canvas.SetTop(bug, myCurrentField.yBugPos);
 
-                 // Zelle zum Canvas hinzufügen
-                 canvas.Children.Add(bug);
+               // Zelle zum Canvas hinzufügen
+               canvas.Children.Add(bug);*/
+
+
+                DrawBug(canvas, myCurrentField);
+
+
+
+                //Apfel zeichnen
+                if (myCurrentField.xApplePos != 0 && myCurrentField.yApplePos !=0)
+                {
+                    DrawApple(canvas, myCurrentField);
+                }
 
              }
          }
 
-         public void TickPaintGameField(Canvas canvas, IGameField currentField)
+        private void DrawBug(Canvas canvas, IG_GameField_Bug field)
+        {
+            // Erstellen des Bilds
+            var bugImage = new Image
+            {
+                Width = 40,
+                Height = 40,
+                Source = new BitmapImage(new Uri("/Classes/G_Gruppe/folder_bilder/Bug.png", UriKind.Relative))
+            };
+
+            // Mittelpunkt von Bild
+            double centerX = bugImage.Width / 2;
+            double centerY = bugImage.Height / 2;
+
+            // Positionierung des Bilds
+            Canvas.SetTop(bugImage, field.yBugPos - 40);
+            Canvas.SetLeft(bugImage, field.xBugPos - 40);
+
+            // Bild zur Zeichenfläche hinzufügen
+            canvas.Children.Add(bugImage);
+        }
+
+        private void DrawApple(Canvas canvas, IG_GameField_Bug field)
+        {
+            // Erstellen des Bilds
+            var bugImage = new Image
+            {
+                Width = 40,
+                Height = 40,
+                Source = new BitmapImage(new Uri("/Classes/G_Gruppe/folder_bilder/Apple.png", UriKind.Relative))
+            };
+
+            // Mittelpunkt von Bild
+            double centerX = bugImage.Width / 2;
+            double centerY = bugImage.Height / 2;
+
+            // Positionierung des Bilds
+            Canvas.SetTop(bugImage, field.yApplePos - 40);
+            Canvas.SetLeft(bugImage, field.xApplePos - 40);
+
+            // Bild zur Zeichenfläche hinzufügen
+            canvas.Children.Add(bugImage);
+
+        }
+
+        public void TickPaintGameField(Canvas canvas, IGameField currentField)
          {
              PaintGameField(canvas, currentField);
          }
@@ -568,3 +636,7 @@ int AppleSpawnPosY = (AppleSpawnGridY * (GridHeight / RasterXY)) + ((GridHeight 
 Ellipse Apple = new Ellipse() { Margin = new Thickness(AppleSpawnPosX, AppleSpawnPosY, 0, 0), Width = RasterWidth, Height = RasterHeight, Stroke = AppleStroke, StrokeThickness = 5.0 }; //Paint Apple
 canvas.Children.Add(Apple);
 */
+
+
+
+ 
