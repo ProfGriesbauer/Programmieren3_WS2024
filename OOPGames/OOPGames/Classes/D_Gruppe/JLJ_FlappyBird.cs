@@ -388,6 +388,11 @@ namespace OOPGames
 
         private int birdjump = -22;
 
+        public FlappyRules()
+        {
+            CurrentField = new FlappyField(800, 600);
+        }
+
         public bool MovesPossible // Solange der Spieler nicht verloren hat.
         {
             get
@@ -399,11 +404,6 @@ namespace OOPGames
 
                 return true;
             }
-        }
-
-        public FlappyRules()
-        {
-            CurrentField = new FlappyField(800, 600);
         }
 
         public void DoMove(IPlayMove move)
