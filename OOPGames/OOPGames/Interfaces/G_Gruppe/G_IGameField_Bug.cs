@@ -20,5 +20,15 @@ namespace OOPGames
         
         double yBugVel { get; set; }
 
+        double canvasWidth { get; set; }
+        double canvasHeight { get; set; }
+
+        double rasterXY { get; set; }
+        double gridHeight { get; set; }
+        double rasterWidth { get; set; }
+        double rasterHeight { get; set; }
+        double rasterMiddleX { get; set; }
+        double rasterMiddleY { get; set; }
+
     }
 }
