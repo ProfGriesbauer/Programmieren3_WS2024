@@ -201,6 +201,11 @@ namespace OOPGames
             return painter is G_Painter;
         }
 
+        bool IGameField.CanBePaintedBy(IPaintGame painter)
+        {
+            throw new NotImplementedException();
+        }
+
         public double xBugPos
         {
             get { return _xBugPos; }
@@ -234,6 +239,14 @@ namespace OOPGames
             get { return _yBugVel; }
             set { _yBugVel = value; }
         }
+
+        double IG_GameField_Bug.xBugPos { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        double IG_GameField_Bug.yBugPos { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        double IG_GameField_Bug.xApplePos { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        double IG_GameField_Bug.yApplePos { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        double IG_GameField_Bug.xBugVel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        double IG_GameField_Bug.yBugVel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public D_Bug Bug { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 
     public class G_Apple : IComputerGamePlayer
@@ -491,8 +504,12 @@ namespace OOPGames
             throw new NotImplementedException();
         }
 
+    public void TickPaintGameField(Canvas canvas, IGameField currentField)
+    {
+        throw new NotImplementedException();
+    }
 
-        private void DrawBug(Canvas canvas, IG_GameField_Bug field)
+    private void DrawBug(Canvas canvas, IG_GameField_Bug field)
         {
             // Erstellen des Bilds
             var bugImage = new Image
