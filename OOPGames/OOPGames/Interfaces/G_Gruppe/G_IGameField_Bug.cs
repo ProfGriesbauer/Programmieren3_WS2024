@@ -22,7 +22,7 @@ namespace OOPGames
         double yBugVel { get; set; }
 
 
-        public D_Bug Bug { get; private set; } // Der Vogel als Objekt
+        D_Bug Bug { get; set; } // Der Vogel als Objekt
 
 
     }
