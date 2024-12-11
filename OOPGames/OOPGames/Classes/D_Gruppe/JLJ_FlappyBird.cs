@@ -341,6 +341,11 @@ namespace OOPGames
 
         private int birdjump = -22;
 
+        public FlappyRules()
+        {
+            CurrentField = new FlappyField(800, 600);
+        }
+
         public override bool MovesPossible // Solange der Spieler nicht verloren hat.
         {
             get
@@ -353,7 +358,7 @@ namespace OOPGames
                 return true;
             }
         }
-
+        public override void DoFlappyMove(ID_FB_Move move)
         {
             if (move is FlappyMove)
             {
@@ -659,4 +664,5 @@ namespace OOPGames
             return bird.Y + bird.Radius > Y;
         }
     }
+    
 }
