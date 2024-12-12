@@ -106,17 +106,8 @@ namespace OOPGames
                     Canvas.SetTop(player, Pos_y - Playersize / 2);
                     canvas.Children.Add(player);
                     break;
-                case 1: //Image nicht vorhanden -> wie Style 0
-                    Ellipse player_img = new Ellipse
-                    {
-                        Width = Playersize,
-                        Height = Playersize,
-                        Fill = Brushes.Blue
-                    };
-                    Canvas.SetLeft(player_img, Pos_x - Playersize / 2);
-                    Canvas.SetTop(player_img, Pos_y - Playersize / 2);
-                    canvas.Children.Add(player_img);
-                    break;
+                case 1: //Image nicht vorhanden -> wie Style 2
+                    goto case 2;
                 case 2:
                     var player_drw = new Image
                     {
@@ -126,17 +117,17 @@ namespace OOPGames
                     //Set the correct Color for the Player
                     if (PlayerNumber == 1)
                     {
-                        player_drw.Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Player_Red.PNG", UriKind.Relative));
+                        player_drw.Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Player_Blue.PNG", UriKind.Relative));
                     }
                     else if (PlayerNumber == 2)
                     {
-                        player_drw.Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Player_Blue.PNG", UriKind.Relative));
+                        player_drw.Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Player_Red.PNG", UriKind.Relative));
                     }
 
                     // Squish the Player when moving on Ground or jumping
                     _waitTime++;
 
-                    if (IsOnGround && Velo_x != 0 && !_Squished || IsOnGround && Velo_y != 0 && !_Squished)
+                    if ((IsOnGround && Velo_x != 0 && !_Squished) || (IsOnGround && Velo_y != 0 && !_Squished))
                     {
                         player_drw.Width = Playersize * 1.4;
                         player_drw.Height = Playersize * 1.2;

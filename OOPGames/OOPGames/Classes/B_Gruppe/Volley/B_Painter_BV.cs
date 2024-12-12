@@ -80,16 +80,16 @@ namespace OOPGames
             TextBlock scorePlayer1 = new TextBlock
             {
                 Text = $"{field.Rules_BV.Points[0]}",
-                FontSize = 30,
+                FontSize = 40,
                 FontWeight = FontWeights.Bold,
-                Foreground = Brushes.BlueViolet,
+                Foreground = Brushes.Blue,
                 Background = Brushes.Transparent,
                 TextAlignment = TextAlignment.Left,
                 FontFamily = new FontFamily("Comic Sans MS"),
                 Width = field.Width * 0.9,
                 Effect = new DropShadowEffect
                 {
-                    Color = Colors.Black,
+                    Color = Colors.White,
                     BlurRadius = 7,
                     ShadowDepth = 0,
                     Opacity = 1
@@ -102,17 +102,17 @@ namespace OOPGames
             TextBlock scorePlayer2 = new TextBlock
             {
                 Text = $"{field.Rules_BV.Points[1]}",
-                FontSize = 30,
+                FontSize = 40,
                 FontWeight = FontWeights.Bold,
-                Foreground = Brushes.BlueViolet,
+                Foreground = Brushes.Red,
                 Background = Brushes.Transparent,
                 TextAlignment = TextAlignment.Right,
                 FontFamily = new FontFamily("Comic Sans MS"),
                 Width = field.Width * 0.9,
                 Effect = new DropShadowEffect
                 {
-                    Color = Colors.Black,
-                    BlurRadius = 7,
+                    Color = Colors.White,
+                    BlurRadius = 10,
                     ShadowDepth = 0,
                     Opacity = 1
                 }
@@ -127,21 +127,28 @@ namespace OOPGames
                 TextBlock playerWon = new TextBlock
                 {
                     Text = "Player " + field.Rules_BV.CheckIfPLayerWon() + " Won",
-                    FontSize = 70,
+                    FontSize = 80,
                     FontWeight = FontWeights.Bold,
-                    Foreground = Brushes.BlueViolet,
                     Background = Brushes.Transparent,
                     TextAlignment = TextAlignment.Center,
                     FontFamily = new FontFamily("Comic Sans MS"),
                     Width = field.Width,
                     Effect = new DropShadowEffect
                     {
-                        Color = Colors.Black,
-                        BlurRadius = 7,
+                        Color = Colors.White,
+                        BlurRadius = 10,
                         ShadowDepth = 0,
                         Opacity = 1
                     }
                 };
+                if (field.Rules_BV.CheckIfPLayerWon() == 1)
+                {
+                    playerWon.Foreground = Brushes.Blue;
+                }
+                else
+                {
+                    playerWon.Foreground = Brushes.Red;
+                }
 
                 Canvas.SetLeft(playerWon, 0);
                 Canvas.SetTop(playerWon, field.Height * 0.3);

@@ -80,7 +80,7 @@ namespace OOPGames
         {
             for (int i = 0; i < 2; i++)
             {
-                if (Points[i] >= 10)
+                if (Points[i] >= 3)
                 {
                     return i + 1;
                 }
@@ -134,7 +134,7 @@ namespace OOPGames
                 //Check if Player is on Ground or slightly above
                 if (Field_BV.Player[move.PlayerNumber - 1].IsOnGround)
                 {
-                    Field_BV.Player[move.PlayerNumber - 1].Velo_y = -60;
+                    Field_BV.Player[move.PlayerNumber - 1].Velo_y = -Field_BV.Height * 0.08;
                 }
             }
 

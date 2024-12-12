@@ -48,6 +48,8 @@ namespace OOPGames
             }
         }
         public IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key) { return null; }
+
+        int _PlayerTurn = -1;
         public IB_Move_BV GetKeyTickMoveBV(IB_Field_BV field, IDictKeySelection keySelection)
         {
             bool _MoveLeft = false;
@@ -55,43 +57,54 @@ namespace OOPGames
             bool _Jump = false;
             int pn = -1;
 
+
             if (field.Player[this.PlayerNumber - 1] == null)
             {
                 field.Player[this.PlayerNumber - 1] = this;
             }
 
-            if (keySelection.PressedKeys.TryGetValue(Key.W, out bool isWPressed) && isWPressed)
+            if (field.Player[0] is IHumanGamePlayer2 && field.Player[1] is IHumanGamePlayer2)
             {
-                pn = 1;
-                _Jump = true; // Jump up
-            }
-            if (keySelection.PressedKeys.TryGetValue(Key.A, out bool isAPressed) && isAPressed)
-            {
-                pn = 1;
-                _MoveLeft = true; // Move left
-            }
-            if (keySelection.PressedKeys.TryGetValue(Key.D, out bool isDPressed) && isDPressed)
-            {
-                pn = 1;
-                _MoveRight = true; // Move right
+                _PlayerTurn = _PlayerTurn == 1 ? 2 : 1;
             }
 
-            if (keySelection.PressedKeys.TryGetValue(Key.J, out bool isJPressed) && isJPressed)
+            if (_PlayerTurn == 1 || _PlayerTurn == -1)
             {
-                pn = 2;
-                _MoveLeft = true; // Move left
-            }
-            if (keySelection.PressedKeys.TryGetValue(Key.L, out bool isLPressed) && isLPressed)
-            {
-                pn = 2;
-                _MoveRight = true; // Move right
-            }
-            if (keySelection.PressedKeys.TryGetValue(Key.I, out bool isIPressed) && isIPressed)
-            {
-                pn = 2;
-                _Jump = true; // Jump up
+                if (keySelection.PressedKeys.TryGetValue(Key.W, out bool isWPressed) && isWPressed)
+                {
+                    pn = 1;
+                    _Jump = true; // Jump up
+                }
+                if (keySelection.PressedKeys.TryGetValue(Key.A, out bool isAPressed) && isAPressed)
+                {
+                    pn = 1;
+                    _MoveLeft = true; // Move left
+                }
+                if (keySelection.PressedKeys.TryGetValue(Key.D, out bool isDPressed) && isDPressed)
+                {
+                    pn = 1;
+                    _MoveRight = true; // Move right
+                }
             }
 
+            if (_PlayerTurn == 2 || _PlayerTurn == -1)
+            {
+                if (keySelection.PressedKeys.TryGetValue(Key.J, out bool isJPressed) && isJPressed)
+                {
+                    pn = 2;
+                    _MoveLeft = true; // Move left
+                }
+                if (keySelection.PressedKeys.TryGetValue(Key.L, out bool isLPressed) && isLPressed)
+                {
+                    pn = 2;
+                    _MoveRight = true; // Move right
+                }
+                if (keySelection.PressedKeys.TryGetValue(Key.I, out bool isIPressed) && isIPressed)
+                {
+                    pn = 2;
+                    _Jump = true; // Jump up
+                }
+            }
             return pn != -1 ? new B_Move_BV(pn, _MoveLeft, _MoveRight, _Jump) : null;
         }
 
