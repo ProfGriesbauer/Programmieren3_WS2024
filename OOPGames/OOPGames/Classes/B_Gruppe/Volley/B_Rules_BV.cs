@@ -80,7 +80,7 @@ namespace OOPGames
         {
             for (int i = 0; i < 2; i++)
             {
-                if (Points[i] >= 3)
+                if (Points[i] >= 10)
                 {
                     return i + 1;
                 }
