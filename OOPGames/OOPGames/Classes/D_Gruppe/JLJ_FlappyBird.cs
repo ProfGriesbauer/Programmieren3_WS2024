@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Effects;
-using OOPGames.Classes.D_Gruppe;
 
 namespace OOPGames
 {
@@ -388,7 +387,7 @@ namespace OOPGames
 
         private int tubeDistance = 250;
 
-        private int speedOuG = 7; // Standard 5 wie schnell sich Hinderniss und Boden Bewegen
+        private int speedOuG = 7; //wie schnell sich Hinderniss und Boden Bewegen
 
         private int PlayerWon = -1;
 
@@ -407,8 +406,10 @@ namespace OOPGames
                 {
                     return false;
                 }
-
-                return true;
+                else
+                {
+                    return true;
+                }
             }
         }
         public override void DoFlappyMove(ID_FB_Move move)

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
 
-namespace OOPGames.Classes.D_Gruppe
+namespace OOPGames
 {
     public abstract class D_FB_Base_FlappyPainter : ID_FB_Painter
     {
