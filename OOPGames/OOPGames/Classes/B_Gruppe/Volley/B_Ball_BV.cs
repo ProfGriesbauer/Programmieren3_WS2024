@@ -112,6 +112,15 @@ namespace OOPGames
                 Velo_y += 0.007 * field.Height;
             }
 
+            // Begrenze die maximale Ballgeschwindigkeit
+            double maxSpeed = 120;
+            double currentSpeed = Math.Sqrt(Velo_x * Velo_x + Velo_y * Velo_y);
+            if (currentSpeed > maxSpeed)
+            {
+                double scale = maxSpeed / currentSpeed;
+                Velo_x *= scale;
+                Velo_y *= scale;
+            }
 
             // Update ball position based on velocity
             Pos_x += Velo_x;
@@ -139,7 +148,7 @@ namespace OOPGames
 
             // Check if ball is colliding with the net Left
             //Pos_x + Ballsize / 2 > netLeft && Pos_x - Ballsize / 2 < netRight && Pos_y + Ballsize / 2 > netTop + Ballsize / 2
-            if (Pos_x + Ballsize / 2 > netLeft && Pos_x - Ballsize / 2 < netRight && Pos_y + Ballsize / 2 > netTop + Ballsize /4)
+            if (Pos_x + Ballsize / 2 > netLeft && Pos_x - Ballsize / 2 < netRight && Pos_y + Ballsize / 2 > netTop + Ballsize / 4)
             {
                 // Reflect the ball's velocity based on collision
                 if (Pos_x < field.Width / 2)
@@ -155,7 +164,7 @@ namespace OOPGames
                 }
                 Velo_y *= 0.8; // Reflect the vertical velocity
             }
-            
+
 
             // Check if ball is colliding with the net top
             if (Pos_x + Ballsize / 2 > netLeft && Pos_x - Ballsize / 2 < netRight && Pos_y + Ballsize / 2 > netTop && Pos_y + Ballsize / 2 < netTop + Ballsize / 4)

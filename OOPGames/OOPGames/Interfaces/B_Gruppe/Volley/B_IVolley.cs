@@ -64,8 +64,6 @@ namespace OOPGames
         bool MoveLeft { get; }
         bool MoveRight { get; }
         bool Jump { get; }
-        void ResetMove();
-
     }
 
     public interface IB_Player_BV : IGamePlayer
@@ -78,6 +76,7 @@ namespace OOPGames
 
         double Playersize { get; set; }
         bool IsOnGround { get; set; }
+        bool IsMoving { get; set; }
 
         //Paints the Player on the PlayField
         void B_Paint_Player(Canvas canvas, int fieldStyle);
