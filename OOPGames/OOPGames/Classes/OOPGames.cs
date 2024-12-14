@@ -18,7 +18,7 @@ namespace OOPGames
         IPaintGame _activePainter;
         IGameRules _activeRules;
 
-        public OOPGamesManager ()
+        public OOPGamesManager()
         {
             _Painters = new List<IPaintGame>();
             _Players = new List<IGamePlayer>();
@@ -29,7 +29,7 @@ namespace OOPGames
             _activeRules = null;
         }
 
-        public void RegisterPainter (IPaintGame painter)
+        public void RegisterPainter(IPaintGame painter)
         {
             _Painters.Add(painter);
         }
@@ -81,7 +81,7 @@ namespace OOPGames
 
         public IEnumerable<IPaintGame> Painters { get { return _Painters; } }
 
-        public IEnumerable<IGamePlayer> Players {  get { return _Players; } }
+        public IEnumerable<IGamePlayer> Players { get { return _Players; } }
 
         public IEnumerable<IGameRules> Rules { get { return _Rules; } }
 
@@ -111,7 +111,7 @@ namespace OOPGames
         int _ClickY;
         int _ChangedButton;
 
-        public ClickSelection (int clickX, int clickY, int ChangedButton)
+        public ClickSelection(int clickX, int clickY, int ChangedButton)
         {
             _ClickX = clickX;
             _ClickY = clickY;
@@ -124,7 +124,7 @@ namespace OOPGames
 
         public MoveType MoveType { get { return MoveType.click; } }
 
-        public int ChangedButton { get { return _ChangedButton; } } 
+        public int ChangedButton { get { return _ChangedButton; } }
     }
 
     public class KeySelection : IKeySelection
@@ -144,6 +144,16 @@ namespace OOPGames
 
         public Key Key { get { return _Key; } }
 
+        public MoveType MoveType { get { return MoveType.key; } }
+    }
+    public class DictKeySelection : IDictKeySelection
+    {
+        IDictionary<Key, bool> _PressedKeys;
+        public DictKeySelection(IDictionary<Key, bool> pressedKeys)
+        {
+            _PressedKeys = pressedKeys;
+        }
+        public IDictionary<Key, bool> PressedKeys { get { return _PressedKeys; } }
         public MoveType MoveType { get { return MoveType.key; } }
     }
 }
