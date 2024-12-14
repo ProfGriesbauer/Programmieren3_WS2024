@@ -181,7 +181,9 @@ namespace OOPGames
 
             if (GameOver)
             {
+
                 return;
+
             }
 
             // Moves Ball and Players

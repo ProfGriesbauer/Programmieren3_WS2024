@@ -58,15 +58,33 @@ namespace OOPGames
                 field.Player[this.PlayerNumber - 1] = this;
             }
 
-            // Ziel: Folge dem Ball
-            if (field.Ball.Pos_x < Pos_x -10) // Ball links vom Spieler
+            if (this.PlayerNumber == 1)
             {
-                _MoveLeft = true;
+                // Ziel: Folge dem Ball
+                if (field.Ball.Pos_x > Pos_x + 10) // Ball rechts vom Spieler
+                {
+                    _MoveRight = true;
+                }
+                else if (field.Ball.Pos_x <= Pos_x) // Ball links vom Spieler
+                {
+                    _MoveLeft = true;
+                }
             }
-            else if (field.Ball.Pos_x >= Pos_x) // Ball rechts vom Spieler
+
+            if (this.PlayerNumber == 2)
             {
-                _MoveRight = true;
+                // Ziel: Folge dem Ball
+                if (field.Ball.Pos_x < Pos_x - 10) // Ball links vom Spieler
+                {
+                    _MoveLeft = true;
+                }
+                else if (field.Ball.Pos_x >= Pos_x) // Ball rechts vom Spieler
+                {
+                    _MoveRight = true;
+                }
             }
+
+           
 
             // Logik für das Springen:
             // Springe nur, wenn der Ball über dem Spieler ist und er in Reichweite ist
