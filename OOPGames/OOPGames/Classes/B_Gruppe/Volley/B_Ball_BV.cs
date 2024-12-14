@@ -139,23 +139,26 @@ namespace OOPGames
 
             // Check if ball is colliding with the net Left
             //Pos_x + Ballsize / 2 > netLeft && Pos_x - Ballsize / 2 < netRight && Pos_y + Ballsize / 2 > netTop + Ballsize / 2
-            if (Pos_x + Ballsize / 2 > netLeft && Pos_x - Ballsize / 2 < netRight && Pos_y + Ballsize / 2 > netTop)
+            if (Pos_x + Ballsize / 2 > netLeft && Pos_x - Ballsize / 2 < netRight && Pos_y + Ballsize / 2 > netTop + Ballsize /4)
             {
                 // Reflect the ball's velocity based on collision
                 if (Pos_x < field.Width / 2)
                 {
+
                     Velo_x = -Math.Abs(Velo_x); // Ball is on the left side of the net
+                    Pos_x = netLeft - Ballsize / 2;
                 }
                 else
                 {
                     Velo_x = Math.Abs(Velo_x); // Ball is on the right side of the net
+                    Pos_x = Ballsize / 2 + netRight;
                 }
                 Velo_y *= 0.8; // Reflect the vertical velocity
             }
             
 
             // Check if ball is colliding with the net top
-            if (Pos_x + Ballsize / 2 > netLeft && Pos_x - Ballsize / 2 < netRight && Pos_y + Ballsize / 2 < netTop + Ballsize / 2 && Pos_y + Ballsize / 2 > netTop)
+            if (Pos_x + Ballsize / 2 > netLeft && Pos_x - Ballsize / 2 < netRight && Pos_y + Ballsize / 2 > netTop && Pos_y + Ballsize / 2 < netTop + Ballsize / 4)
             {
                 // Reflect the ball's velocity based on collision
                 if (Pos_x < field.Width / 2)
