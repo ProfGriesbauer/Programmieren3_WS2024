@@ -167,7 +167,9 @@ namespace OOPGames
 
             if (GameOver)
             {
+
                 return;
+
             }
             // Moves Ball and Players
             Field_BV.Ball.B_Move_Ball(Field_BV);
