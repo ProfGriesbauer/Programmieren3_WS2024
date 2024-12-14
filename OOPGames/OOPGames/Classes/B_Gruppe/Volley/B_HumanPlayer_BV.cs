@@ -15,7 +15,7 @@ namespace OOPGames
         {
             get
             {
-                return "Gruppe B BV HumanPlayer";
+                return "Blobby Human Player";
             }
         }
         public override IGamePlayer Clone()
@@ -36,8 +36,21 @@ namespace OOPGames
                 return null;
             }
         }
+        public IPlayMove GetKeyTickMove(IDictKeySelection selection, IGameField field)
+        {
+            if (field is IB_Field_BV)
+            {
+                return GetKeyTickMoveBV((IB_Field_BV)field, selection);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key) { return null; }
 
-        public IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key)
+        int _PlayerTurn = -1;
+        public IB_Move_BV GetKeyTickMoveBV(IB_Field_BV field, IDictKeySelection keySelection)
         {
             bool _MoveLeft = false;
             bool _MoveRight = false;
@@ -45,40 +58,55 @@ namespace OOPGames
             int pn = -1;
 
 
-            switch (key.Key)
+            if (field.Player[this.PlayerNumber - 1] == null)
             {
-                case Key.A:
-                    pn = 1;
-                    _MoveLeft = true; // Move left
-                    break;
-                case Key.D:
-                    pn = 1;
-                    _MoveRight = true; // Move right
-                    break;
-                case Key.W:
-                    pn = 1;
-                    _Jump = true; // Jump up
-                    break;
+                field.Player[this.PlayerNumber - 1] = this;
             }
 
-            switch (key.Key)
+            if (field.Player[0] is IHumanGamePlayer2 && field.Player[1] is IHumanGamePlayer2)
             {
-                case Key.J:
-                    pn = 2;
-                    _MoveLeft = true; // Move left
-                    break;
-                case Key.L:
-                    pn = 2;
-                    _MoveRight = true; // Move right
-                    break;
-                case Key.I:
-                    pn = 2;
-                    _Jump = true; // Jump up
-                    break;
+                _PlayerTurn = _PlayerTurn == 1 ? 2 : 1;
             }
 
+            if (_PlayerTurn == 1 || _PlayerTurn == -1)
+            {
+                if (keySelection.PressedKeys.TryGetValue(Key.W, out bool isWPressed) && isWPressed)
+                {
+                    pn = 1;
+                    _Jump = true; // Jump up
+                }
+                if (keySelection.PressedKeys.TryGetValue(Key.A, out bool isAPressed) && isAPressed)
+                {
+                    pn = 1;
+                    _MoveLeft = true; // Move left
+                }
+                if (keySelection.PressedKeys.TryGetValue(Key.D, out bool isDPressed) && isDPressed)
+                {
+                    pn = 1;
+                    _MoveRight = true; // Move right
+                }
+            }
 
+            if (_PlayerTurn == 2 || _PlayerTurn == -1)
+            {
+                if (keySelection.PressedKeys.TryGetValue(Key.J, out bool isJPressed) && isJPressed)
+                {
+                    pn = 2;
+                    _MoveLeft = true; // Move left
+                }
+                if (keySelection.PressedKeys.TryGetValue(Key.L, out bool isLPressed) && isLPressed)
+                {
+                    pn = 2;
+                    _MoveRight = true; // Move right
+                }
+                if (keySelection.PressedKeys.TryGetValue(Key.I, out bool isIPressed) && isIPressed)
+                {
+                    pn = 2;
+                    _Jump = true; // Jump up
+                }
+            }
             return pn != -1 ? new B_Move_BV(pn, _MoveLeft, _MoveRight, _Jump) : null;
         }
+
     }
 }

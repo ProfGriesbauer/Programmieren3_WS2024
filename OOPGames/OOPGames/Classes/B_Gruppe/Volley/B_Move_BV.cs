@@ -49,11 +49,5 @@ namespace OOPGames
                 return _Jump;
             }
         }
-        public void ResetMove()
-        {
-            _MoveLeft = false;
-            _MoveRight = false;
-            _Jump = false;
-        }
     }
 }

@@ -41,6 +41,8 @@ namespace OOPGames
 
     public interface IB_Rules_BV : IGameRules2
     {
+        //Checks if Game is Over
+        bool GameOver { get; set; }
         //Points Player 1 Points[0]
         //Points Player 2 Points[1]
         int[] Points { get; set; }
@@ -62,8 +64,6 @@ namespace OOPGames
         bool MoveLeft { get; }
         bool MoveRight { get; }
         bool Jump { get; }
-        void ResetMove();
-
     }
 
     public interface IB_Player_BV : IGamePlayer
@@ -76,6 +76,7 @@ namespace OOPGames
 
         double Playersize { get; set; }
         bool IsOnGround { get; set; }
+        bool IsMoving { get; set; }
 
         //Paints the Player on the PlayField
         void B_Paint_Player(Canvas canvas, int fieldStyle);
@@ -85,13 +86,15 @@ namespace OOPGames
 
     }
 
-    public interface IB_HumanPlayer_BV : IB_Player_BV, IHumanGamePlayer
+    public interface IB_HumanPlayer_BV : IB_Player_BV, IHumanGamePlayer2
     {
+        IB_Move_BV GetKeyTickMoveBV(IB_Field_BV field, IDictKeySelection key);
         IB_Move_BV GetMoveBV(IB_Field_BV field, IKeySelection key);
     }
 
-    public interface IB_ComputerPlayer_BV : IB_Player_BV, IComputerGamePlayer
+    public interface IB_ComputerPlayer_BV : IB_Player_BV, IComputerGamePlayer2
     {
+        IB_Move_BV GetTickMoveBV(IB_Field_BV field);
         IB_Move_BV GetMoveBV(IB_Field_BV field);
     }
     public interface IB_Ground_BV

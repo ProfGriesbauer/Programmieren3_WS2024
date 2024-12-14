@@ -26,9 +26,13 @@ namespace OOPGames
         public double Velo_x { get; set; }
         public double Velo_y { get; set; }
         public double Playersize { get; set; } = 85;
+        public bool IsMoving { get; set; } = false;
 
         public bool IsOnGround { get; set; }
+
+        bool _WinnerDance = false;
         bool _Squished = false;
+        bool _IsOnGroundPrevious = false;
         int _waitTime = 0;
 
         public abstract string Name
@@ -89,6 +93,11 @@ namespace OOPGames
                     Velo_x = 0;
                 }
             }
+            
+            if(field.Rules_BV.GameOver)
+            {
+                _WinnerDance = true;
+            }
         }
 
         public void B_Paint_Player(Canvas canvas, int fieldStyle)
@@ -106,17 +115,8 @@ namespace OOPGames
                     Canvas.SetTop(player, Pos_y - Playersize / 2);
                     canvas.Children.Add(player);
                     break;
-                case 1: //Image nicht vorhanden -> wie Style 0
-                    Ellipse player_img = new Ellipse
-                    {
-                        Width = Playersize,
-                        Height = Playersize,
-                        Fill = Brushes.Blue
-                    };
-                    Canvas.SetLeft(player_img, Pos_x - Playersize / 2);
-                    Canvas.SetTop(player_img, Pos_y - Playersize / 2);
-                    canvas.Children.Add(player_img);
-                    break;
+                case 1: //Image nicht vorhanden -> wie Style 2
+                    goto case 2;
                 case 2:
                     var player_drw = new Image
                     {
@@ -126,22 +126,22 @@ namespace OOPGames
                     //Set the correct Color for the Player
                     if (PlayerNumber == 1)
                     {
-                        player_drw.Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Player_Red.PNG", UriKind.Relative));
+                        player_drw.Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Player_Blue.PNG", UriKind.Relative));
                     }
                     else if (PlayerNumber == 2)
                     {
-                        player_drw.Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Player_Blue.PNG", UriKind.Relative));
+                        player_drw.Source = new BitmapImage(new Uri("/Classes/B_Gruppe/Volley/Grafiken/Player_Red.PNG", UriKind.Relative));
                     }
 
                     // Squish the Player when moving on Ground or jumping
                     _waitTime++;
 
-                    if (IsOnGround && Velo_x != 0 && !_Squished || IsOnGround && Velo_y != 0 && !_Squished)
+                    if (((IsMoving || (!_IsOnGroundPrevious && IsOnGround)) && !_Squished))
                     {
                         player_drw.Width = Playersize * 1.4;
                         player_drw.Height = Playersize * 1.2;
                         Canvas.SetTop(player_drw, Pos_y - Playersize / 2 + Playersize * 0.3);
-                        if (_waitTime > 4)
+                        if (_waitTime > 5)
                         {
                             _Squished = true;
                             _waitTime = 0;
@@ -152,17 +152,23 @@ namespace OOPGames
                         player_drw.Width = Playersize * 1.2;
                         player_drw.Height = Playersize * 1.5;
                         Canvas.SetTop(player_drw, Pos_y - Playersize / 2);
-                        if (_waitTime > 4)
+                        if (_waitTime > 5)
                         {
                             _Squished = false;
                             _waitTime = 0;
                         }
+                        if (!_WinnerDance)
+                        {
+                            IsMoving = false;
+                        }
+
                     }
 
                     Canvas.SetLeft(player_drw, Pos_x - Playersize / 2);
                     canvas.Children.Add(player_drw);
                     break;
             }
+            _IsOnGroundPrevious = IsOnGround;
 
         }
 

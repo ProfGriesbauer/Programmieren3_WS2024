@@ -104,6 +104,7 @@
     <Compile Include="Classes\G_Gruppe\G_mmo_Bug.cs" />
     <Compile Include="Classes\G_Gruppe\OliverMarcus_TicTacToe.cs" />
     <Compile Include="Classes\G_Gruppe\Snake.cs" />
+    <Compile Include="Classes\G_Gruppe\Übergabe.cs" />
     <Compile Include="Classes\I_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\J_Gruppe\Vorname_Nachname_XXX.cs" />
     <Compile Include="Classes\H_Gruppe\Vorname_Nachname_XXX.cs" />
@@ -205,6 +206,8 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Classes\D_Gruppe\Grafiken\Highscore.png" />
+    <Resource Include="Classes\G_Gruppe\folder_bilder\Apple.png" />
+    <Resource Include="Classes\G_Gruppe\folder_bilder\Bug.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

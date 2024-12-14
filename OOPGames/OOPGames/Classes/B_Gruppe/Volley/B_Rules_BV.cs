@@ -10,6 +10,7 @@ namespace OOPGames
     public class B_Rules_BV : IB_Rules_BV
     {
         bool _firstStart = true;
+        bool _gameOver = false;
         public string Name => "Blobby Volley Rules";
 
         private B_Field_BV _Field;
@@ -21,6 +22,18 @@ namespace OOPGames
             _Points[0] = 0;
             _Points[1] = 0;
         }
+        public bool GameOver
+        {
+            get
+            {
+                return _gameOver;
+            }
+            set
+            {
+                _gameOver = value;
+            }
+        }
+
         public IB_Field_BV Field_BV
         {
             get
@@ -55,10 +68,10 @@ namespace OOPGames
         {
             get
             {
-                if (CheckIfPLayerWon() < 0)
+                /*if (CheckIfPLayerWon() < 0)
                 {
                     return true;
-                }
+                }*/
                 return false;
             }
         }
@@ -67,9 +80,9 @@ namespace OOPGames
         {
             for (int i = 0; i < 2; i++)
             {
-                if (Points[i] >= 10)
+                if (Points[i] >= 2)
                 {
-                    return i;
+                    return i + 1;
                 }
             }
             return -1;
@@ -101,14 +114,31 @@ namespace OOPGames
 
         public void DoMoveBV(IB_Move_BV move)
         {
+            // Sets the IsMoving for the winner dance
+            if (GameOver)
+            {
+                Field_BV.Player[CheckIfPLayerWon() - 1].IsMoving = true;
+                return;
+            }
 
+            // Sets the IsMoving when Player is moving and on Ground
+            if ((move.MoveLeft || move.MoveRight || move.Jump) && Field_BV.Player[move.PlayerNumber - 1].IsOnGround)
+            {
+                Field_BV.Player[move.PlayerNumber - 1].IsMoving = true;
+            }
+            else
+            {
+                Field_BV.Player[move.PlayerNumber - 1].IsMoving = false;
+            }
+
+            //If Move Left or Right
             if (move.MoveLeft && !move.MoveRight)
             {
-                Field_BV.Player[move.PlayerNumber - 1].Velo_x = -15;
+                Field_BV.Player[move.PlayerNumber - 1].Velo_x = -25;
             }
             else if (!move.MoveLeft && move.MoveRight)
             {
-                Field_BV.Player[move.PlayerNumber - 1].Velo_x = 15;
+                Field_BV.Player[move.PlayerNumber - 1].Velo_x = 25;
             }
             else
             {
@@ -118,19 +148,17 @@ namespace OOPGames
             //If Jump Move
             if (move.Jump)
             {
-                //Check if Player is on Ground or slightly above
+                //Check if Player is on Ground
                 if (Field_BV.Player[move.PlayerNumber - 1].IsOnGround)
                 {
-                    Field_BV.Player[move.PlayerNumber - 1].Velo_y = -60;
+                    Field_BV.Player[move.PlayerNumber - 1].Velo_y = -Field_BV.Height * 0.08;
                 }
             }
-
-            //reset move Object
-            move.ResetMove();
         }
 
         public void StartedGameCall()
         {
+            GameOver = false;
             _firstStart = true;
             Points[0] = 0;
             Points[1] = 0;
@@ -149,22 +177,18 @@ namespace OOPGames
             // Checks if Ball is on Ground and resets Game if so
             CheckIfPLayerScored();
 
-            // Process moves for all players
-            for (int i = 0; i < Field_BV.Player.Length; i++)
-            {
-                // Check if player is a computer
 
-                if (Field_BV.Player[i] is IB_ComputerPlayer_BV computerPlayer)
-                {
-                    // Get the computer's move
-                    IB_Move_BV computerMove = computerPlayer.GetMoveBV(Field_BV);
-                    DoMoveBV(computerMove);
-                }
+
+            if (GameOver)
+            {
+
+                return;
 
             }
 
             // Moves Ball and Players
             Field_BV.Ball.B_Move_Ball(Field_BV);
+
             Field_BV.Player[0].B_Move_Player(Field_BV);
             Field_BV.Player[1].B_Move_Player(Field_BV);
 
@@ -202,6 +226,12 @@ namespace OOPGames
             Field_BV.Player[1].Velo_x = 0;
             Field_BV.Player[1].Velo_y = 0;
 
+            if (CheckIfPLayerWon() != -1)
+            {
+                GameOver = true;
+                Field_BV.Player[0].B_Move_Player(Field_BV);
+                Field_BV.Player[1].B_Move_Player(Field_BV);
+            }
         }
     }
 }
