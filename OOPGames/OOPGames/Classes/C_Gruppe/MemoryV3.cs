@@ -5,10 +5,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
+using System.Timers;
+// Memory 11:40
 namespace OOPGames
 {
-    // Memory Game Field
+    // Memory Game Field 
     public class MemoryGameField : IGameField
     {
         public string[,] Cards { get; set; }
@@ -32,8 +33,8 @@ namespace OOPGames
 
             for (int i = 0; i < totalCards / 2; i++)
             {
-                cardValues.Add($"Card{i + 1}");
-                cardValues.Add($"Card{i + 1}");
+                cardValues.Add($"{i + 1}");
+                cardValues.Add($"{i + 1}");
             }
 
             var random = new Random();
@@ -69,6 +70,7 @@ namespace OOPGames
 
         public void HideCards((int Row, int Col) first, (int Row, int Col) second)
         {
+            Console.WriteLine($"Verdeckkarten: First=({first.Row}, {first.Col}), Second=({second.Row}, {second.Col})");
             ValidateCoordinates(first.Row, first.Col);
             ValidateCoordinates(second.Row, second.Col);
             Revealed[first.Row, first.Col] = false;
@@ -114,6 +116,7 @@ namespace OOPGames
     // Memory Game Rules
     public class C_MemoryGameRules : IGameRules
     {
+        private Timer _revealTimer;
         public string Name => "Memory";
         public IGameField CurrentField { get; set; }
         public bool MovesPossible => RemainingPairs > 0;
@@ -122,6 +125,8 @@ namespace OOPGames
         private int Player1Score;
         private int Player2Score;
         private (int Row, int Column)? FirstCard;
+        private (int Row, int Column)? _secondCard;
+        private bool _isWaiting;
 
         public C_MemoryGameRules(int rows = 4, int columns = 4)
         {
@@ -132,11 +137,13 @@ namespace OOPGames
 
             CurrentField = new MemoryGameField(rows, columns);
             RemainingPairs = (rows * columns) / 2;
+            _revealTimer = new Timer(1000); // 1 Sekunde Verzögerung
+            _revealTimer.Elapsed += OnRevealTimerElapsed;
         }
 
         public void DoMove(IPlayMove move)
         {
-            if (!(move is MemoryMove memoryMove) || !(CurrentField is MemoryGameField field)) return;
+            if (_isWaiting || !(move is MemoryMove memoryMove) || !(CurrentField is MemoryGameField field)) return;
 
             if (field.IsRevealed(memoryMove.Row, memoryMove.Column)) return;
 
@@ -145,13 +152,43 @@ namespace OOPGames
             if (FirstCard == null)
             {
                 FirstCard = (memoryMove.Row, memoryMove.Column);
+                Console.WriteLine($"Erste Karte: Row={FirstCard.Value.Row}, Col={FirstCard.Value.Column}");
             }
             else
             {
-                var secondCard = (memoryMove.Row, memoryMove.Column);
-                CheckPair(field, FirstCard.Value, secondCard, memoryMove.PlayerNumber);
-                FirstCard = null;
+                _secondCard = (memoryMove.Row, memoryMove.Column);
+                Console.WriteLine($"Zweite Karte: Row={_secondCard.Value.Row}, Col={_secondCard.Value.Column}");
+                _isWaiting = true;
+                if (field.GetCard(FirstCard.Value.Row, FirstCard.Value.Column) ==
+                field.GetCard(_secondCard.Value.Row, _secondCard.Value.Column))
+                {
+                    RemainingPairs--;
+                    FirstCard = null;
+                    _secondCard = null;
+                    _isWaiting = false;
+                }
+                else
+                {
+                    _revealTimer.Start();
+                }
             }
+        }
+
+        private void OnRevealTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            _revealTimer.Stop();
+            if (FirstCard.HasValue && _secondCard.HasValue && CurrentField is MemoryGameField field)
+            {
+                Console.WriteLine($"Verdeckkarten: {FirstCard.Value} und {_secondCard.Value}");
+                field.HideCards(FirstCard.Value, _secondCard.Value);
+            }
+            else
+            {
+                Console.WriteLine("Fehler: Kartenkoordinaten sind ungültig.");
+            }
+            FirstCard = null;
+            _secondCard = null;
+            _isWaiting = false;
         }
 
         private void CheckPair(MemoryGameField field, (int Row, int Column) first, (int Row, int Column) second, int playerNumber)
@@ -168,7 +205,13 @@ namespace OOPGames
             }
         }
 
-        public void ClearField() => CurrentField = new MemoryGameField(4, 4);
+        public void ClearField()
+        {
+            CurrentField = new MemoryGameField(4, 4);
+            RemainingPairs = (4 * 4) / 2;
+            FirstCard = null;
+            _secondCard = null;
+        }
 
         public int CheckIfPLayerWon()
         {
