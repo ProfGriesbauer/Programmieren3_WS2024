@@ -12,7 +12,7 @@ namespace OOPGames
 {
     public class C_Painter : IPaintGame
     {
-        public string Name { get { return "RJL_Painter"; } }
+        public string Name { get { return "C_TikTakToePainter"; } }
 
         public void PaintGameField(Canvas canvas, IGameField currentField)
 
@@ -99,7 +99,7 @@ namespace OOPGames
         C_Field Field = new C_Field();
 
 
-        public string Name { get { return "RJL_Rules"; } }
+        public string Name { get { return "C_TicTacToeRules"; } }
 
         public IGameField CurrentField { get { return Field; } }
 
@@ -198,7 +198,7 @@ namespace OOPGames
     {
         int _PlayerNumber = 0;
 
-        public string Name { get { return "RJL_HumanPlayer"; { } } }
+        public string Name { get { return "C_HumanTicTacToePlayer"; { } } }
 
         public int PlayerNumber { get { return _PlayerNumber; } }
 
@@ -254,7 +254,7 @@ namespace OOPGames
     {
         int _PlayerNumber = 0;
 
-        public string Name { get { return "RJL_ComputerPlayer"; } }
+        public string Name { get { return "C_ComputerTicTacToePlayer"; } }
 
         public int PlayerNumber { get { return _PlayerNumber; } }
 

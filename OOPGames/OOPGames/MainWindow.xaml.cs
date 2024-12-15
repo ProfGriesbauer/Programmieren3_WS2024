@@ -72,7 +72,6 @@ namespace OOPGames
             OOPGamesManager.Singleton.RegisterPlayer(new C_Computer());
             OOPGamesManager.Singleton.RegisterPlayer(new C_Human());
             OOPGamesManager.Singleton.RegisterPlayer(new C_HumanMemoryPlayer());
-            OOPGamesManager.Singleton.RegisterPlayer(new C_ComputerMemoryPlayer());
             OOPGamesManager.Singleton.RegisterPlayer(new FlappyPlayer());
             OOPGamesManager.Singleton.RegisterPlayer(new oX_TicTacToeHumanPlayer());
             OOPGamesManager.Singleton.RegisterPlayer(new oX_TicTacToeComputerPlayer());
