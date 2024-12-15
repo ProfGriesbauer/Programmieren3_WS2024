@@ -42,8 +42,6 @@ namespace OOPGames
             OOPGamesManager.Singleton.RegisterPainter(new C_MemoryGamePainter());
             OOPGamesManager.Singleton.RegisterPainter(new FlappyPainter());
             OOPGamesManager.Singleton.RegisterPainter(new oX_TicTacToePaint());
-            OOPGamesManager.Singleton.RegisterPainter(new omSnakePaint());
-            OOPGamesManager.Singleton.RegisterPainter(new omm_BugPaint());
             OOPGamesManager.Singleton.RegisterPainter(new A_Painter());
             OOPGamesManager.Singleton.RegisterPainter(new G_Painter());
        
@@ -56,7 +54,6 @@ namespace OOPGames
             OOPGamesManager.Singleton.RegisterRules(new C_MemoryGameRules());
             OOPGamesManager.Singleton.RegisterRules(new FlappyRules());
             OOPGamesManager.Singleton.RegisterRules(new oX_TicTacToeRules());
-            OOPGamesManager.Singleton.RegisterRules(new omSnakeRules());
             OOPGamesManager.Singleton.RegisterRules(new A_Rules());
             OOPGamesManager.Singleton.RegisterRules(new G_Bug_Rules());
             //Players
@@ -75,7 +72,6 @@ namespace OOPGames
             OOPGamesManager.Singleton.RegisterPlayer(new FlappyPlayer());
             OOPGamesManager.Singleton.RegisterPlayer(new oX_TicTacToeHumanPlayer());
             OOPGamesManager.Singleton.RegisterPlayer(new oX_TicTacToeComputerPlayer());
-            OOPGamesManager.Singleton.RegisterPlayer(new omSnakeHumanPlayer());
             OOPGamesManager.Singleton.RegisterPlayer(new A_Human_Player());
             OOPGamesManager.Singleton.RegisterPlayer(new A_Computer_Player());
 
