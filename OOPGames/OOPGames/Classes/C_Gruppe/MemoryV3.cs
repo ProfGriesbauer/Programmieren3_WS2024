@@ -150,12 +150,10 @@ namespace OOPGames
             if (FirstCard == null)
             {
                 FirstCard = (memoryMove.Row, memoryMove.Column);
-                Console.WriteLine($"Erste Karte: Row={FirstCard.Value.Row}, Col={FirstCard.Value.Column}");
             }
             else
             {
                 _secondCard = (memoryMove.Row, memoryMove.Column);
-                Console.WriteLine($"Zweite Karte: Row={_secondCard.Value.Row}, Col={_secondCard.Value.Column}");
                 _isWaiting = true;
                 if (field.GetCard(FirstCard.Value.Row, FirstCard.Value.Column) ==
                 field.GetCard(_secondCard.Value.Row, _secondCard.Value.Column))
