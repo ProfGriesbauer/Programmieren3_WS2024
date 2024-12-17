@@ -217,21 +217,13 @@ namespace OOPGames
                 for (int col = 0; col < memoryField.Columns; col++)
                 {
 
-                    Brush cardFill = memoryField.IsRevealed(row, col) ? Brushes.LightGray : Brushes.Silver;
-
                     var card = new Rectangle
                     {
                         Width = cardWidth - 5,
                         Height = cardHeight - 5,
                         Stroke = Brushes.Black,
-                        Fill = cardFill
+                        Fill = memoryField.IsRevealed(row, col) ? Brushes.LightGray : Brushes.Silver
                     };
-
-                    if (memoryField.GetCard(_rules.FirstCard.Value.Row, _rules.FirstCard.Value.Column) ==
-                    memoryField.GetCard(_rules._secondCard.Value.Row, _rules._secondCard.Value.Column))
-                    {
-                        cardFill = Brushes.Green;
-                    }
 
                         card.MouseLeftButtonDown += (sender, args) =>
                     {
