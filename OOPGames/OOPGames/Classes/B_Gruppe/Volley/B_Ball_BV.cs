@@ -207,35 +207,49 @@ namespace OOPGames
         }
         public void HandlePlayerCollision(IB_Player_BV player)
         {
+            // Berechne den Abstand zwischen Ball und Spieler
             double dx = Pos_x - player.Pos_x;
             double dy = Pos_y - player.Pos_y;
             double distance = Math.Sqrt(dx * dx + dy * dy);
 
-            // Check collision using a sweep test for high-speed motion
+            // Überprüfe zukünftige Position für Kollisionsvorhersage (Swept-Kollisionserkennung)
             double futurePosX = Pos_x + Velo_x;
             double futurePosY = Pos_y + Velo_y;
             double futureDx = futurePosX - player.Pos_x;
             double futureDy = futurePosY - player.Pos_y;
             double futureDistance = Math.Sqrt(futureDx * futureDx + futureDy * futureDy);
 
+            // Prüfe auf Kollision (jetzt oder im nächsten Frame)
             if (distance <= Ballsize / 2 + player.Playersize / 2 || futureDistance <= Ballsize / 2 + player.Playersize / 2)
             {
                 GravityOn = true;
 
-                // Normalize the direction vector
+                // Normalisiere den Kollisionsvektor
                 double nx = dx / distance;
                 double ny = dy / distance;
 
-                // Reflect the ball's velocity based on collision
-                double dotProduct = 0.8 * Velo_x * nx + 0.8 * Velo_y * ny - (player.Velo_x * nx + player.Velo_y * ny);
-                Velo_x = -dotProduct * nx;
-                Velo_y = -dotProduct * ny;
+                // Reflektiere die Geschwindigkeit des Balls basierend auf dem Kollisionsvektor
+                double relativeVeloX = Velo_x - player.Velo_x;
+                double relativeVeloY = Velo_y - player.Velo_y;
 
-                // Move the ball away from the player
+                // Berechne den Reflexionsvektor
+                double dotProduct = (relativeVeloX * nx + relativeVeloY * ny);
+                Velo_x -= 2 * dotProduct * nx;
+                Velo_y -= 2 * dotProduct * ny;
+
+                // Dämpfung einfügen (realistisches Abprallen)
+                Velo_x *= 0.9; // 90% der horizontalen Geschwindigkeit bleiben erhalten
+                Velo_y *= 0.9; // 90% der vertikalen Geschwindigkeit bleiben erhalten
+
+                // Verschiebe den Ball, damit er nicht im Spieler "stecken bleibt"
                 Pos_x = player.Pos_x + nx * (Ballsize / 2 + player.Playersize / 2 + 1);
                 Pos_y = player.Pos_y + ny * (Ballsize / 2 + player.Playersize / 2 + 1);
+
+                // Optional: Leichte Anhebung des Balls nach Kollision
+                Velo_y -= 2.5; // Hebt den Ball leicht nach oben
             }
         }
+
 
     }
 }

@@ -6,10 +6,10 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Timers;
-// Memory 11:40
+
 namespace OOPGames
 {
-    // Memory Game Field 
+    // Memory Game Field
     public class MemoryGameField : IGameField
     {
         public string[,] Cards { get; set; }
@@ -51,7 +51,6 @@ namespace OOPGames
 
         public bool IsRevealed(int row, int column)
         {
-            Console.WriteLine($"Prüfe IsRevealed für Row={row}, Column={column}");
             ValidateCoordinates(row, column);
             return Revealed[row, column];
         }
@@ -116,7 +115,7 @@ namespace OOPGames
     public class C_MemoryGameRules : IGameRules
     {
         private Timer _revealTimer;
-        public string Name => "Memory";
+        public string Name => "C_MemoryRules";
         public IGameField CurrentField { get; set; }
         public bool MovesPossible => RemainingPairs > 0;
 
@@ -151,12 +150,10 @@ namespace OOPGames
             if (FirstCard == null)
             {
                 FirstCard = (memoryMove.Row, memoryMove.Column);
-                Console.WriteLine($"Erste Karte: Row={FirstCard.Value.Row}, Col={FirstCard.Value.Column}");
             }
             else
             {
                 _secondCard = (memoryMove.Row, memoryMove.Column);
-                Console.WriteLine($"Zweite Karte: Row={_secondCard.Value.Row}, Col={_secondCard.Value.Column}");
                 _isWaiting = true;
                 if (field.GetCard(FirstCard.Value.Row, FirstCard.Value.Column) ==
                 field.GetCard(_secondCard.Value.Row, _secondCard.Value.Column))
@@ -178,31 +175,13 @@ namespace OOPGames
             _revealTimer.Stop();
             if (FirstCard.HasValue && _secondCard.HasValue && CurrentField is MemoryGameField field)
             {
-                Console.WriteLine($"Verdeckkarten: {FirstCard.Value} und {_secondCard.Value}");
                 field.HideCards(FirstCard.Value, _secondCard.Value);
-            }
-            else
-            {
-                Console.WriteLine("Fehler: Kartenkoordinaten sind ungültig.");
             }
             FirstCard = null;
             _secondCard = null;
             _isWaiting = false;
         }
 
-        private void CheckPair(MemoryGameField field, (int Row, int Column) first, (int Row, int Column) second, int playerNumber)
-        {
-            if (field.GetCard(first.Row, first.Column) == field.GetCard(second.Row, second.Column))
-            {
-                RemainingPairs--;
-                if (playerNumber == 1) Player1Score++;
-                else Player2Score++;
-            }
-            else
-            {
-                field.HideCards(first, second);
-            }
-        }
 
         public void ClearField()
         {
@@ -221,7 +200,7 @@ namespace OOPGames
     // Memory Game Painter
     public class C_MemoryGamePainter : IPaintGame
     {
-        public string Name => "C_MemoryGamePainter";
+        public string Name => "C_MemoryPainter";
         C_MemoryGameRules _rules = new C_MemoryGameRules();
 
 
@@ -268,7 +247,6 @@ namespace OOPGames
 
                         try
                         {
-                            Console.WriteLine($"Klick auf Karte: Row={row}, Col={col}");
                             HumanPlayerMove(selection, canvas);
                             PaintGameField(canvas, _rules.CurrentField);
                         }
@@ -315,7 +293,6 @@ namespace OOPGames
 
             try
             {
-                Console.WriteLine($"Klick: X={selection.XClickPos}, Y={selection.YClickPos}, Row={row}, Col={col}");
                 var move = new MemoryMove(1, row, col);
                 _rules.DoMove(move);
             }
@@ -329,7 +306,7 @@ namespace OOPGames
     // Human Player
     public class C_HumanMemoryPlayer : IHumanGamePlayer
     {
-        public string Name => "RJL_HumanMemoryPlayer";
+        public string Name => "C_HumanMemoryPlayer";
         public int PlayerNumber { get; set; }
 
         public void SetPlayerNumber(int playerNumber) => PlayerNumber = playerNumber;
@@ -347,38 +324,6 @@ namespace OOPGames
         {
             // This function is not used in UI-based implementation.
             return null;
-        }
-    }
-    public class C_ComputerMemoryPlayer : IComputerGamePlayer
-    {
-        public string Name => "RJL_ComputerMemoryPlayer";
-        public int PlayerNumber { get; set; }
-        private readonly Random _random = new Random();
-
-        public void SetPlayerNumber(int playerNumber) => PlayerNumber = playerNumber;
-
-        public bool CanBeRuledBy(IGameRules rules) => rules is C_MemoryGameRules;
-
-        public IGamePlayer Clone()
-        {
-            var player = new C_ComputerMemoryPlayer();
-            player.SetPlayerNumber(PlayerNumber);
-            return player;
-        }
-
-        public IPlayMove GetMove(IGameField field)
-        {
-            var memoryField = field as MemoryGameField;
-            if (memoryField == null) return null;
-
-            int row, col;
-            do
-            {
-                row = _random.Next(memoryField.Rows);
-                col = _random.Next(memoryField.Columns);
-            } while (memoryField.IsRevealed(row, col));
-
-            return new MemoryMove(PlayerNumber, row, col);
         }
     }
 }

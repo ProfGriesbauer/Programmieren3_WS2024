@@ -8,7 +8,7 @@ namespace OOPGames
 {
     public interface IG_GameField_Bug : IGameField
     {
-        double xBugPos { get; set;}
+        double xBugPos { get; set; }
 
         double yBugPos { get; set; }
 
@@ -16,19 +16,18 @@ namespace OOPGames
 
         double yApplePos { get; set; }
 
+        int appleCounter { get; set; }
+
         double xBugVel { get; set; }
-        
+
         double yBugVel { get; set; }
 
         double canvasWidth { get; set; }
         double canvasHeight { get; set; }
 
-        double rasterXY { get; set; }
-        double gridHeight { get; set; }
-        double rasterWidth { get; set; }
-        double rasterHeight { get; set; }
-        double rasterMiddleX { get; set; }
-        double rasterMiddleY { get; set; }
+        int bugDirection { get; set; }
+
+        bool gameLost { get; set; }
 
     }
 }

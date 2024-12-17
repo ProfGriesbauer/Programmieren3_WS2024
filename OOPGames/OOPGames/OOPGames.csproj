@@ -206,6 +206,14 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Classes\D_Gruppe\Grafiken\Highscore.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Classes\G_Gruppe\folder_bilder\BugDown.png" />
+    <Resource Include="Classes\G_Gruppe\folder_bilder\BugLeft.png" />
+    <Resource Include="Classes\G_Gruppe\folder_bilder\BugRight.png" />
+    <Resource Include="Classes\G_Gruppe\folder_bilder\Lawn.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Classes\G_Gruppe\folder_bilder\Apple.png" />
     <Resource Include="Classes\G_Gruppe\folder_bilder\Bug.png" />
   </ItemGroup>
