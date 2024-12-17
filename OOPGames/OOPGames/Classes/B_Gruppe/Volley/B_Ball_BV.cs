@@ -244,9 +244,6 @@ namespace OOPGames
                 // Verschiebe den Ball, damit er nicht im Spieler "stecken bleibt"
                 Pos_x = player.Pos_x + nx * (Ballsize / 2 + player.Playersize / 2 + 1);
                 Pos_y = player.Pos_y + ny * (Ballsize / 2 + player.Playersize / 2 + 1);
-
-                // Optional: Leichte Anhebung des Balls nach Kollision
-                Velo_y -= 2.5; // Hebt den Ball leicht nach oben
             }
         }
 

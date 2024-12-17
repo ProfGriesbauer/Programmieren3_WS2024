@@ -55,9 +55,9 @@ namespace OOPGames
             double t = Math.Abs((y0 - y1) / vy);
 
             // x-Koordinate berechnen
-            double xLanding = x0 + vx * t;
+            double _xLanding = x0 + vx * t;
 
-            return xLanding;
+            return _xLanding;
         }
         public IB_Move_BV GetTickMoveBV(IB_Field_BV field)
         {
@@ -65,17 +65,17 @@ namespace OOPGames
             bool _MoveRight = false;
             bool _Jump = false;
             // Spielerpositionen
-            double playerX = Pos_x;
-            double playerY = Pos_y;
-            double Velo_x = field.Ball.Velo_x;
-            double Velo_y = field.Ball.Velo_y;
+            double _playerX = Pos_x;
+            double _playerY = Pos_y;
+            double _Velo_x = field.Ball.Velo_x;
+            double _Velo_y = field.Ball.Velo_y;
 
             // Ballposition
-            double ballX = field.Ball.Pos_x;
-            double ballY = field.Ball.Pos_y;
+            double _ballX = field.Ball.Pos_x;
+            double _ballY = field.Ball.Pos_y;
 
             // Spielfeldbreite
-            double fieldWidth = field.Width;
+            double _fieldWidth = field.Width;
             
 
             if (field.Player[this.PlayerNumber - 1] == null)
@@ -83,30 +83,30 @@ namespace OOPGames
                 field.Player[this.PlayerNumber - 1] = this;
             }
 
-            if (this.PlayerNumber == 1 && ballX <= fieldWidth / 2)
+            if (this.PlayerNumber == 1 && _ballX <= _fieldWidth / 2)
             {
-        if (LandingPosition(ballX, ballY, Velo_x, Velo_y, field.Height/4) > playerX) // Ball rechts vom Spieler
+        if (LandingPosition(_ballX, _ballY, _Velo_x, _Velo_y, field.Height/4) > _playerX) // Ball rechts vom Spieler
                 {
                     _MoveRight = true;
                 }
-                else if (LandingPosition(ballX, ballY, Velo_x, Velo_y, field.Height / 4) < playerX || ballX == playerX) // Ball links vom Spieler
+                else if (LandingPosition(_ballX, _ballY, _Velo_x, _Velo_y, field.Height / 4) < _playerX || _ballX == _playerX) // Ball links vom Spieler
                 {
                     _MoveLeft = true;
                 }
             }
-            else if (this.PlayerNumber == 2 && ballX >= fieldWidth/2)
+            else if (this.PlayerNumber == 2 && _ballX >= _fieldWidth/2)
             {
-                if (LandingPosition(ballX, ballY, Velo_x, Velo_y, field.Height / 4) < playerX) // Ball links vom Spieler
+                if (LandingPosition(_ballX, _ballY, _Velo_x, _Velo_y, field.Height / 4) < _playerX) // Ball links vom Spieler
                 {
                     _MoveLeft = true;
                 }
-                else if (LandingPosition(ballX, ballY, Velo_x, Velo_y, field.Height / 4) > playerX || ballX == playerX) // Ball rechts vom Spieler
+                else if (LandingPosition(_ballX, _ballY, _Velo_x, _Velo_y, field.Height / 4) > _playerX || _ballX == _playerX) // Ball rechts vom Spieler
                 {
                     _MoveRight = true;
                 }
             }
             Random random = new Random();
-            if (random.NextDouble() < 0.05) // 2% Wahrscheinlichkeit, nichts zu tun
+            if (random.NextDouble() < 0.05) // 5% Wahrscheinlichkeit, nichts zu tun
             {
                 _MoveLeft = false;
                 _MoveRight = false;
@@ -117,7 +117,7 @@ namespace OOPGames
 
             // Logik für das Springen:
             // Springe nur, wenn der Ball über dem Spieler ist und er in Reichweite ist
-            if (ballY > field.Height/2)
+            if (Math.Abs(field.Ball.Pos_x - Pos_x) < 50 && field.Ball.Pos_y < Pos_y)
             {
                 _Jump = true;
             }
