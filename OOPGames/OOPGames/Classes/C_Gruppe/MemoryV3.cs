@@ -70,7 +70,6 @@ namespace OOPGames
 
         public void HideCards((int Row, int Col) first, (int Row, int Col) second)
         {
-            Console.WriteLine($"Verdeckkarten: First=({first.Row}, {first.Col}), Second=({second.Row}, {second.Col})");
             ValidateCoordinates(first.Row, first.Col);
             ValidateCoordinates(second.Row, second.Col);
             Revealed[first.Row, first.Col] = false;
@@ -124,8 +123,8 @@ namespace OOPGames
         private int RemainingPairs;
         private int Player1Score;
         private int Player2Score;
-        private (int Row, int Column)? FirstCard;
-        private (int Row, int Column)? _secondCard;
+        public (int Row, int Column)? FirstCard;
+        public (int Row, int Column)? _secondCard;
         private bool _isWaiting;
 
         public C_MemoryGameRules(int rows = 4, int columns = 4)
@@ -238,15 +237,24 @@ namespace OOPGames
             {
                 for (int col = 0; col < memoryField.Columns; col++)
                 {
+
+                    Brush cardFill = memoryField.IsRevealed(row, col) ? Brushes.LightGray : Brushes.Silver;
+
                     var card = new Rectangle
                     {
                         Width = cardWidth - 5,
                         Height = cardHeight - 5,
                         Stroke = Brushes.Black,
-                        Fill = memoryField.IsRevealed(row, col) ? Brushes.LightGray : Brushes.Silver
+                        Fill = cardFill
                     };
 
-                    card.MouseLeftButtonDown += (sender, args) =>
+                    if (memoryField.GetCard(_rules.FirstCard.Value.Row, _rules.FirstCard.Value.Column) ==
+                    memoryField.GetCard(_rules._secondCard.Value.Row, _rules._secondCard.Value.Column))
+                    {
+                        cardFill = Brushes.Green;
+                    }
+
+                        card.MouseLeftButtonDown += (sender, args) =>
                     {
                         var selection = new C_ClickSelection
                         {
